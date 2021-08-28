@@ -41,15 +41,21 @@ public class ActivityRegister extends AppCompatActivity {
             @Override
             public void run() {
 
+                // request
+                String request = PostUtil.Post("RegisterServlet", new String("request=register"));
+
+                // access
+                String publicKey = request;
                 String userdata = "";
                 try {
-                    userdata = "username=" + URLEncoder.encode(newUsername, "UTF-8") +
-                            "&password=" + URLEncoder.encode(newPassword, "UTF-8");
+                    String cipherPassword = RSAKeyManager.encrypt(password.getText().toString(), publicKey);
+                    userdata = "request=access&username=" + URLEncoder.encode(newUsername, "UTF-8") +
+                            "&password=" + URLEncoder.encode(cipherPassword, "UTF-8");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
 
-                String request = PostUtil.Post("RegisterServlet", userdata);
+                request = PostUtil.Post("RegisterServlet", userdata);
                 int msg = 0;
                 if (request.equals("Register Successful"))
                     msg = 1;

@@ -22,8 +22,23 @@ public class LoginServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
+		String require = request.getParameter("request");
+		if (require == null) return;
+		if (require.equals("login")) {
+			// generate RSA Keys
+			RSAKeyManager.generate();
+			String msg = RSAKeyManager.getPublicKey();
+			response.setCharacterEncoding("UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println(msg);
+			out.flush();
+			out.close();
+			return;
+		}
+		
 		String username = request.getParameter("username");
-		String password =  request.getParameter("password");
+		String cipherPassword = request.getParameter("password");
+		String password = RSAKeyManager.decrypt(cipherPassword, RSAKeyManager.getPrivateKey());
 		response.setCharacterEncoding("UTF-8");
 		
 		UserDao dao = new UserDao();

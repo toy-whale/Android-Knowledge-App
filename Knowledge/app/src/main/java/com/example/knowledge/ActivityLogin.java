@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -34,15 +33,23 @@ public class ActivityLogin extends AppCompatActivity {
             @Override
             public void run() {
 
+                // request
+                String request = PostUtil.Post("LoginServlet", new String("request=login"));
+
+                // access
+                String publicKey = request;
                 String userdata = "";
                 try {
-                    userdata = "username=" + URLEncoder.encode(username.getText().toString(), "UTF-8") +
-                            "&password=" + URLEncoder.encode(password.getText().toString(), "UTF-8");
+
+                    // encrypt password
+                    String cipherPassword = RSAKeyManager.encrypt(password.getText().toString(), publicKey);
+                    userdata = "request=access&username=" + URLEncoder.encode(username.getText().toString(), "UTF-8") +
+                            "&password=" + URLEncoder.encode(cipherPassword, "UTF-8");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
 
-                String request = PostUtil.Post("LoginServlet", userdata);
+                request = PostUtil.Post("LoginServlet", userdata);
                 int msg = 0;
                 if (request.equals("Login Successful"))
                     msg = 1;
@@ -61,7 +68,7 @@ public class ActivityLogin extends AppCompatActivity {
                 intent.putExtra("data_return", ((EditText) findViewById(R.id.loginUserName)).getText().toString());
                 setResult(RESULT_OK, intent);
                 finish();
-            } else {
+            } else if (msg.what == 0) {
                 Toast.makeText(getApplicationContext(), "用户名或密码错误", Toast.LENGTH_LONG).show();
             }
         }
