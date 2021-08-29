@@ -11,7 +11,7 @@ import com.alibaba.fastjson.JSONObject;
 
 public class InstanceList {
 	private static String instanceListURL = "http://open.edukg.cn/opedukg/api/typeOpen/open/instanceList";
-	public static String get(String course, String searchKey, String id) throws Exception {
+	public static String get(String course, String searchKey, String id, String sort_type, String word) throws Exception {
 		String s = sendGet(course, searchKey, id);
 		JSONObject result = JSONObject.parseObject(s);
 		JSONArray data = result.getJSONArray("data");
@@ -30,6 +30,8 @@ public class InstanceList {
 			y.put("category", x.getString("category"));
 			dataList.add(y);
 		}
+		dataList = Sort.select(dataList, word);
+		dataList = Sort.sort(dataList, sort_type);
 		item.put("data", dataList);
 		String answer = item.toString();
 		return answer;

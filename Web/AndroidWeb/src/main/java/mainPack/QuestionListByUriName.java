@@ -54,6 +54,8 @@ public class QuestionListByUriName {
 			item.put("C", C);
 			item.put("D", D);
 			item.put("qAnswer", qAnswer);
+			if (!qAnswer.equals("A") && !qAnswer.equals("B") && !qAnswer.equals("C") && !qAnswer.equals("D"))
+				continue;
 			answerList.add(item);
 		}
 		JSONObject item = new JSONObject();

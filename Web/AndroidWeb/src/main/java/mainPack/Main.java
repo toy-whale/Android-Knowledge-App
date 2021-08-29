@@ -20,16 +20,17 @@ public class Main extends HttpServlet {
     	}
     	
     	String code = request.getParameter("code");
-    	
-    	// code can't be null
     	if (code == null) return;
     	
     	String answer = "";
     	if(code.equals("2")) { //实体搜索
     		String course = request.getParameter("course");
     		String name = request.getParameter("name");
+    		String sort_type = request.getParameter("sort_type");
+    		String word = request.getParameter("word");
+    		if (sort_type == null) sort_type = "0";
     		try {
-				answer = InstanceList.get(course, name, id);
+				answer = InstanceList.get(course, name, id, sort_type, word);
 			} catch (Exception e) {}
     	}
     	else if(code.equals("3")) { //实体详情
