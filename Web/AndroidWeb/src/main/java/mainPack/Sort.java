@@ -19,6 +19,7 @@ public class Sort {
 		if(type.equals("1")) {
 			Collections.sort(Jsons, new Comparator<JSONObject>() {
 	            private static final String KEY = "label";
+
 	            @Override
 	            public int compare(JSONObject a, JSONObject b) {
 	                String valA = a.getString(KEY);
