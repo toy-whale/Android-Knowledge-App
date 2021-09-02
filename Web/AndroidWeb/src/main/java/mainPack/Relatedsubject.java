@@ -5,6 +5,13 @@ import org.apache.commons.httpclient.methods.PostMethod;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+package mainPack;
+
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.methods.PostMethod;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 
 public class Relatedsubject {
@@ -48,6 +55,11 @@ public class Relatedsubject {
 			else
 				continue;
 		}
+		String r = QuestionListByUriName.get(subjectName, id);
+		JSONObject rjson = JSONObject.parseObject(r);
+		JSONArray qset = rjson.getJSONArray("data");
+		if(qset != null && qset.size() > 0)
+			sList.put("相关习题", qset);
 		JSONObject item = new JSONObject();
 		item.put("subject", sList);
 		item.put("value", vList);
