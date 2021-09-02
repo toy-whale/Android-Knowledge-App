@@ -18,7 +18,7 @@ public class PostUtil {
             // you should modify it before building APK and running
             // your phone(run android app) and PC(run server) should share Internet connection
             // and change it into your PC(server) Internet IPv4 address
-            
+
             HttpURLConnection conn = (HttpURLConnection) new URL("http://183.172.59.21:8080/AndroidWeb/"+url).openConnection();
             conn.setRequestMethod("POST");
             conn.setReadTimeout(5000);
