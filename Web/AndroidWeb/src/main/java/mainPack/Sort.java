@@ -51,7 +51,7 @@ public class Sort {
 		JSONArray y = new JSONArray();
 		if(word == null)
 			return x;
-		String [] arr = word.split("\\s+");
+		String [] arr = word.split("\\|");
 		for(int i = 0; i < x.size(); i++) {
 			JSONObject item = x.getJSONObject(i);
 			boolean flag = true;
