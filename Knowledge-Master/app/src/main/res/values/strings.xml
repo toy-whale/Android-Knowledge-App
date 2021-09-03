@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Knowledge-Master</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">未登录</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="menu_home">欢迎</string>
+
+    <string name="menu_instanceList">实体列表</string>
+    <string name="menu_instanceFind">实体搜索</string>
+    <string name="menu_instanceLink">实体链接</string>
+    <string name="menu_questionAns">知识问答</string>
+    <string name="menu_specificTest">专项测试</string>
+    <string name="menu_knowledgeSum">知识梳理</string>
+    <string name="menu_questionRec">试题推荐</string>
+    <string name="menu_browsingHis">浏览记录</string>
+    <string name="menu_collectingHis">收藏记录</string>
+    <string name="passwordChange">修改密码</string>
+    <string name="logout">退出</string>
+    <string name="login">登录</string>
+</resources>

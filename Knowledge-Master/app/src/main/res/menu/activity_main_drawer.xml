@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/item_instanceList"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/menu_instanceList" />
+        <item
+            android:id="@+id/item_instanceFind"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/menu_instanceFind" />
+        <item
+            android:id="@+id/item_instanceLink"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/menu_instanceLink" />
+        <item
+            android:id="@+id/item_questionAns"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/menu_questionAns" />
+        <item
+            android:id="@+id/item_specificTest"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/menu_specificTest" />
+        <item
+            android:id="@+id/item_knowledgeSum"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/menu_knowledgeSum" />
+        <item
+            android:id="@+id/item_questionRec"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/menu_questionRec" />
+        <item
+            android:id="@+id/item_browsingHis"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/menu_browsingHis" />
+        <item
+            android:id="@+id/item_collectingHis"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/menu_collectingHis" />
+    </group>
+</menu>

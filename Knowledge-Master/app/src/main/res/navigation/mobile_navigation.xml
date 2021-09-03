@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_instanceList">
+
+    <fragment
+        android:id="@+id/nav_instanceList"
+        android:name="com.java.qitianliang.ui.InstanceListFragment"
+        android:label="@string/menu_instanceList"
+        tools:layout="@layout/instance_list_fragment" />
+
+    <fragment
+        android:id="@+id/nav_instanceFind"
+        android:name="com.java.qitianliang.ui.InstanceFindFragment"
+        android:label="@string/menu_instanceFind"
+        tools:layout="@layout/instance_find_fragment" />
+
+    <fragment
+        android:id="@+id/nav_instanceLink"
+        android:name="com.java.qitianliang.ui.InstanceLinkFragment"
+        android:label="@string/menu_instanceLink"
+        tools:layout="@layout/instance_link_fragment" />
+
+    <fragment
+        android:id="@+id/nav_questionAns"
+        android:name="com.java.qitianliang.ui.QuestionAnsFragment"
+        android:label="@string/menu_questionAns"
+        tools:layout="@layout/question_ans_fragment" />
+
+    <fragment
+        android:id="@+id/nav_specificTest"
+        android:name="com.java.qitianliang.ui.SpecificTestFragment"
+        android:label="@string/menu_specificTest"
+        tools:layout="@layout/specific_test_fragment" />
+
+    <fragment
+        android:id="@+id/nav_knowledgeSum"
+        android:name="com.java.qitianliang.ui.KnowledgeSumFragment"
+        android:label="@string/menu_knowledgeSum"
+        tools:layout="@layout/knowledge_sum_fragment" />
+
+    <fragment
+        android:id="@+id/nav_questionRec"
+        android:name="com.java.qitianliang.ui.QuestionRecFragment"
+        android:label="@string/menu_questionRec"
+        tools:layout="@layout/question_rec_fragment" />
+
+    <fragment
+        android:id="@+id/nav_browsingHis"
+        android:name="com.java.qitianliang.ui.BrowsingHisFragment"
+        android:label="@string/menu_browsingHis"
+        tools:layout="@layout/browsing_his_fragment" />
+
+    <fragment
+        android:id="@+id/nav_collectingHis"
+        android:name="com.java.qitianliang.ui.CollectingHisFragment"
+        android:label="@string/menu_collectingHis"
+        tools:layout="@layout/collecting_his_fragment" />
+
+</navigation>
