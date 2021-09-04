@@ -40,6 +40,7 @@
         <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/drawable/ic_menu_camera.xml" value="0.1953125" />
         <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/drawable/ic_menu_gallery.xml" value="0.1953125" />
         <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.1953125" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/drawable/leftlist_bg.xml" value="0.1953125" />
         <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/drawable/side_nav_bar.xml" value="0.1953125" />
         <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/drawable/textview_style.xml" value="0.1953125" />
         <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/drawable/textview_unselect_border.xml" value="0.1953125" />
@@ -54,10 +55,11 @@
         <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/content_main.xml" value="0.17916666666666667" />
         <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/instance_find_fragment.xml" value="0.17916666666666667" />
         <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/instance_link_fragment.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/instance_link_item.xml" value="0.36099585062240663" />
         <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/instance_list_fragment.xml" value="0.17916666666666667" />
         <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/knowledge_sum_fragment.xml" value="0.17916666666666667" />
         <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/nav_header_main.xml" value="0.17916666666666667" />
-        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/property.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/property.xml" value="0.15025906735751296" />
         <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/question.xml" value="0.17916666666666667" />
         <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/question_ans_fragment.xml" value="0.1" />
         <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/question_rec_fragment.xml" value="0.17916666666666667" />

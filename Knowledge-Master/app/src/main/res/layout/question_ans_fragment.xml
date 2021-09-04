@@ -18,7 +18,7 @@
         android:inputType="textMultiLine"
         android:minHeight="20dp"
         android:textColor="#000000"
-        android:hint="请输入想问的问题..."
+        android:hint="请输入问题"
         android:maxLines="8"
         android:scrollbars="vertical"
         android:background="@android:drawable/edit_text">
