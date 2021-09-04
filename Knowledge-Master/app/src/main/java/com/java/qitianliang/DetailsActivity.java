@@ -13,6 +13,8 @@ import com.java.qitianliang.property.Property;
 import com.java.qitianliang.property.PropertyAdapter;
 import com.java.qitianliang.question.Question;
 import com.java.qitianliang.question.QuestionAdapter;
+import com.java.qitianliang.relative.Relative;
+import com.java.qitianliang.relative.RelativeAdapter;
 import com.java.qitianliang.server.*;
 import com.java.qitianliang.noScrollListview.NoScrollListview;
 
@@ -23,13 +25,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DetailsActivity extends AppCompatActivity {
-    private Button button1;
+    private RatingBar collect;
     private TextView title;
+    private TextView description;
     private List<Question> QuestionList = new ArrayList<Question>();
     private List<Property> PropertyList = new ArrayList<Property>();
+    private List<Relative> RelativeList = new ArrayList<Relative>();
     private String ID;
     private String Name;
     private String Course;
+    private JSONObject Result = null;
+    private String is_collect = "false"; //是否收藏
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,18 +45,28 @@ public class DetailsActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
         //获取登录状态码
         ID = getID();
-        //传递实体名称测试
+        System.out.println(ID);
         Intent intent = getIntent();
         Name = intent.getStringExtra("name");
         Course = intent.getStringExtra("course");
+        is_collect = intent.getStringExtra("is_collect");
+        Result = getInfo(Course, Name, ID);
         //设置标题
         title = (TextView) findViewById(R.id.title);
         title.setText(Name);
+        //设置描述
+        initdescription();
         //上方菜单栏
         ActionBar actionBar = getSupportActionBar();
         actionBar.show();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
+        //设置关系
+        initRelatives();
+        RelativeAdapter relative_adapter = new RelativeAdapter(this, R.layout.relative, RelativeList);
+        NoScrollListview relative_listView = (NoScrollListview) findViewById(R.id.relative_list_view);
+        relative_listView.setAdapter(relative_adapter);
+
         //设置属性
         initPropertys();
         PropertyAdapter property_adapter = new PropertyAdapter(this, R.layout.property, PropertyList);
@@ -65,9 +81,13 @@ public class DetailsActivity extends AppCompatActivity {
     }
     //右上选项
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) { //右上菜单栏
-        menu.add(0, 1, 0, "收藏");
-        menu.add(0, 2, 0, "分享到新浪微博");
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_details,menu);
+        if(is_collect.equals("true")) {
+            menu.findItem(R.id.collect).setIcon(android.R.drawable.btn_star_big_on);
+        }
+        else
+            menu.findItem(R.id.collect).setIcon(android.R.drawable.btn_star_big_off);
         return true;
     }
     //处理方法
@@ -75,10 +95,19 @@ public class DetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
-            case 1: //收藏
-                Toast.makeText(this, "已收藏！", Toast.LENGTH_LONG).show();
+            case R.id.collect: //收藏
+                if(is_collect.equals("false")) {
+                    Toast.makeText(this, "已收藏！", Toast.LENGTH_LONG).show();
+                    is_collect = "true";
+                    item.setIcon(android.R.drawable.btn_star_big_on);
+                }
+                else {
+                    Toast.makeText(this, "取消收藏！", Toast.LENGTH_LONG).show();
+                    is_collect = "false";
+                    item.setIcon(android.R.drawable.btn_star_big_off);
+                }
                 break;
-            case 2: //分享到新浪微博
+            case R.id.share: //分享到新浪微博
                 Toast.makeText(this, "分享到新浪微博！", Toast.LENGTH_LONG).show();
                 break;
             case android.R.id.home:
@@ -108,6 +137,7 @@ public class DetailsActivity extends AppCompatActivity {
         JSONObject x = JSONObject.parseObject(result);
         return x;
     }
+
     private JSONObject getQuestion(String name, String id) {
         String result = "";
         try {
@@ -118,6 +148,7 @@ public class DetailsActivity extends AppCompatActivity {
         JSONObject x = JSONObject.parseObject(result);
         return x;
     }
+
     private void initQuestions() {
         JSONObject x = getQuestion(Name, ID);
         JSONArray data = x.getJSONArray("data");
@@ -130,13 +161,35 @@ public class DetailsActivity extends AppCompatActivity {
             QuestionList.add(u);
         }
     }
+
     private void initPropertys() {
-        JSONObject x = getInfo(Course, Name, ID);
-        JSONArray data = x.getJSONArray("property");
+        JSONArray data = Result.getJSONArray("property");
         for(int i = 0; i < data.size(); i++) {
             JSONObject y = data.getJSONObject(i);
             Property u = new Property(y);
             PropertyList.add(u);
         }
+    }
+
+    private void initRelatives() {
+        JSONArray data = Result.getJSONArray("content");
+        for(int i = 0; i < data.size(); i++) {
+            JSONObject y = data.getJSONObject(i);
+            Relative u = new Relative(y, Name);
+            RelativeList.add(u);
+        }
+    }
+
+    private void initdescription() {
+        description = (TextView) findViewById(R.id.description);
+        String D = "无相关描述！";
+        JSONArray data = Result.getJSONArray("property");
+        for(int i = 0; i < data.size(); i++) {
+            JSONObject y = data.getJSONObject(i);
+            if(y.getString("label").equals("定义"))
+                D = y.getString("object");
+        }
+        if(D == null) D = "无相关描述！";
+        description.setText("      " + D);
     }
 }

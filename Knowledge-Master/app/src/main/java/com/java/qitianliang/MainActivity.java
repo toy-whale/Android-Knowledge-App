@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         drawer = binding.drawerLayout;
         navigationView = binding.navView;
 
@@ -89,6 +88,14 @@ public class MainActivity extends AppCompatActivity {
                         // Login Activity
                         startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), 1);
                         break;
+                    case R.id.test:
+                        intent = new Intent();
+                        intent.setClass(getApplicationContext(), DetailsActivity.class);
+                        intent.putExtra("name","杜甫");
+                        intent.putExtra("course","chinese");
+                        intent.putExtra("id", id);
+                        intent.putExtra("is_collect","true");
+                        startActivity(intent);
                     default:
                         break;
                 }
