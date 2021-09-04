@@ -19,4 +19,9 @@
         android:orderInCategory="100"
         android:title="@string/logout"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/test"
+        android:orderInCategory="100"
+        android:title="进入详情页测试"
+        app:showAsAction="never" />
 </menu>

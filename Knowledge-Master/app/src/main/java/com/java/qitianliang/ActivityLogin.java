@@ -19,6 +19,7 @@ public class ActivityLogin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        finish();
     }
 
     public void goto_register(View view) {
@@ -28,7 +29,6 @@ public class ActivityLogin extends AppCompatActivity {
     public void login(View view) {
         EditText username = (EditText) findViewById(R.id.loginUserName);
         EditText password = (EditText) findViewById(R.id.loginPassWord);
-
         new Thread() {
             @Override
             public void run() {
@@ -40,7 +40,6 @@ public class ActivityLogin extends AppCompatActivity {
                 String publicKey = request;
                 String userdata = "";
                 try {
-
                     // encrypt password
                     String cipherPassword = RSAKeyManager.encrypt(password.getText().toString(), publicKey);
                     userdata = "request=access&username=" + URLEncoder.encode(username.getText().toString(), "UTF-8") +
