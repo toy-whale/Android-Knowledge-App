@@ -1,5 +1,6 @@
 package com.java.qitianliang;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +32,12 @@ public class ActivitySubjectManager extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //设置返回按钮
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.show();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+
         setContentView(R.layout.activity_subject_manager);
 
         gridLayout1 = findViewById(R.id.arr_grid1);
@@ -73,7 +81,7 @@ public class ActivitySubjectManager extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(mCategory.size() == 0){
+        if(mCategory.size() == 0) {
             Toast.makeText(getApplicationContext(), "必须至少选择一个学科", Toast.LENGTH_LONG).show();
             return;
         }
@@ -82,5 +90,26 @@ public class ActivitySubjectManager extends AppCompatActivity {
         intent.putExtra("delSub", mDelCategory);
         setResult(Activity.RESULT_OK, intent);
         finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if(mCategory.size() == 0) {
+                    Toast.makeText(getApplicationContext(), "必须至少选择一个学科", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+                Intent intent = getIntent();
+                intent.putExtra("sub", mCategory);
+                intent.putExtra("delSub", mDelCategory);
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 }

@@ -3,12 +3,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.QuestionAnsFragment">
+    tools:context=".ui.QuestionAnsFragment"
+    android:orientation="vertical">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchInstanceByLines"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-
+    <EditText
+        android:id="@+id/question_Text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:enabled="true"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:minHeight="20dp"
+        android:textColor="#000000"
+        android:hint="请输入想问的问题..."
+        android:maxLines="8"
+        android:scrollbars="vertical"
+        android:background="@android:drawable/edit_text">
+    </EditText>
+    <Button
+        android:id="@+id/ask_question"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="提问"/>
+    <EditText
+        android:id="@+id/answer_Text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="15dp"
+        android:visibility="invisible"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:minHeight="20dp"
+        android:textColor="#000000"
+        android:maxLines="8"
+        android:minLines="8"
+        android:enabled="false"
+        android:scrollbars="vertical"
+        android:background="@android:drawable/edit_text">
+    </EditText>
 </LinearLayout>

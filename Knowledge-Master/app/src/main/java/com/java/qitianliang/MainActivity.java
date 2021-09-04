@@ -56,13 +56,13 @@ public class MainActivity extends AppCompatActivity {
         navigationView = binding.navView;
 
         setSupportActionBar(binding.appBarMain.toolbar);
-        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
+        /*binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 呼出菜单栏
                 drawer.openDrawer(navigationView);
             }
-        });
+        });*/
 
         // settings
         binding.appBarMain.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {

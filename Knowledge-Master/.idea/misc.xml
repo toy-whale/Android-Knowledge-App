@@ -34,10 +34,39 @@
         <entry key="..\:/Knowledge-Master/app/src/main/res/layout/specific_test_fragment.xml" value="0.30416666666666664" />
         <entry key="..\:/Knowledge-Master/app/src/main/res/menu/activity_main_drawer.xml" value="0.4466666666666667" />
         <entry key="..\:/Knowledge-Master/app/src/main/res/menu/main.xml" value="0.30416666666666664" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1953125" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/drawable/edit_bg.xml" value="0.1953125" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1953125" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/drawable/ic_menu_camera.xml" value="0.1953125" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/drawable/ic_menu_gallery.xml" value="0.1953125" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.1953125" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/drawable/side_nav_bar.xml" value="0.1953125" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/drawable/textview_style.xml" value="0.1953125" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/drawable/textview_unselect_border.xml" value="0.1953125" />
         <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/activity_details.xml" value="0.1" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/activity_login.xml" value="0.1328125" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/activity_main.xml" value="0.13333333333333333" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/activity_register.xml" value="0.1328125" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/activity_subject_manager.xml" value="0.1" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/app_bar_main.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/browsing_his_fragment.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/collecting_his_fragment.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/content_main.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/instance_find_fragment.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/instance_link_fragment.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/instance_list_fragment.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/knowledge_sum_fragment.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/nav_header_main.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/property.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/question.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/question_ans_fragment.xml" value="0.1" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/question_rec_fragment.xml" value="0.17916666666666667" />
         <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/relative.xml" value="0.1" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/layout/specific_test_fragment.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/menu/activity_main_drawer.xml" value="0.17916666666666667" />
         <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/menu/main.xml" value="0.1" />
         <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/menu/menu_details.xml" value="0.1" />
+        <entry key="..\:/Users/13425/Desktop/Knowledge-Master/app/src/main/res/xml/my_navigation_drawer_style.xml" value="0.17916666666666667" />
       </map>
     </option>
   </component>
