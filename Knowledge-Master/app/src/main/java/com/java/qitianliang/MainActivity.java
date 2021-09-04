@@ -13,14 +13,20 @@ import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
 import com.java.qitianliang.databinding.ActivityMainBinding;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +37,14 @@ public class MainActivity extends AppCompatActivity {
 
     // 用于同步浏览记录
     private String loginUsername = null;
+
+    // 当前选定学科
+    private String currentSubject = null;
+    public ArrayList<String> Subject = new ArrayList<>(Arrays.asList("语文", "数学", "英语",
+            "政治", "历史", "地理", "物理", "化学", "生物"));
+    public ArrayList<String> delSubject = new ArrayList<>();
+    private static final String[] subjects
+            = { "语文", "数学", "英语", "政治", "历史", "地理", "物理", "化学", "生物" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +62,58 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // 呼出菜单栏
                 drawer.openDrawer(navigationView);
+            }
+        });
+
+        // settings
+        binding.appBarMain.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                switch (id) {
+                    case R.id.action_subjectChange:
+                        // 修改学科
+                        Intent intent = new Intent(getApplicationContext(), ActivitySubjectManager.class);
+                        intent.putExtra("sub", Subject);
+                        intent.putExtra("delSub", delSubject);
+                        startActivityForResult(intent, 2);
+                        break;
+                    case R.id.action_passwordChange:
+                        //
+
+                        break;
+                    case R.id.action_logout:
+                        loginUsername = null;
+                        // 保存记录?
+
+                        // Login Activity
+                        startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), 1);
+                        break;
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
+
+        // 学科栏初始化
+        TabLayout tabs = binding.appBarMain.tabs;
+        for (int i = 0; i < 9; i++)
+            tabs.addTab(tabs.newTab().setText(subjects[i]));
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
 
@@ -138,16 +204,29 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Get Login Username for Collecting List and History Record
         switch (requestCode) {
             case 1:
                 if (resultCode == RESULT_OK) {
+                    // Get Login Username for Collecting List and History Record
                     loginUsername = data.getStringExtra("data_return");
+                }
+                if (loginUsername != null)
+                    ((TextView) findViewById(R.id.usernameView)).setText(loginUsername);
+                break;
+            case 2:
+                if (resultCode == RESULT_OK) {
+                    // set subject list
+                    ArrayList<String> category = (ArrayList<String>) (data).getSerializableExtra("sub");
+                    ArrayList<String> delCategory = (ArrayList<String>) (data).getSerializableExtra("delSub");
+                    Subject = category;
+                    delSubject = delCategory;
+                    TabLayout tabs = binding.appBarMain.tabs;
+                    tabs.removeAllTabs();
+                    for (int i = 0; i < category.size(); i++)
+                        tabs.addTab(tabs.newTab().setText(category.get(i)));
                 }
                 break;
             default:
         }
-        if (loginUsername != null)
-        ((TextView) findViewById(R.id.usernameView)).setText(loginUsername);
     }
 }

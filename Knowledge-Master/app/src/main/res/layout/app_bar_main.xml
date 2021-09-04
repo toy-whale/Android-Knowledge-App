@@ -18,6 +18,16 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/Theme.KnowledgeMaster.PopupOverlay" />
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:tabSelectedTextColor="?attr/colorPrimary"
+            app:tabTextColor="@color/black"
+            app:tabMode="scrollable"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_main" />

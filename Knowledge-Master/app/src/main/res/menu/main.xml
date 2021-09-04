@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_login"
+        android:id="@+id/action_subjectChange"
         android:orderInCategory="100"
-        android:title="@string/login"
+        android:title="@string/subjectChange"
         app:showAsAction="never" />
 
     <item
