@@ -18,8 +18,14 @@ import java.util.Map;
 
 public class Login {
     static String loginURL = "http://open.edukg.cn/opedukg/api/typeAuth/user/login";
-    public static String get(String phone, String password) throws Exception {
-        String s = sendPost(phone, password);
+    public static String get(String phone, String password) {
+        String s;
+        try {
+            s = sendPost(phone, password);
+        } catch (Exception e) {
+            s = "";
+            return s;
+        }
         JSONObject result = JSONObject.parseObject(s);
         String id = result.getString("id");
         return id;

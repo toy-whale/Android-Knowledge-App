@@ -49,13 +49,54 @@
             android:buttonTint="#FF6200EE"
             android:text="选项D" />
     </RadioGroup>
-    <Button
-        android:id="@+id/post"
-        android:paddingTop="5dp"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="提交"/>
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/z"
+            android:paddingTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="4"
+            android:visibility="invisible"
+            android:text="提交"/>
+        <Button
+            android:id="@+id/post"
+            android:paddingTop="5dp"
+            android:layout_weight="4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="提交"/>
+        <Button
+            android:id="@+id/zz"
+            android:paddingTop="5dp"
+            android:layout_weight="30"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            android:text="提"/>
+        <Button
+            android:id="@+id/post_share"
+            android:paddingTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="4"
+            android:text="分享"/>
+        <Button
+            android:id="@+id/zzz"
+            android:paddingTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="4"
+            android:visibility="invisible"
+            android:text="提交"/>
+    </LinearLayout>
     <TextView
         android:id="@+id/result"
         android:layout_width="match_parent"

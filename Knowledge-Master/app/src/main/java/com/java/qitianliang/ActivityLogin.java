@@ -58,7 +58,6 @@ public class ActivityLogin extends AppCompatActivity {
                 if (request.equals("Login Successful"))
                     msg = 1;
                 handLogin.sendEmptyMessage(msg);
-
             }
         }.start();
     }

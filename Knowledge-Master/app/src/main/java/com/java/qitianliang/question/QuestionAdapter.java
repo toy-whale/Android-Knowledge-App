@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import com.java.qitianliang.DetailsActivity;
 import com.java.qitianliang.R;
 
 public class QuestionAdapter extends ArrayAdapter<Question> {
@@ -43,6 +44,7 @@ public class QuestionAdapter extends ArrayAdapter<Question> {
         //提交按钮
         Button Post = (Button) view.findViewById(R.id.post);
         //结果
+        Button Share = (Button) view.findViewById(R.id.post_share);
         TextView result = (TextView) view.findViewById(R.id.result);
         //点击提交事件
         Post.setOnClickListener(new View.OnClickListener() {
@@ -69,6 +71,12 @@ public class QuestionAdapter extends ArrayAdapter<Question> {
                 }
                 result.setVisibility(View.VISIBLE);
                 Post.setEnabled(false);
+            }
+        });
+        Share.setOnClickListener(new View.OnClickListener() { //分享试题
+            public void onClick(View v) {
+                //Toast.makeText(getContext(), "分享到新浪微博！",Toast.LENGTH_LONG);
+                System.out.println("分享到新浪微博！");
             }
         });
         return view;
