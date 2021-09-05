@@ -51,6 +51,8 @@ public class InfoByInstanceName {
                 y.put("object", x.getString("object_label"));
                 y.put("flag", "1");
             }
+            if(y.toString().contains("CKEM"))
+                continue;
             content.add(y);
         }
         item.put("property", property);

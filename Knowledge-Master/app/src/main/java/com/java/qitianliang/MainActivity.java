@@ -2,6 +2,7 @@ package com.java.qitianliang;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     public static String loginUsername = null;
 
     // 当前选定学科
-    public static String currentSubject = null;
+    public static String currentSubject = "chinese";
     public ArrayList<String> Subject = new ArrayList<>(Arrays.asList("语文", "数学", "英语",
             "政治", "历史", "地理", "物理", "化学", "生物"));
     public ArrayList<String> delSubject = new ArrayList<>();
@@ -50,12 +51,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         drawer = binding.drawerLayout;
         navigationView = binding.navView;
-
         setSupportActionBar(binding.appBarMain.toolbar);
         /*binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -263,5 +262,4 @@ public class MainActivity extends AppCompatActivity {
                 return null;
         }
     }
-
 }
