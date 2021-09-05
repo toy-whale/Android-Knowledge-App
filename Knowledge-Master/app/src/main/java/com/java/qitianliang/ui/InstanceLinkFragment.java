@@ -69,10 +69,7 @@ public class InstanceLinkFragment extends Fragment {
                 String answer = null;
                 JSONObject x = null;
                 try {
-                    if (MainActivity.currentSubject == null)
-                        answer = LinkInstance.get("chinese", text, ID);
-                    else
-                        answer = LinkInstance.get(MainActivity.currentSubject, text, ID);
+                    answer = LinkInstance.get(MainActivity.currentSubject, text, ID);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -87,7 +84,7 @@ public class InstanceLinkFragment extends Fragment {
                 InstanceAdapter instance_adapter = new InstanceAdapter(getActivity(), R.layout.instance_link_item, InstanceList);
                 NoScrollListview instance_listView = (NoScrollListview) view.findViewById(R.id.link_list_view);
                 instance_listView.setAdapter(instance_adapter);
-                link_number.setText("共搜索到" + InstanceList.size() + "个实体：");
+                link_number.setText("共搜索到" + InstanceList.size() + "个实体:");
                 link_number.setVisibility(View.VISIBLE);
             }
         });

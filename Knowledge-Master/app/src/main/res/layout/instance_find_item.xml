@@ -5,15 +5,22 @@
     android:background="@drawable/leftlist_bg"
     android:orientation="vertical">
     <TextView
-        android:id="@+id/list_instance"
+        android:id="@+id/find_instance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:text="题目"
+        android:text="label"
         android:textSize="25dp"
-        android:paddingTop="15dp"
+        android:paddingTop="5dp"
         android:paddingLeft="10dp"
-        android:paddingBottom="15dp"
-        android:layout_marginBottom="5dp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+    <TextView
+        android:id="@+id/find_instance2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="category"
+        android:textSize="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="5dp"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 </LinearLayout>

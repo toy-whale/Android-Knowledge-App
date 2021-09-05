@@ -37,25 +37,25 @@ public class InstanceListFragment extends Fragment {
     Spinner sort_option;
     Spinner display_option;
 
-    private List<Instance_list> InstanceList = new ArrayList<Instance_list>();
-    private List<Instance_list_pair> InstanceListPair = new ArrayList<Instance_list_pair>();
-    private ArrayList<String> instanceListOfSub;
-    private ArrayList<String> instanceListOfSubByChar;
-    private ArrayList<String> instanceListOfSubByLength;
-    private String currentSub;
-    private final int INSTANCE_A_TIME = 20;
-    private int current_page = 1;
-    private int instance_amount;
-    private int page_amount;
+    public List<Instance_list> InstanceListSingle = new ArrayList<Instance_list>();
+    public List<Instance_list_pair> InstanceListPair = new ArrayList<Instance_list_pair>();
+    public ArrayList<String> instanceListOfSub;
+    public ArrayList<String> instanceListOfSubByChar;
+    public ArrayList<String> instanceListOfSubByLength;
+    public String currentSub;
+    public final int INSTANCE_A_TIME = 20;
+    public int current_page = 1;
+    public int instance_amount;
+    public int page_amount;
 
     // sort and display
-    private final int DEFALUT = 1;
-    private final int CHAR = 2;
-    private final int LENGTH = 3;
-    private final int COLUMN = 4;
-    private final int GRID = 5;
-    private int currentSort = 1;
-    private int currentDis = 4;
+    public final int DEFALUT = 1;
+    public final int CHAR = 2;
+    public final int LENGTH = 3;
+    public final int COLUMN = 4;
+    public final int GRID = 5;
+    public int currentSort = 1;
+    public int currentDis = 4;
 
     public static InstanceListFragment newInstance() {
         return new InstanceListFragment();
@@ -78,6 +78,7 @@ public class InstanceListFragment extends Fragment {
         });
         instanceListOfSubByChar = new ArrayList<String>(instanceListOfSub);
         instanceListOfSubByChar.sort(Comparator.naturalOrder());
+
         instance_amount = instanceListOfSub.size();
         page_amount = (instance_amount / 20) + 1;
         list_number = (TextView) view.findViewById(R.id.list_number);
@@ -85,13 +86,13 @@ public class InstanceListFragment extends Fragment {
         page_number = (TextView) view.findViewById(R.id.pages_list);
         page_number.setText("共" + page_amount + "页,第" + current_page + "页");
         for (int i = 0; i < INSTANCE_A_TIME; i++) {
-            InstanceList.add(new Instance_list(instanceListOfSub.get(i)));
+            InstanceListSingle.add(new Instance_list(instanceListOfSub.get(i)));
         }
         for (int i = 0; i < INSTANCE_A_TIME; i+=2) {
             InstanceListPair.add(new Instance_list_pair(instanceListOfSub.get(i), instanceListOfSub.get(i+1)));
         }
         instance_listView = view.findViewById(R.id.list_list_view);
-        instance_adapter = new ListAdapter(getActivity(), R.layout.instance_list_item, InstanceList);
+        instance_adapter = new ListAdapter(getActivity(), R.layout.instance_list_item, InstanceListSingle);
         instance_pair_adapter = new ListPairAdapter(getActivity(), R.layout.instance_list_item_grid, InstanceListPair);
         instance_listView.setAdapter(instance_adapter);
 
@@ -104,12 +105,12 @@ public class InstanceListFragment extends Fragment {
                     int i = (current_page - 2) * INSTANCE_A_TIME;
                     int j = i + INSTANCE_A_TIME;
                     int k = i;
-                    InstanceList.clear();
+                    InstanceListSingle.clear();
                     InstanceListPair.clear();
                     switch (currentSort) {
                         case 1:
                             for (; i < j; i++) {
-                                InstanceList.add(new Instance_list(instanceListOfSub.get(i)));
+                                InstanceListSingle.add(new Instance_list(instanceListOfSub.get(i)));
                             }
                             for (; k < j; k+=2) {
                                 InstanceListPair.add(new Instance_list_pair(instanceListOfSub.get(k), instanceListOfSub.get(k+1)));
@@ -117,7 +118,7 @@ public class InstanceListFragment extends Fragment {
                             break;
                         case 2:
                             for (; i < j; i++) {
-                                InstanceList.add(new Instance_list(instanceListOfSubByChar.get(i)));
+                                InstanceListSingle.add(new Instance_list(instanceListOfSubByChar.get(i)));
                             }
                             for (; k < j; k+=2) {
                                 InstanceListPair.add(new Instance_list_pair(instanceListOfSubByChar.get(k), instanceListOfSubByChar.get(k+1)));
@@ -125,7 +126,7 @@ public class InstanceListFragment extends Fragment {
                             break;
                         case 3:
                             for (; i < j; i++) {
-                                InstanceList.add(new Instance_list(instanceListOfSubByLength.get(i)));
+                                InstanceListSingle.add(new Instance_list(instanceListOfSubByLength.get(i)));
                             }
                             for (; k < j; k+=2) {
                                 InstanceListPair.add(new Instance_list_pair(instanceListOfSubByLength.get(k), instanceListOfSubByLength.get(k+1)));
@@ -165,12 +166,12 @@ public class InstanceListFragment extends Fragment {
                     int i = (current_page) * INSTANCE_A_TIME;
                     int j = i + INSTANCE_A_TIME;
                     int k = i;
-                    InstanceList.clear();
+                    InstanceListSingle.clear();
                     InstanceListPair.clear();
                     switch (currentSort) {
                         case 1:
                             for (; i < j; i++) {
-                                InstanceList.add(new Instance_list(instanceListOfSub.get(i)));
+                                InstanceListSingle.add(new Instance_list(instanceListOfSub.get(i)));
                             }
                             for (; k < j; k+=2) {
                                 InstanceListPair.add(new Instance_list_pair(instanceListOfSub.get(k), instanceListOfSub.get(k+1)));
@@ -178,7 +179,7 @@ public class InstanceListFragment extends Fragment {
                             break;
                         case 2:
                             for (; i < j; i++) {
-                                InstanceList.add(new Instance_list(instanceListOfSubByChar.get(i)));
+                                InstanceListSingle.add(new Instance_list(instanceListOfSubByChar.get(i)));
                             }
                             for (; k < j; k+=2) {
                                 InstanceListPair.add(new Instance_list_pair(instanceListOfSubByChar.get(k), instanceListOfSubByChar.get(k+1)));
@@ -186,7 +187,7 @@ public class InstanceListFragment extends Fragment {
                             break;
                         case 3:
                             for (; i < j; i++) {
-                                InstanceList.add(new Instance_list(instanceListOfSubByLength.get(i)));
+                                InstanceListSingle.add(new Instance_list(instanceListOfSubByLength.get(i)));
                             }
                             for (; k < j; k+=2) {
                                 InstanceListPair.add(new Instance_list_pair(instanceListOfSubByLength.get(k), instanceListOfSubByLength.get(k+1)));
@@ -226,13 +227,13 @@ public class InstanceListFragment extends Fragment {
                 // defalut
                 if (i == 0) {
                     if (currentSort == 1) return;
-                    InstanceList.clear();
+                    InstanceListSingle.clear();
                     InstanceListPair.clear();
                     int j = (current_page - 1) * INSTANCE_A_TIME;
                     int k = j + INSTANCE_A_TIME;
                     int n = j;
                     for (; j < k; j++) {
-                        InstanceList.add(new Instance_list(instanceListOfSub.get(j)));
+                        InstanceListSingle.add(new Instance_list(instanceListOfSub.get(j)));
                     }
                     for (; n < k; n+=2) {
                         InstanceListPair.add(new Instance_list_pair(instanceListOfSub.get(n), instanceListOfSub.get(n+1)));
@@ -243,13 +244,13 @@ public class InstanceListFragment extends Fragment {
                 // char
                 else if (i == 1) {
                     if (currentSort == 2) return;
-                    InstanceList.clear();
+                    InstanceListSingle.clear();
                     InstanceListPair.clear();
                     int j = (current_page - 1) * INSTANCE_A_TIME;
                     int k = j + INSTANCE_A_TIME;
                     int n = j;
                     for (; j < k; j++) {
-                        InstanceList.add(new Instance_list(instanceListOfSubByChar.get(j)));
+                        InstanceListSingle.add(new Instance_list(instanceListOfSubByChar.get(j)));
                     }
                     for (; n < k; n+=2) {
                         InstanceListPair.add(new Instance_list_pair(instanceListOfSubByChar.get(n), instanceListOfSubByChar.get(n+1)));
@@ -260,13 +261,13 @@ public class InstanceListFragment extends Fragment {
                 // length
                 else if (i == 2) {
                     if (currentSort == 3) return;
-                    InstanceList.clear();
+                    InstanceListSingle.clear();
                     InstanceListPair.clear();
                     int j = (current_page - 1) * INSTANCE_A_TIME;
                     int k = j + INSTANCE_A_TIME;
                     int n = j;
                     for (; j < k; j++) {
-                        InstanceList.add(new Instance_list(instanceListOfSubByLength.get(j)));
+                        InstanceListSingle.add(new Instance_list(instanceListOfSubByLength.get(j)));
                     }
                     for (; n < k; n+=2) {
                         InstanceListPair.add(new Instance_list_pair(instanceListOfSubByLength.get(n), instanceListOfSubByLength.get(n+1)));
@@ -329,10 +330,6 @@ public class InstanceListFragment extends Fragment {
         });
 
         return view;
-    }
-
-    public void goto_last_page() {
-
     }
 
 }
