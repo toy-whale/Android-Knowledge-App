@@ -25,6 +25,10 @@ public class ActivityLogin extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), ActivityRegister.class));
     }
 
+    public void skip(View view) {
+        this.finish();
+    }
+
     public void login(View view) {
         EditText username = (EditText) findViewById(R.id.loginUserName);
         EditText password = (EditText) findViewById(R.id.loginPassWord);

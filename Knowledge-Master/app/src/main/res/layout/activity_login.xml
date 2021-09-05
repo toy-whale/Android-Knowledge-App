@@ -78,6 +78,14 @@
             android:text="注册"
             android:textSize="15dp"/>
 
+        <Button
+            android:id="@+id/button_skip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="skip"
+            android:text="跳过登录"
+            android:textSize="15dp"/>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

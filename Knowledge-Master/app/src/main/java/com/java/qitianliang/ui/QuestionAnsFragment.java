@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.java.qitianliang.MainActivity;
 import com.java.qitianliang.R;
 import com.java.qitianliang.question.Question;
 import com.java.qitianliang.server.InputQuestion;
@@ -57,7 +58,10 @@ public class QuestionAnsFragment extends Fragment {
                 //默认为语文，需要传入学科信息
                 String answer = null;
                 try {
-                    answer = InputQuestion.get("chinese", question, ID);
+                    if (MainActivity.currentSubject == null)
+                        answer = InputQuestion.get("chinese", question, ID);
+                    else
+                        answer = InputQuestion.get(MainActivity.currentSubject, question, ID);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

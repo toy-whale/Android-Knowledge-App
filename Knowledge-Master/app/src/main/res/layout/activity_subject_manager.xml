@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="20dp"
-            android:text="点击删除学科，长按拖动调整顺序"
+            android:text="点击删除学科,长按拖动调整顺序"
             android:textColor="@color/purple_500"
             android:textSize="15dp"
             android:textAppearance="?android:attr/textAppearanceSmall" />

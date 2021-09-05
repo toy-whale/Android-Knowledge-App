@@ -3,6 +3,7 @@ package com.java.qitianliang;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
@@ -36,10 +37,10 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
 
     // 用于同步浏览记录
-    private String loginUsername = null;
+    public static String loginUsername = null;
 
     // 当前选定学科
-    private String currentSubject = null;
+    public static String currentSubject = null;
     public ArrayList<String> Subject = new ArrayList<>(Arrays.asList("语文", "数学", "英语",
             "政治", "历史", "地理", "物理", "化学", "生物"));
     public ArrayList<String> delSubject = new ArrayList<>();
@@ -110,7 +111,8 @@ public class MainActivity extends AppCompatActivity {
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-
+                String subject_chi = tab.getText().toString();
+                currentSubject = transChi2Eng(subject_chi);
             }
 
             @Override
@@ -236,4 +238,30 @@ public class MainActivity extends AppCompatActivity {
             default:
         }
     }
+
+    public String transChi2Eng(String sub_chi) {
+        switch (sub_chi) {
+            case "语文":
+                return new String("chinese");
+            case "数学":
+                return new String("math");
+            case "英语":
+                return new String("english");
+            case "政治":
+                return new String("politics");
+            case "历史":
+                return new String("history");
+            case "地理":
+                return new String("geo");
+            case "物理":
+                return new String("physics");
+            case "化学":
+                return new String("chemistry");
+            case "生物":
+                return new String("biology");
+            default:
+                return null;
+        }
+    }
+
 }

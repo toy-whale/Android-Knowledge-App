@@ -30,22 +30,22 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="提问"/>
+
     <EditText
         android:id="@+id/answer_Text"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
         android:layout_marginTop="15dp"
-        android:visibility="invisible"
+        android:layout_marginRight="5dp"
+        android:background="@android:drawable/edit_text"
+        android:enabled="false"
         android:gravity="top"
         android:inputType="textMultiLine"
-        android:minHeight="20dp"
-        android:textColor="#000000"
         android:maxLines="8"
+        android:minHeight="20dp"
         android:minLines="8"
-        android:enabled="false"
         android:scrollbars="vertical"
-        android:background="@android:drawable/edit_text">
-    </EditText>
+        android:textColor="#000000"
+        android:visibility="invisible"></EditText>
 </LinearLayout>
