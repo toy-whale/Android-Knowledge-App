@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java.qitianliang.MainActivity;
 import com.java.qitianliang.R;
 import com.java.qitianliang.noScrollListview.NoScrollListview;
 import com.java.qitianliang.question.QuestionAdapter;
@@ -68,7 +69,10 @@ public class InstanceLinkFragment extends Fragment {
                 String answer = null;
                 JSONObject x = null;
                 try {
-                    answer = LinkInstance.get("chinese", text, ID);
+                    if (MainActivity.currentSubject == null)
+                        answer = LinkInstance.get("chinese", text, ID);
+                    else
+                        answer = LinkInstance.get(MainActivity.currentSubject, text, ID);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

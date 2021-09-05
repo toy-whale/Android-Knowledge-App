@@ -26,6 +26,8 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
     public void skip(View view) {
+        Intent intent = new Intent();
+        setResult(RESULT_CANCELED, intent);
         this.finish();
     }
 

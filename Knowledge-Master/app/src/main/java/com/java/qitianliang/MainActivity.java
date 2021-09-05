@@ -1,6 +1,5 @@
 package com.java.qitianliang;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +14,9 @@ import com.google.android.material.navigation.NavigationView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -25,9 +26,17 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.java.qitianliang.databinding.ActivityMainBinding;
+import com.java.qitianliang.ui.InstanceListFragment;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,12 +49,15 @@ public class MainActivity extends AppCompatActivity {
     public static String loginUsername = null;
 
     // 当前选定学科
-    public static String currentSubject = null;
+    public static String currentSubject = "chinese";
     public ArrayList<String> Subject = new ArrayList<>(Arrays.asList("语文", "数学", "英语",
             "政治", "历史", "地理", "物理", "化学", "生物"));
     public ArrayList<String> delSubject = new ArrayList<>();
-    private static final String[] subjects
+    public static final String[] subjects
             = { "语文", "数学", "英语", "政治", "历史", "地理", "物理", "化学", "生物" };
+
+    // 实体列表
+    public static HashMap<String, ArrayList<String>> instanceListOfAll = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,15 +69,6 @@ public class MainActivity extends AppCompatActivity {
         navigationView = binding.navView;
 
         setSupportActionBar(binding.appBarMain.toolbar);
-        /*binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // 呼出菜单栏
-                drawer.openDrawer(navigationView);
-            }
-        });*/
-
-        // settings
         binding.appBarMain.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -77,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("sub", Subject);
                         intent.putExtra("delSub", delSubject);
                         startActivityForResult(intent, 2);
+                        currentSubject = transChi2Eng(Subject.get(0));
                         break;
                     case R.id.action_passwordChange:
                         //
@@ -104,27 +108,49 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // 学科栏初始化
-        TabLayout tabs = binding.appBarMain.tabs;
-        for (int i = 0; i < 9; i++)
-            tabs.addTab(tabs.newTab().setText(subjects[i]));
-        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                String subject_chi = tab.getText().toString();
-                currentSubject = transChi2Eng(subject_chi);
+        // 从文件中读入全部实体序列
+        for (int i = 0; i < 9; i++) {
+            int raw_file = transChi2FileId(subjects[i]);
+            String instance_Key = transChi2Eng(subjects[i]);
+            ArrayList<String> instanceListOfSub = new ArrayList<String>();
+
+            //读文件写入数组
+            InputStream inputStream = null;
+            Reader reader = null;
+            BufferedReader bufferedReader = null;
+            try {
+                //得到资源中的Raw数据流
+                inputStream = getResources().openRawResource(raw_file);
+                reader = new InputStreamReader(inputStream);
+                bufferedReader = new BufferedReader(reader);
+                String temp;
+                while ((temp = bufferedReader.readLine()) != null) {
+                    instanceListOfSub.add(temp);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (reader != null)
+                    try {
+                        reader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                if (inputStream != null)
+                    try {
+                        inputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                if (bufferedReader != null)
+                    try {
+                        bufferedReader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
             }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
+            instanceListOfAll.put(instance_Key, instanceListOfSub);
+        }
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -191,6 +217,43 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // 学科栏初始化
+        TabLayout tabs = binding.appBarMain.tabs;
+        for (int i = 0; i < 9; i++)
+            tabs.addTab(tabs.newTab().setText(subjects[i]));
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                String subject_chi = tab.getText().toString();
+                currentSubject = transChi2Eng(subject_chi);
+                // 获取当前活动的fragment
+                // 更新对应fragment的内容
+                // 实体列表、专项测试
+                int id = navController.getCurrentDestination().getId();
+                switch (id) {
+                    case R.id.nav_instanceList:
+                        navController.popBackStack();
+                        navController.navigate(id);
+                        break;
+                    case R.id.nav_specificTest:
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
         // Login Activity
         startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), 1);
     }
@@ -218,7 +281,8 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     // Get Login Username for Collecting List and History Record
                     loginUsername = data.getStringExtra("data_return");
-                }
+                } else
+                    loginUsername = null;
                 if (loginUsername != null)
                     ((TextView) findViewById(R.id.usernameView)).setText(loginUsername);
                 break;
@@ -239,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public String transChi2Eng(String sub_chi) {
+    public static String transChi2Eng(String sub_chi) {
         switch (sub_chi) {
             case "语文":
                 return new String("chinese");
@@ -261,6 +325,31 @@ public class MainActivity extends AppCompatActivity {
                 return new String("biology");
             default:
                 return null;
+        }
+    }
+
+    public static int transChi2FileId(String sub_chi) {
+        switch (sub_chi) {
+            case "语文":
+                return R.raw.chinese;
+            case "数学":
+                return R.raw.math;
+            case "英语":
+                return R.raw.english;
+            case "政治":
+                return R.raw.politics;
+            case "历史":
+                return R.raw.history;
+            case "地理":
+                return R.raw.geo;
+            case "物理":
+                return R.raw.physics;
+            case "化学":
+                return R.raw.chemistry;
+            case "生物":
+                return R.raw.biology;
+            default:
+                return 0;
         }
     }
 

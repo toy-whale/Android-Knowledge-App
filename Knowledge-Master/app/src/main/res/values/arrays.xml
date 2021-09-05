@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="sort">
-        <item>按拼音排列</item>
-        <item>按长度排列</item>
+        <item>默认排序</item>
+        <item>字符排序</item>
+        <item>长度排序</item>
     </string-array>
 
     <string-array name="filter">
-        <item>关键词查询</item>
+        <item>模糊查找</item>
+        <item>精确查找</item>
     </string-array>
 
     <string-array name="display">
         <item>单列排布</item>
-        <item>双列排布</item>
+        <item>网格排布</item>
         <item>瀑布流</item>
     </string-array>
 </resources>

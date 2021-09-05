@@ -58,7 +58,7 @@ public class InfoByInstanceName {
         String answer = item.toString();
         return answer;
     }
-    private static String sendGet(String course, String name, String id) throws Exception {
+    public static String sendGet(String course, String name, String id) throws Exception {
         String result = "";
         String data = "?" + "course="+course+"&name="+name+"&id="+id;
         HttpURLConnection conn = (HttpURLConnection) new URL(infoByInstanceNameURL + data).openConnection();
