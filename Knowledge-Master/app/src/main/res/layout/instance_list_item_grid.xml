@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <TextView
+        android:id="@+id/list_instance_left"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textStyle="bold"
+        android:text="题目"
+        android:textSize="30dp"
+        android:paddingTop="15dp"
+        android:background="@drawable/leftlist_bg"
+        android:paddingLeft="10dp"
+        android:paddingBottom="15dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_weight="1"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <TextView
+        android:id="@+id/list_instance_right"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textStyle="bold"
+        android:text="题目"
+        android:background="@drawable/leftlist_bg"
+        android:textSize="30dp"
+        android:paddingTop="15dp"
+        android:paddingLeft="10dp"
+        android:paddingBottom="15dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_weight="1"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+</LinearLayout>

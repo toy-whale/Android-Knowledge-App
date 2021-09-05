@@ -18,6 +18,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import com.java.qitianliang.DetailsActivity;
+import com.java.qitianliang.MainActivity;
 import com.java.qitianliang.R;
 
 import com.java.qitianliang.roundBackgroundColorSpan.*;
@@ -45,7 +46,7 @@ public class InstanceAdapter extends ArrayAdapter<Instance> {
                 Intent intent = new Intent();
                 intent.setClass(getContext(), DetailsActivity.class);
                 intent.putExtra("name", Entity);
-                intent.putExtra("course","chinese");
+                intent.putExtra("course", MainActivity.currentSubject);
                 intent.putExtra("is_collect","false");
                 getContext().startActivity(intent);
             }
