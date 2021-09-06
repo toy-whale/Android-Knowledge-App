@@ -66,7 +66,6 @@ public class DetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Name = intent.getStringExtra("name");
         Course = intent.getStringExtra("course");
-        is_collect = intent.getStringExtra("is_collect");
         //查找收藏记录
         if (username != null && findInDB("c"))
             is_collect = "true";
