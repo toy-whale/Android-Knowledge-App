@@ -2,24 +2,35 @@ package com.java.qitianliang.ui;
 
 import androidx.appcompat.widget.SearchView;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.os.Message;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.java.qitianliang.ConnectChecker;
 import com.java.qitianliang.MainActivity;
 import com.java.qitianliang.R;
 import com.java.qitianliang.noScrollListview.NoScrollListview;
+import com.java.qitianliang.server.LinkInstance;
 import com.java.qitianliang.server.Login;
 import com.java.qitianliang.server.InstanceList;
 import com.java.qitianliang.ui.find_instance.FindAdapter;
@@ -44,9 +55,40 @@ public class InstanceFindFragment extends Fragment {
     FindPairAdapter instance_pair_adapter;
     NoScrollListview instance_listView;
     Spinner sort_option;
-    Spinner filter_option;
     Spinner display_option;
-    SearchView search;
+    AutoCompleteTextView search;
+    String username = MainActivity.loginUsername;
+    Button POST;
+    TextView result;
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 1) { //联网成功
+                Bundle bundle = msg.getData();
+                String answer = bundle.getString("answer");
+                JSONObject x = JSONObject.parseObject(answer);
+                InstanceListSingle.clear();
+                InstanceListPair.clear();
+                initInstances(x);
+                // 展示返回数据
+                result.setText("共检索到" + InstanceListSingle.size() + "个实体:");
+                int dis_pos = display_option.getSelectedItemPosition();
+                instance_listView.setAdapter(null);
+                // 单列
+                if (dis_pos == 0) {
+                    instance_listView.setAdapter(instance_adapter);
+                    instance_adapter.notifyDataSetChanged();
+                }
+                // 网格
+                else if (dis_pos == 1) {
+                    instance_listView.setAdapter(instance_pair_adapter);
+                    instance_pair_adapter.notifyDataSetChanged();
+                }
+            } else if (msg.what == 0) { //联网失败
+                Toast.makeText(getActivity(), "网络不太好呢~", Toast.LENGTH_LONG).show();
+            }
+        }
+    };
 
     public List<Instance_find> InstanceListSingle = new ArrayList<Instance_find>();
     public List<Instance_find_pair> InstanceListPair = new ArrayList<Instance_find_pair>();
@@ -68,89 +110,72 @@ public class InstanceFindFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.instance_find_fragment, container, false);
-        StrictMode.ThreadPolicy policy=new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
 
         search = view.findViewById(R.id.searchInstanceByWords);
-        search.setSubmitButtonEnabled(true);
-        TextView result = (TextView) view.findViewById(R.id.find_result);
+        search.setText("");
+        initsearch();
         sort_option = view.findViewById(R.id.sortOptions_find);
-        filter_option = view.findViewById(R.id.filterOptions_find);
         display_option = view.findViewById(R.id.displayOptions_find);
+        result = view.findViewById(R.id.find_result);
 
         instance_listView = view.findViewById(R.id.find_list_view);
         instance_adapter = new FindAdapter(getActivity(), R.layout.instance_find_item, InstanceListSingle);
         instance_pair_adapter = new FindPairAdapter(getActivity(), R.layout.instance_find_item_grid, InstanceListPair);
-
-        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        POST = view.findViewById(R.id.search_btn);
+        POST.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                // 调用实体查询接口
-                int sort_pos = sort_option.getSelectedItemPosition();
-                String sort_type = null;
-                int filter_pos = filter_option.getSelectedItemPosition();
-                switch (sort_pos) {
-                    case 0:
-                        sort_type = "0";
-                        break;
-                    case 1:
-                        sort_type = "2";
-                        break;
-                    case 2:
-                        sort_type = "1";
-                        break;
-                    default:
-                        break;
-                }
-                String ID = "";
-                try {
-                    ID = Login.get("14759265980", "Ee123456");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                String answer = null;
-                JSONObject x = null;
-                try {
-                    // 模糊
-                    if (filter_pos == 0)
-                        answer = InstanceList.get(MainActivity.currentSubject, query, ID, sort_type, null);
-                    // 精确
-                    else
-                        answer = InstanceList.get(MainActivity.currentSubject, query, ID, sort_type, query);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                if(answer != null) {
-                    x = JSONObject.parseObject(answer);
-                }
-                InstanceListSingle.clear();
-                InstanceListPair.clear();
-                initInstances(x);
-
-                // 展示返回数据
-                result.setText("共检索到" + InstanceListSingle.size() + "个实体:");
-                int dis_pos = display_option.getSelectedItemPosition();
-                instance_listView.setAdapter(null);
-                // 单列
-                if (dis_pos == 0) {
-                    instance_listView.setAdapter(instance_adapter);
-                    instance_adapter.notifyDataSetChanged();
-                }
-                // 网格
-                else if (dis_pos == 1) {
-                    instance_listView.setAdapter(instance_pair_adapter);
-                    instance_pair_adapter.notifyDataSetChanged();
-                }
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
+            public void onClick(View view) {
+                saveHistory("history");
+                String query = search.getText().toString();
+                if(query == null || query == "") return;
+                new Thread() {
+                    @Override
+                    public void run() {
+                        Message msg = new Message();
+                        if (ConnectChecker.check(getActivity()) == false)
+                            msg.what = 0;
+                        else {
+                            msg.what = 1;
+                            String ID = "";
+                            try {
+                                ID = Login.get("14759265980", "Ee123456");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            if (ID.equals(""))
+                                msg.what = 0;
+                            int sort_pos = sort_option.getSelectedItemPosition();
+                            String sort_type = null;
+                            switch (sort_pos) {
+                                case 0:
+                                    sort_type = "0";
+                                    break;
+                                case 1:
+                                    sort_type = "2";
+                                    break;
+                                case 2:
+                                    sort_type = "1";
+                                    break;
+                                default:
+                                    break;
+                            }
+                            String answer = null;
+                            try {
+                                answer = InstanceList.get(MainActivity.currentSubject, query, ID, sort_type, null);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            if(answer == null)
+                                msg.what = 0;
+                            Bundle bundle = new Bundle();
+                            bundle.putString("answer", answer);
+                            msg.setData(bundle);
+                        }
+                        handler.sendMessage(msg);
+                    }
+                }.start();
             }
         });
-
         return view;
     }
 
@@ -183,7 +208,52 @@ public class InstanceFindFragment extends Fragment {
             Instance_find_pair u = new Instance_find_pair(y, z);
             InstanceListPair.add(u);
         }
-
     }
 
+    private void initsearch() {
+        String[] hisArrays = null;
+        if(username != null) {
+            SharedPreferences sp = getActivity().getSharedPreferences(username, Context.MODE_PRIVATE);
+            String longhistory = sp.getString("history", null);
+            if(longhistory != null)
+                hisArrays = longhistory.split(",");
+        }
+        else
+            hisArrays = null;
+        ArrayAdapter<String> adapter;
+        //只保留最近的5条的记录
+        if(hisArrays != null && hisArrays.length > 5){
+            String[] newArrays = new String[5];
+            System.arraycopy(hisArrays, 0, newArrays, 0, 5);
+            adapter = new ArrayAdapter<String>(getActivity(), R.layout.search_history, hisArrays);
+        }
+        if(hisArrays != null) {
+            adapter = new ArrayAdapter<String>(getActivity(), R.layout.search_history, hisArrays);
+            search.setAdapter(adapter);
+        }
+        search.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                AutoCompleteTextView view = (AutoCompleteTextView) v;
+                    if (hasFocus)
+                        view.showDropDown();
+            }
+        });
+    }
+    private void saveHistory(String field) {
+        if(username == null) return;
+        String text = search.getText().toString();
+        if(text == null || text == "") return;
+        SharedPreferences sp = getActivity().getSharedPreferences(username, Context.MODE_PRIVATE);
+        String longhistory = sp.getString(field, "");
+        if (!longhistory.contains(text + ",")) {
+            StringBuilder sb = new StringBuilder(longhistory);
+            sb.insert(0, text + ",");
+            sp.edit().putString("history", sb.toString()).commit();
+        }
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        search.setText("");
+    }
 }
