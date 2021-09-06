@@ -86,8 +86,14 @@ public class MainActivity extends AppCompatActivity {
                         currentSubject = transChi2Eng(Subject.get(0));
                         break;
                     case R.id.action_passwordChange:
-                        //
-
+                        // 信息修改
+                        // 必须登录后才能修改已登录账号的信息
+                        if(loginUsername != null) {
+                            startActivityForResult(new Intent(getApplicationContext(), ActivityInfo.class), 3);
+                        }
+                        else {
+                            Toast.makeText(MainActivity.this, "登录后才能修改用户信息!", Toast.LENGTH_LONG).show();
+                        }
                         break;
                     case R.id.action_logout:
                         loginUsername = null;
@@ -305,6 +311,16 @@ public class MainActivity extends AppCompatActivity {
                     tabs.removeAllTabs();
                     for (int i = 0; i < category.size(); i++)
                         tabs.addTab(tabs.newTab().setText(category.get(i)));
+                }
+                break;
+            case 3:
+                // 信息修改
+                if (resultCode == RESULT_OK) {
+                    String oldUsername = loginUsername;
+                    loginUsername = data.getStringExtra("data_return");
+                    ((TextView) findViewById(R.id.usernameView)).setText(loginUsername);
+                    // reload user data
+
                 }
                 break;
             default:
