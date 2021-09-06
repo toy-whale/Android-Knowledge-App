@@ -5,11 +5,14 @@
     android:orientation="horizontal">
 
     <LinearLayout
+        android:id="@+id/always_show"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@drawable/leftlist_bg"
         android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp">
         <TextView
             android:id="@+id/find_instance_left1"
             android:layout_width="match_parent"
@@ -30,11 +33,15 @@
             android:layout_marginBottom="5dp"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </LinearLayout>
-    <LinearLayout android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:id="@+id/hide_or_not"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@drawable/leftlist_bg"
         android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp">
         <TextView
             android:id="@+id/find_instance_right1"
             android:layout_width="match_parent"

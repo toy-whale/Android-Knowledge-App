@@ -1,16 +1,19 @@
 package com.java.qitianliang.ui;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +39,7 @@ public class InstanceListFragment extends Fragment {
     TextView list_number;
     Spinner sort_option;
     Spinner display_option;
+    EditText jump_page;
 
     public List<Instance_list> InstanceListSingle = new ArrayList<Instance_list>();
     public List<Instance_list_pair> InstanceListPair = new ArrayList<Instance_list_pair>();
@@ -61,6 +65,7 @@ public class InstanceListFragment extends Fragment {
         return new InstanceListFragment();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -69,6 +74,7 @@ public class InstanceListFragment extends Fragment {
         // 初始化
         currentSub = MainActivity.currentSubject;
         instanceListOfSub = MainActivity.instanceListOfAll.get(currentSub);
+        assert instanceListOfSub != null;
         instanceListOfSubByLength = new ArrayList<String>(instanceListOfSub);
         instanceListOfSubByLength.sort(new Comparator<String>() {
             @Override
@@ -81,10 +87,11 @@ public class InstanceListFragment extends Fragment {
 
         instance_amount = instanceListOfSub.size();
         page_amount = (instance_amount / 20) + 1;
+        jump_page = (EditText) view.findViewById(R.id.jump_page);
         list_number = (TextView) view.findViewById(R.id.list_number);
-        list_number.setText("共计" + instance_amount + "个实体");
+        list_number.setText("共计" + instance_amount + "个实体,合" + page_amount + "页");
         page_number = (TextView) view.findViewById(R.id.pages_list);
-        page_number.setText("共" + page_amount + "页,第" + current_page + "页");
+        page_number.setText("第" + current_page + "页");
         for (int i = 0; i < INSTANCE_A_TIME; i++) {
             InstanceListSingle.add(new Instance_list(instanceListOfSub.get(i)));
         }
@@ -97,6 +104,65 @@ public class InstanceListFragment extends Fragment {
         instance_listView.setAdapter(instance_adapter);
 
         // 翻页
+        jump_page.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int p, KeyEvent keyEvent) {
+                int target_page = Integer.parseInt(jump_page.getText().toString());
+                if (target_page <= 0 || target_page >= page_amount ) {
+                    Toast.makeText(getContext(), "不在页数范围内!", Toast.LENGTH_LONG).show();
+                    return false;
+                }
+                current_page = target_page;
+                int i = (current_page - 1) * INSTANCE_A_TIME;
+                int j = i + INSTANCE_A_TIME;
+                int k = i;
+                InstanceListSingle.clear();
+                InstanceListPair.clear();
+                switch (currentSort) {
+                    case 1:
+                        for (; i < j; i++) {
+                            InstanceListSingle.add(new Instance_list(instanceListOfSub.get(i)));
+                        }
+                        for (; k < j; k+=2) {
+                            InstanceListPair.add(new Instance_list_pair(instanceListOfSub.get(k), instanceListOfSub.get(k+1)));
+                        }
+                        break;
+                    case 2:
+                        for (; i < j; i++) {
+                            InstanceListSingle.add(new Instance_list(instanceListOfSubByChar.get(i)));
+                        }
+                        for (; k < j; k+=2) {
+                            InstanceListPair.add(new Instance_list_pair(instanceListOfSubByChar.get(k), instanceListOfSubByChar.get(k+1)));
+                        }
+                        break;
+                    case 3:
+                        for (; i < j; i++) {
+                            InstanceListSingle.add(new Instance_list(instanceListOfSubByLength.get(i)));
+                        }
+                        for (; k < j; k+=2) {
+                            InstanceListPair.add(new Instance_list_pair(instanceListOfSubByLength.get(k), instanceListOfSubByLength.get(k+1)));
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                switch (currentDis) {
+                    case 4:
+                        instance_listView.setAdapter(instance_adapter);
+                        instance_adapter.notifyDataSetChanged();
+                        break;
+                    case 5:
+                        instance_listView.setAdapter(instance_pair_adapter);
+                        instance_pair_adapter.notifyDataSetChanged();
+                        break;
+                    default:
+                        break;
+                }
+                page_number.setText("第" + current_page + "页");
+                return true;
+            }
+        });
+
         Button goto_last = (Button)  view.findViewById(R.id.last_page);
         goto_last.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,19 +204,17 @@ public class InstanceListFragment extends Fragment {
                     current_page--;
                     switch (currentDis) {
                         case 4:
-                            instance_listView.setAdapter(null);
                             instance_listView.setAdapter(instance_adapter);
                             instance_adapter.notifyDataSetChanged();
                             break;
                         case 5:
-                            instance_listView.setAdapter(null);
                             instance_listView.setAdapter(instance_pair_adapter);
                             instance_pair_adapter.notifyDataSetChanged();
                             break;
                         default:
                             break;
                     }
-                    page_number.setText("共" + page_amount + "页,第" + current_page + "页");
+                    page_number.setText("第" + current_page + "页");
                 }
                 else
                     Toast.makeText(getContext(), "已经是第一页!", Toast.LENGTH_LONG).show();
@@ -199,19 +263,17 @@ public class InstanceListFragment extends Fragment {
                     current_page++;
                     switch (currentDis) {
                         case 4:
-                            instance_listView.setAdapter(null);
                             instance_listView.setAdapter(instance_adapter);
                             instance_adapter.notifyDataSetChanged();
                             break;
                         case 5:
-                            instance_listView.setAdapter(null);
                             instance_listView.setAdapter(instance_pair_adapter);
                             instance_pair_adapter.notifyDataSetChanged();
                             break;
                         default:
                             break;
                     }
-                    page_number.setText("共" + page_amount + "页,第" + current_page + "页");
+                    page_number.setText("第" + current_page + "页");
                 }
                 else
                     Toast.makeText(getContext(), "已经是最后一页!", Toast.LENGTH_LONG).show();
@@ -219,7 +281,7 @@ public class InstanceListFragment extends Fragment {
         });
 
         // 排序
-        sort_option = (Spinner) view.findViewById(R.id.sortOptions);
+        sort_option = (Spinner) view.findViewById(R.id.sortOptions_list);
         sort_option.setSelection(0, true);
         sort_option.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -277,12 +339,10 @@ public class InstanceListFragment extends Fragment {
                 }
                 switch (currentDis) {
                     case 4:
-                        instance_listView.setAdapter(null);
                         instance_listView.setAdapter(instance_adapter);
                         instance_adapter.notifyDataSetChanged();
                         break;
                     case 5:
-                        instance_listView.setAdapter(null);
                         instance_listView.setAdapter(instance_pair_adapter);
                         instance_pair_adapter.notifyDataSetChanged();
                         break;
@@ -298,7 +358,7 @@ public class InstanceListFragment extends Fragment {
         });
 
         // 分布
-        display_option = (Spinner) view.findViewById(R.id.displayOptions);
+        display_option = (Spinner) view.findViewById(R.id.displayOptions_list);
         display_option.setSelection(0, true);
         display_option.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -306,18 +366,14 @@ public class InstanceListFragment extends Fragment {
                 // column
                 if (i == 0) {
                     if (currentDis == 4) return;
-                    instance_listView.setAdapter(null);
                     instance_listView.setAdapter(instance_adapter);
-                    instance_adapter.notifyDataSetChanged();
                     Toast.makeText(getContext(), "单列分布", Toast.LENGTH_SHORT).show();
                     currentDis = 4;
                 }
                 // grid
                 else if (i == 1) {
                     if (currentDis == 5) return;
-                    instance_listView.setAdapter(null);
                     instance_listView.setAdapter(instance_pair_adapter);
-                    instance_pair_adapter.notifyDataSetChanged();
                     Toast.makeText(getContext(), "网格分布", Toast.LENGTH_SHORT).show();
                     currentDis = 5;
                 }

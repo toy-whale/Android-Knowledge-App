@@ -1,65 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.InstanceFindFragment"
-    android:orientation="vertical">
-
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchInstanceByWords"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+    tools:context=".ui.InstanceFindFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchInstanceByWords"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-        <Spinner
-            android:id="@+id/sortOptions"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:entries="@array/sort" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-<!--        <Spinner-->
-<!--            android:id="@+id/filterOptions"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:entries="@array/filter"-->
-<!--            android:layout_weight="1"-->
-<!--            />-->
+            <Spinner
+                android:id="@+id/sortOptions_find"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:entries="@array/sort" />
 
-        <Spinner
-            android:id="@+id/displayOptions"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:entries="@array/display"
-            android:layout_weight="1"
-            />
+            <!--        <Spinner-->
+            <!--            android:id="@+id/filterOptions"-->
+            <!--            android:layout_width="wrap_content"-->
+            <!--            android:layout_height="50dp"-->
+            <!--            android:entries="@array/filter"-->
+            <!--            android:layout_weight="1"-->
+            <!--            />-->
 
+            <Spinner
+                android:id="@+id/displayOptions_find"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:entries="@array/display"
+                android:layout_weight="1"
+                />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/find_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="搜索结果"
+            android:textSize="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <com.java.qitianliang.noScrollListview.NoScrollListview
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/find_list_view"
+            android:dividerHeight="10dp"
+            android:divider="#00000000"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp">
+        </com.java.qitianliang.noScrollListview.NoScrollListview>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/list_result"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="搜索结果"
-        android:textSize="15dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <com.java.qitianliang.noScrollListview.NoScrollListview
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/find_list_view"
-        android:dividerHeight="10dp"
-        android:divider="#00000000"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="15dp">
-    </com.java.qitianliang.noScrollListview.NoScrollListview>
-
-</LinearLayout>
+</ScrollView>

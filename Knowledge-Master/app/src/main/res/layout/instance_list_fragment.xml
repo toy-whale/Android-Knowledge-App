@@ -15,29 +15,76 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
         <Spinner
-            android:id="@+id/sortOptions"
+            android:id="@+id/sortOptions_list"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_weight="1"
             android:entries="@array/sort" />
 
         <Spinner
-            android:id="@+id/displayOptions"
+            android:id="@+id/displayOptions_list"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:entries="@array/display"
             android:layout_weight="1" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/list_number"
+        <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="15dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/list_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="共 个实体,共 页"
+                android:textSize="15dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center_vertical"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="right">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="跳转至第"
+                    android:textColor="@color/purple_500"
+                    android:textSize="15dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/jump_page"
+                    android:textSize="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:inputType="number"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="页"
+                    android:textColor="@color/purple_500"
+                    android:textSize="15dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+            </LinearLayout>
+
+        </LinearLayout>
 
     <com.java.qitianliang.noScrollListview.NoScrollListview
         android:layout_width="match_parent"
@@ -59,10 +106,15 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/pages_list"
                 android:textSize="15dp"
+                android:text="第 页"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_gravity="center_vertical"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

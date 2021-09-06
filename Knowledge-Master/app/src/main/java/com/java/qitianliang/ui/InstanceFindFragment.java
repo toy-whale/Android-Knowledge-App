@@ -72,9 +72,9 @@ public class InstanceFindFragment extends Fragment {
 
         search = view.findViewById(R.id.searchInstanceByWords);
         search.setSubmitButtonEnabled(true);
-        TextView result = (TextView) view.findViewById(R.id.list_result);
-        sort_option = view.findViewById(R.id.sortOptions);
-        display_option = view.findViewById(R.id.displayOptions);
+        TextView result = (TextView) view.findViewById(R.id.find_result);
+        sort_option = view.findViewById(R.id.sortOptions_find);
+        display_option = view.findViewById(R.id.displayOptions_find);
 
         instance_listView = view.findViewById(R.id.find_list_view);
         instance_adapter = new FindAdapter(getActivity(), R.layout.instance_find_item, InstanceListSingle);
@@ -122,6 +122,7 @@ public class InstanceFindFragment extends Fragment {
                 // 展示返回数据
                 result.setText("共检索到" + InstanceListSingle.size() + "个实体:");
                 int dis_pos = display_option.getSelectedItemPosition();
+                instance_listView.setAdapter(null);
                 // 单列
                 if (dis_pos == 0) {
                     instance_listView.setAdapter(instance_adapter);
@@ -153,12 +154,28 @@ public class InstanceFindFragment extends Fragment {
             InstanceListSingle.add(u);
         }
         int pairs = data.size() / 2;
-        for(int i = 0; i < pairs * 2; i+=2) {
+        int i = 0;
+        if (data.size() % 2 == 0) {
+            for(i = 0; i < pairs * 2; i+=2) {
+                JSONObject y = data.getJSONObject(i);
+                JSONObject z = data.getJSONObject(i+1);
+                Instance_find_pair u = new Instance_find_pair(y, z);
+                InstanceListPair.add(u);
+            }
+        }
+        else {
+            for(i = 0; i < pairs * 2; i+=2) {
+                JSONObject y = data.getJSONObject(i);
+                JSONObject z = data.getJSONObject(i+1);
+                Instance_find_pair u = new Instance_find_pair(y, z);
+                InstanceListPair.add(u);
+            }
             JSONObject y = data.getJSONObject(i);
-            JSONObject z = data.getJSONObject(i+1);
+            JSONObject z = null;
             Instance_find_pair u = new Instance_find_pair(y, z);
             InstanceListPair.add(u);
         }
+
     }
 
 }

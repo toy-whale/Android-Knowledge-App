@@ -40,25 +40,27 @@ public class ListPairAdapter extends ArrayAdapter<Instance_list_pair> {
         String name_r = instance.getLabelRight();
         t_right.setText(name_r);
 
-        view.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                 // judge
-                if (v.getId() == R.id.list_instance_left) {
-                    Intent intent = new Intent();
-                    intent.setClass(getContext(), DetailsActivity.class);
-                    intent.putExtra("name", name_l);
-                    intent.putExtra("course", MainActivity.currentSubject);
-                    intent.putExtra("is_collect","false");
-                    getContext().startActivity(intent);
-                }
-                else {
-                    Intent intent = new Intent();
-                    intent.setClass(getContext(), DetailsActivity.class);
-                    intent.putExtra("name", name_r);
-                    intent.putExtra("course",MainActivity.currentSubject);
-                    intent.putExtra("is_collect","false");
-                    getContext().startActivity(intent);
-                }
+        t_left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setClass(getContext(), DetailsActivity.class);
+                intent.putExtra("name", name_l);
+                intent.putExtra("course", MainActivity.currentSubject);
+                intent.putExtra("is_collect","false");
+                getContext().startActivity(intent);
+            }
+        });
+
+        t_right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setClass(getContext(), DetailsActivity.class);
+                intent.putExtra("name", name_r);
+                intent.putExtra("course", MainActivity.currentSubject);
+                intent.putExtra("is_collect","false");
+                getContext().startActivity(intent);
             }
         });
 
