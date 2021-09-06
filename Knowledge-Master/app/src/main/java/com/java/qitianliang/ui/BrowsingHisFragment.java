@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.java.qitianliang.MainActivity;
 import com.java.qitianliang.R;
@@ -18,39 +19,56 @@ import com.java.qitianliang.SQLite.Entity;
 import com.java.qitianliang.SQLite.EntityDBManager;
 import com.java.qitianliang.SQLite.Title;
 import com.java.qitianliang.SQLite.TitleDBManager;
+import com.java.qitianliang.noScrollListview.NoScrollListview;
+import com.java.qitianliang.ui.list_instance.Instance_list;
+import com.java.qitianliang.ui.list_instance.ListAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BrowsingHisFragment extends Fragment {
 
+    ListAdapter instance_adapter;
+    NoScrollListview instance_listView;
+    TextView tips;
+
+    public List<Instance_list> InstanceList = new ArrayList<Instance_list>();
+
     public static BrowsingHisFragment newInstance() {
         return new BrowsingHisFragment();
     }
-    private String username = MainActivity.loginUsername;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        if(username != null)
-            PrintAll();
-        return inflater.inflate(R.layout.browsing_his_fragment, container, false);
+        View view = inflater.inflate(R.layout.browsing_his_fragment, container, false);
+        tips = (TextView) view.findViewById(R.id.browse_tips);
+        instance_listView = (NoScrollListview) view.findViewById(R.id.browse_list_view);
+        instance_adapter = new ListAdapter(getActivity(), R.layout.instance_list_item, InstanceList);
+        instance_listView.setAdapter(instance_adapter);
+
+        // 不展示浏览
+        if(MainActivity.loginUsername == null) {
+            tips.setText("用户不存在,无法获取浏览记录!");
+            return view;
+        }
+        // 加载显示
+        LoadAll();
+        tips.setText("您过去浏览了" + InstanceList.size() + "条实体信息:");
+
+        return view;
     }
 
 
-    void PrintAll() {
-        EntityDBManager manager = EntityDBManager.getInstance(getActivity(), username);
+    void LoadAll() {
+        EntityDBManager manager = EntityDBManager.getInstance(getActivity(), MainActivity.loginUsername);
         List<Entity> e = manager.getAllEntity();
-        System.out.println();
+        InstanceList.clear();
         for (int i = 0; i < e.size(); i++) {
             Entity y = e.get(i);
-            System.out.println(i + 1 + ":");
-            System.out.println(y.getName());
-            System.out.println(y.getSubject());
-            System.out.println(y.getDescription());
-            System.out.println(y.getProperty());
-            System.out.println(y.getRelative());
-            System.out.println(y.getQuestion());
+            InstanceList.add(new Instance_list(y.getName()));
         }
-        System.out.println("浏览记录输出结束!");
+        instance_adapter.notifyDataSetChanged();
     }
 
 }

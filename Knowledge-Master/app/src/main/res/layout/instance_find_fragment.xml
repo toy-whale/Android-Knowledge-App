@@ -26,13 +26,13 @@
                 android:layout_weight="1"
                 android:entries="@array/sort" />
 
-            <!--        <Spinner-->
-            <!--            android:id="@+id/filterOptions"-->
-            <!--            android:layout_width="wrap_content"-->
-            <!--            android:layout_height="50dp"-->
-            <!--            android:entries="@array/filter"-->
-            <!--            android:layout_weight="1"-->
-            <!--            />-->
+            <Spinner
+                android:id="@+id/filterOptions_find"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:entries="@array/filter"
+                android:layout_weight="1"
+                />
 
             <Spinner
                 android:id="@+id/displayOptions_find"

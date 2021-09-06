@@ -256,6 +256,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // 加载历史记录
+
+
         // Login Activity
         startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), 1);
     }
@@ -285,8 +288,11 @@ public class MainActivity extends AppCompatActivity {
                     loginUsername = data.getStringExtra("data_return");
                 } else
                     loginUsername = null;
-                if (loginUsername != null)
+                if (loginUsername != null) {
                     ((TextView) findViewById(R.id.usernameView)).setText(loginUsername);
+                    // 根据用户加载收藏记录
+
+                }
                 break;
             case 2:
                 if (resultCode == RESULT_OK) {

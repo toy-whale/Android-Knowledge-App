@@ -44,6 +44,7 @@ public class InstanceFindFragment extends Fragment {
     FindPairAdapter instance_pair_adapter;
     NoScrollListview instance_listView;
     Spinner sort_option;
+    Spinner filter_option;
     Spinner display_option;
     SearchView search;
 
@@ -74,6 +75,7 @@ public class InstanceFindFragment extends Fragment {
         search.setSubmitButtonEnabled(true);
         TextView result = (TextView) view.findViewById(R.id.find_result);
         sort_option = view.findViewById(R.id.sortOptions_find);
+        filter_option = view.findViewById(R.id.filterOptions_find);
         display_option = view.findViewById(R.id.displayOptions_find);
 
         instance_listView = view.findViewById(R.id.find_list_view);
@@ -86,6 +88,7 @@ public class InstanceFindFragment extends Fragment {
                 // 调用实体查询接口
                 int sort_pos = sort_option.getSelectedItemPosition();
                 String sort_type = null;
+                int filter_pos = filter_option.getSelectedItemPosition();
                 switch (sort_pos) {
                     case 0:
                         sort_type = "0";
@@ -108,7 +111,12 @@ public class InstanceFindFragment extends Fragment {
                 String answer = null;
                 JSONObject x = null;
                 try {
-                    answer = InstanceList.get(MainActivity.currentSubject, query, ID, sort_type, null);
+                    // 模糊
+                    if (filter_pos == 0)
+                        answer = InstanceList.get(MainActivity.currentSubject, query, ID, sort_type, null);
+                    // 精确
+                    else
+                        answer = InstanceList.get(MainActivity.currentSubject, query, ID, sort_type, query);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
