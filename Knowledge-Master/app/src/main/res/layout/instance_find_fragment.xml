@@ -9,10 +9,39 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <AutoCompleteTextView
+                android:theme="@style/mySpinnerStyle"
+                android:id="@+id/searchInstanceByWords"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:completionThreshold="1"
+                android:layout_marginLeft="5dp"
+                android:hint="输入关键词进行搜索" />
+            <Button
+                android:id="@+id/search_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="3"
+                android:text="搜索" />
+        </LinearLayout>
+        <!--
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchInstanceByWords"
             android:layout_width="match_parent"
+            android:iconifiedByDefault="false"
             android:layout_height="wrap_content"/>
+            <View
+                android:id="@+id/searchClick"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+                -->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,6 +52,7 @@
                 android:id="@+id/sortOptions_find"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:entries="@array/sort" />
 
@@ -38,6 +68,7 @@
                 android:id="@+id/displayOptions_find"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
+                android:layout_marginRight="5dp"
                 android:entries="@array/display"
                 android:layout_weight="1"
                 />

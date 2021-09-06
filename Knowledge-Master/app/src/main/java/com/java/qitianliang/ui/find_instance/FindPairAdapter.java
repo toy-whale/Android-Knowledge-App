@@ -60,7 +60,6 @@ public class FindPairAdapter extends ArrayAdapter<Instance_find_pair> {
                 intent.setClass(getContext(), DetailsActivity.class);
                 intent.putExtra("name", name_l);
                 intent.putExtra("course", MainActivity.currentSubject);
-                intent.putExtra("is_collect","false");
                 getContext().startActivity(intent);
             }
         });
@@ -73,7 +72,6 @@ public class FindPairAdapter extends ArrayAdapter<Instance_find_pair> {
                 intent.setClass(getContext(), DetailsActivity.class);
                 intent.putExtra("name", name_r);
                 intent.putExtra("course", MainActivity.currentSubject);
-                intent.putExtra("is_collect","false");
                 getContext().startActivity(intent);
             }
         });

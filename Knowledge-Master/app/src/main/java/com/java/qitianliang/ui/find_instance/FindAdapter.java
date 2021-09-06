@@ -42,7 +42,6 @@ public class FindAdapter extends ArrayAdapter<Instance_find> {
                 intent.setClass(getContext(), DetailsActivity.class);
                 intent.putExtra("name", name);
                 intent.putExtra("course", MainActivity.currentSubject);
-                intent.putExtra("is_collect","false");
                 getContext().startActivity(intent);
             }
         });
