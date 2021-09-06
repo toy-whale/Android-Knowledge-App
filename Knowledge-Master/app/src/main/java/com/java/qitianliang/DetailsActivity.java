@@ -66,7 +66,6 @@ public class DetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Name = intent.getStringExtra("name");
         Course = intent.getStringExtra("course");
-        is_collect = intent.getStringExtra("is_collect");
         //查找收藏记录
         if (username != null && findInDB("c"))
             is_collect = "true";
@@ -165,7 +164,8 @@ public class DetailsActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.share: //分享到新浪微博
-                Toast.makeText(this, "分享到新浪微博！", Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "分享到新浪微博！", Toast.LENGTH_LONG).show();
+                ShareUtil.shareText(this,"发送详情页！","test");
                 break;
             case android.R.id.home:
                 finish();

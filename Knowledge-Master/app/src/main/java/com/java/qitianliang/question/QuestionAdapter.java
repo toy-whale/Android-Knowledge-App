@@ -16,6 +16,7 @@ import java.util.List;
 
 import com.java.qitianliang.DetailsActivity;
 import com.java.qitianliang.R;
+import com.java.qitianliang.ShareUtil;
 
 public class QuestionAdapter extends ArrayAdapter<Question> {
     private final int resourceId;
@@ -76,7 +77,8 @@ public class QuestionAdapter extends ArrayAdapter<Question> {
         Share.setOnClickListener(new View.OnClickListener() { //分享试题
             public void onClick(View v) {
                 //Toast.makeText(getContext(), "分享到新浪微博！",Toast.LENGTH_LONG);
-                System.out.println("分享到新浪微博！");
+                //System.out.println("分享到新浪微博！");
+                ShareUtil.shareText(getContext(),"发送试题！","test");
             }
         });
         return view;

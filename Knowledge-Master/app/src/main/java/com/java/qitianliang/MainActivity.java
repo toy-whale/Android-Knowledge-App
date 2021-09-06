@@ -25,6 +25,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+import com.java.qitianliang.SQLite.EntityDBManager;
+import com.java.qitianliang.SQLite.TitleDBManager;
 import com.java.qitianliang.databinding.ActivityMainBinding;
 import com.java.qitianliang.ui.InstanceListFragment;
 
@@ -37,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import android.util.Log;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -94,13 +97,12 @@ public class MainActivity extends AppCompatActivity {
                         startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), 1);
                         break;
                     case R.id.test:
-                        intent = new Intent();
-                        intent.setClass(getApplicationContext(), DetailsActivity.class);
-                        intent.putExtra("name","杜甫");
-                        intent.putExtra("course","chinese");
-                        intent.putExtra("id", id);
-                        intent.putExtra("is_collect","true");
-                        startActivity(intent);
+                        //清除浏览记录
+                        if(loginUsername != null) {
+                            EntityDBManager manager = EntityDBManager.getInstance(MainActivity.this, loginUsername);
+                            manager.deleteAllEntity();
+                        }
+                        Toast.makeText(MainActivity.this, "浏览记录已清除!", Toast.LENGTH_LONG).show();
                     default:
                         break;
                 }
