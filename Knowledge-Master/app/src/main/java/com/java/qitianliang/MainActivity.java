@@ -25,7 +25,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+import com.java.qitianliang.SQLite.Entity;
 import com.java.qitianliang.SQLite.EntityDBManager;
+import com.java.qitianliang.SQLite.Title;
 import com.java.qitianliang.SQLite.TitleDBManager;
 import com.java.qitianliang.databinding.ActivityMainBinding;
 import com.java.qitianliang.ui.InstanceListFragment;
@@ -35,9 +37,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+
 import android.util.Log;
 import android.widget.Toast;
 
@@ -96,9 +102,9 @@ public class MainActivity extends AppCompatActivity {
                         }
                         break;
                     case R.id.action_logout:
+                        // 保存记录
+                        upgradeHistory();
                         loginUsername = null;
-                        // 保存记录?
-
                         // Login Activity
                         startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), 1);
                         break;
@@ -243,9 +249,8 @@ public class MainActivity extends AppCompatActivity {
                         navController.popBackStack();
                         navController.navigate(id);
                         break;
-                    case R.id.nav_specificTest:
+                    // other cases
 
-                        break;
                     default:
                         break;
                 }
@@ -284,6 +289,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // 退出前保存到后端
+        upgradeHistory();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -297,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
                 if (loginUsername != null) {
                     ((TextView) findViewById(R.id.usernameView)).setText(loginUsername);
                     // 根据用户加载收藏记录
-
+                    loadHistory();
                 }
                 break;
             case 2:
@@ -320,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
                     loginUsername = data.getStringExtra("data_return");
                     ((TextView) findViewById(R.id.usernameView)).setText(loginUsername);
                     // reload user data
-
+                    loadHistory();
                 }
                 break;
             default:
@@ -375,6 +388,99 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return 0;
         }
+    }
+
+    // 加载历史
+    public void loadHistory() {
+        String username = MainActivity.loginUsername;
+        if (username == null || username.equals("")) return;
+
+        // 加载新登陆的用户前应该把本地记录删除
+        EntityDBManager e = EntityDBManager.getInstance(MainActivity.this, MainActivity.loginUsername);
+        e.deleteAllEntity();
+        TitleDBManager t = TitleDBManager.getInstance(MainActivity.this, MainActivity.loginUsername);
+        t.deleteAllTitle();
+
+        // 以下待定
+        new Thread() {
+            @Override
+            public void run() {
+                String load = "";
+                // request
+                try {
+                    load = "request=load&username=" + URLEncoder.encode(username, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                String request = PostUtil.Post("HistoryServlet", load);
+
+                // load
+                String[] allData = request.split(" ");
+                int num_title = Integer.parseInt(allData[0]);
+                int num_entity = Integer.parseInt(allData[1]);
+
+                for (int i = 0; i < num_title; i++) {
+                    int title_index = i * 2 + 2;
+                    t.insertTitle(new Title(allData[title_index], allData[title_index+1]));
+                }
+                int offset = 2 * num_title + 2;
+                for (int i = 0; i < num_entity; i++) {
+                    int entity_index = i * 6 + offset;
+                    e.insertEntity(new Entity(allData[entity_index], allData[entity_index+1],
+                            allData[entity_index+2], allData[entity_index+3],
+                            allData[entity_index+4], allData[entity_index+5]));
+                }
+            }
+        }.start();
+    }
+
+    //上传历史
+    public void upgradeHistory() {
+        String username = MainActivity.loginUsername;
+        if (username == null || username.equals("")) return;
+
+        // 以下待定
+        new Thread() {
+            @Override
+            public void run() {
+                String upgrade = "";
+                EntityDBManager manager = EntityDBManager.getInstance(MainActivity.this, MainActivity.loginUsername);
+                List<Entity> e = manager.getAllEntity();
+                TitleDBManager u = TitleDBManager.getInstance(MainActivity.this, MainActivity.loginUsername);
+                List<Title> v = u.getAllTitle();
+
+                // upgrade
+                int num_title = v.size();
+                int num_entity = e.size();
+                String msg_title = "";
+                String msg_entity = "";
+                for (int i = 0; i < num_title; i++) {
+                    msg_title = msg_title + v.get(i).getTitle() + " "
+                            + v.get(i).getSubject() + " ";
+                }
+                for (int j = 0; j < num_entity; j++) {
+                    msg_entity = msg_entity + e.get(j).getName() + " "
+                            + e.get(j).getSubject() + " "
+                            + e.get(j).getDescription() + " "
+                            + e.get(j).getProperty() + " "
+                            + e.get(j).getRelative() + " "
+                            + e.get(j).getQuestion() + " ";
+                }
+
+                // request
+                try {
+                    upgrade = "request=upgrade&username=" + URLEncoder.encode(username, "UTF-8") +
+                            "&titleNum=" + URLEncoder.encode(Integer.toString(num_title), "UTF-8") +
+                            "&entityNum=" + URLEncoder.encode(Integer.toString(num_entity), "UTF-8") +
+                            "&titles=" + URLEncoder.encode(msg_title, "UTF-8") +
+                            "&entities=" + URLEncoder.encode(msg_entity, "UTF-8");
+                } catch (UnsupportedEncodingException ex) {
+                    ex.printStackTrace();
+                }
+
+                PostUtil.Post("HistoryServlet", upgrade);
+            }
+        }.start();
     }
 
 }

@@ -1,5 +1,6 @@
 package com.java.qitianliang.ui.linkinstance;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -21,6 +22,8 @@ import com.java.qitianliang.DetailsActivity;
 import com.java.qitianliang.MainActivity;
 import com.java.qitianliang.R;
 
+import com.java.qitianliang.SQLite.Entity;
+import com.java.qitianliang.SQLite.EntityDBManager;
 import com.java.qitianliang.roundBackgroundColorSpan.*;
 public class InstanceAdapter extends ArrayAdapter<Instance> {
     private final int resourceId;
@@ -30,6 +33,7 @@ public class InstanceAdapter extends ArrayAdapter<Instance> {
         resourceId = textViewResourceId;
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Instance instance = (Instance) getItem(position);
@@ -51,6 +55,17 @@ public class InstanceAdapter extends ArrayAdapter<Instance> {
                 getContext().startActivity(intent);
             }
         });
+
+
+        // 浏览记录检测
+        if (MainActivity.loginUsername == null) return view;
+        EntityDBManager manager = EntityDBManager.getInstance(getContext(), MainActivity.loginUsername);
+        List<com.java.qitianliang.SQLite.Entity> e = manager.getAllEntity();
+        for (int i = 0; i < e.size(); i++) {
+            if (e.get(i).getName().equals(Entity)) {
+                entity.setTextColor(R.color.purple_500);
+            }
+        }
 
         return view;
     }

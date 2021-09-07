@@ -1,5 +1,6 @@
 package com.java.qitianliang.ui.find_instance;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import com.java.qitianliang.DetailsActivity;
 import com.java.qitianliang.MainActivity;
 import com.java.qitianliang.R;
 
+import com.java.qitianliang.SQLite.EntityDBManager;
 import com.java.qitianliang.roundBackgroundColorSpan.*;
 import com.java.qitianliang.ui.list_instance.Instance_list;
 
@@ -26,6 +28,7 @@ public class FindAdapter extends ArrayAdapter<Instance_find> {
         resourceId = textViewResourceId;
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Instance_find instance = (Instance_find) getItem(position);
@@ -45,6 +48,16 @@ public class FindAdapter extends ArrayAdapter<Instance_find> {
                 getContext().startActivity(intent);
             }
         });
+
+        // 浏览记录检测
+        if (MainActivity.loginUsername == null) return view;
+        EntityDBManager manager = EntityDBManager.getInstance(getContext(), MainActivity.loginUsername);
+        List<com.java.qitianliang.SQLite.Entity> e = manager.getAllEntity();
+        for (int i = 0; i < e.size(); i++) {
+            if (e.get(i).getName().equals(name)) {
+                entity.setTextColor(R.color.purple_500);
+            }
+        }
 
         return view;
     }

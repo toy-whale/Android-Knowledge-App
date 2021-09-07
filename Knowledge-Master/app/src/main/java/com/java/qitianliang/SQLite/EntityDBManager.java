@@ -86,6 +86,8 @@ public class EntityDBManager {
     public void insertEntity(Entity entity) {
         SQLiteDatabase db = mHelper.getWritableDatabase();
         String u = entity.getName() + entity.getSubject();
+        Entity judge = getEntityByUri(entity.getName(), entity.getSubject());
+        if (judge != null) return;
         db.execSQL("insert into entity(uri, name, time, subject, description, property, relative, question) values(?,?,?,?,?,?,?,?)", new Object[]{u, entity.getName(), System.currentTimeMillis(), entity.getSubject(), entity.getDescription(), entity.getProperty(), entity.getRelative(), entity.getQuestion()});
     }
 }

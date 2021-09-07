@@ -1,5 +1,6 @@
 package com.java.qitianliang.ui.list_instance;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import com.java.qitianliang.DetailsActivity;
 import com.java.qitianliang.MainActivity;
 import com.java.qitianliang.R;
 
+import com.java.qitianliang.SQLite.EntityDBManager;
 import com.java.qitianliang.roundBackgroundColorSpan.*;
 import com.java.qitianliang.ui.list_instance.Instance_list;
 
@@ -28,6 +30,7 @@ public class ListPairAdapter extends ArrayAdapter<Instance_list_pair> {
         resourceId = textViewResourceId;
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Instance_list_pair instance = (Instance_list_pair) getItem(position);
@@ -63,6 +66,19 @@ public class ListPairAdapter extends ArrayAdapter<Instance_list_pair> {
                 getContext().startActivity(intent);
             }
         });
+
+        // 浏览记录检测
+        if (MainActivity.loginUsername == null) return view;
+        EntityDBManager manager = EntityDBManager.getInstance(getContext(), MainActivity.loginUsername);
+        List<com.java.qitianliang.SQLite.Entity> e = manager.getAllEntity();
+        for (int i = 0; i < e.size(); i++) {
+            if (e.get(i).getName().equals(name_l)) {
+                t_left.setTextColor(R.color.purple_500);
+            }
+            if (e.get(i).getName().equals(name_r)) {
+                t_right.setTextColor(R.color.purple_500);
+            }
+        }
 
         return view;
     }

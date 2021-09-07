@@ -76,9 +76,11 @@ public class TitleDBManager {
         }
     }
 
-    public void insertTitle(Title Title) {
+    public void insertTitle(Title title) {
         SQLiteDatabase db = mHelper.getWritableDatabase();
-        String u = Title.getTitle() + Title.getSubject();
-        db.execSQL("insert into Title(uri, title, time, subject) values(?,?,?,?)", new Object[]{u, Title.getTitle(), System.currentTimeMillis(), Title.getSubject()});
+        String u = title.getTitle() + title.getSubject();
+        Title judge = getTitleByUri(title.getTitle(), title.getSubject());
+        if (judge != null) return;
+        db.execSQL("insert into Title(uri, title, time, subject) values(?,?,?,?)", new Object[]{u, title.getTitle(), System.currentTimeMillis(), title.getSubject()});
     }
 }

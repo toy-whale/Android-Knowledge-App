@@ -1,5 +1,6 @@
 package com.java.qitianliang.ui.find_instance;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Layout;
@@ -17,6 +18,7 @@ import com.java.qitianliang.DetailsActivity;
 import com.java.qitianliang.MainActivity;
 import com.java.qitianliang.R;
 
+import com.java.qitianliang.SQLite.EntityDBManager;
 import com.java.qitianliang.roundBackgroundColorSpan.*;
 import com.java.qitianliang.ui.list_instance.Instance_list;
 
@@ -30,6 +32,7 @@ public class FindPairAdapter extends ArrayAdapter<Instance_find_pair> {
         resourceId = textViewResourceId;
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Instance_find_pair instance = (Instance_find_pair) getItem(position);
@@ -75,6 +78,19 @@ public class FindPairAdapter extends ArrayAdapter<Instance_find_pair> {
                 getContext().startActivity(intent);
             }
         });
+
+        // 浏览记录检测
+        if (MainActivity.loginUsername == null) return view;
+        EntityDBManager manager = EntityDBManager.getInstance(getContext(), MainActivity.loginUsername);
+        List<com.java.qitianliang.SQLite.Entity> e = manager.getAllEntity();
+        for (int i = 0; i < e.size(); i++) {
+            if (e.get(i).getName().equals(name_l)) {
+                left1.setTextColor(R.color.purple_500);
+            }
+            if (e.get(i).getName().equals(name_r)) {
+                right1.setTextColor(R.color.purple_500);
+            }
+        }
 
         return view;
     }
