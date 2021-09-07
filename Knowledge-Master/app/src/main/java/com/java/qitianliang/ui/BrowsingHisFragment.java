@@ -70,5 +70,4 @@ public class BrowsingHisFragment extends Fragment {
         }
         instance_adapter.notifyDataSetChanged();
     }
-
 }

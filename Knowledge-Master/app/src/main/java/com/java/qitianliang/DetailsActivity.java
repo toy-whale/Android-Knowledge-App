@@ -224,6 +224,8 @@ public class DetailsActivity extends AppCompatActivity {
             initProperty(data);
             data = JSONArray.parseArray(entity.getQuestion());
             initQuestion(data);
+            manager.deleteEntityByUri(Name, Course);
+            manager.insertEntity(entity);
         } else {  //从网络获取数据
             if(username != null) {
                 //更新数据库

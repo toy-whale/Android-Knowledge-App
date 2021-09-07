@@ -222,13 +222,14 @@ public class InstanceFindFragment extends Fragment {
             hisArrays = null;
         ArrayAdapter<String> adapter;
         //只保留最近的5条的记录
-        if(hisArrays != null && hisArrays.length > 5){
-            String[] newArrays = new String[5];
-            System.arraycopy(hisArrays, 0, newArrays, 0, 5);
-            adapter = new ArrayAdapter<String>(getActivity(), R.layout.search_history, hisArrays);
-        }
         if(hisArrays != null) {
-            adapter = new ArrayAdapter<String>(getActivity(), R.layout.search_history, hisArrays);
+            if(hisArrays.length > 5){
+                String[] newArrays = new String[5];
+                System.arraycopy(hisArrays, 0, newArrays, 0, 5);
+                adapter = new ArrayAdapter<String>(getActivity(), R.layout.search_history, newArrays);
+            }
+            else
+                adapter = new ArrayAdapter<String>(getActivity(), R.layout.search_history, hisArrays);
             search.setAdapter(adapter);
         }
         search.setOnFocusChangeListener(new View.OnFocusChangeListener() {
