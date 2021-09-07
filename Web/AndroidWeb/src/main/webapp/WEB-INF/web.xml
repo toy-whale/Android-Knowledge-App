@@ -21,13 +21,24 @@
     <url-pattern>/RegisterServlet</url-pattern>
   </servlet-mapping>	
   
-  <servlet>  
-        <servlet-name>Main</servlet-name>  
-        <servlet-class>mainPack.Main</servlet-class>
-    </servlet>  
-    <servlet-mapping>  
-        <servlet-name>Main</servlet-name>  
-        <url-pattern>/test</url-pattern>  
-    </servlet-mapping>  
+  <servlet>
+    <servlet-name>InfoServlet</servlet-name>
+    <servlet-class>servlet.InfoServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>InfoServlet</servlet-name>
+    <url-pattern>/InfoServlet</url-pattern>
+  </servlet-mapping>	
+  
+  <servlet>
+    <servlet-name>HistoryServlet</servlet-name>
+    <servlet-class>servlet.HistoryServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>HistoryServlet</servlet-name>
+    <url-pattern>/HistoryServlet</url-pattern>
+  </servlet-mapping>	
   
 </web-app>

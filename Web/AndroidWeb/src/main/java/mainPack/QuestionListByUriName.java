@@ -4,21 +4,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
-package mainPack;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.methods.GetMethod;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 public class QuestionListByUriName {
 	private static String questionListByUriNameURL = "http://open.edukg.cn/opedukg/api/typeOpen/open/questionListByUriName";
 	private static String patternA = "(.*)[A][\56](.*)[B]";
-	private static String patternB = "(.*)[B][\56](.*)[C]";
-	private static String patternC = "(.*)[C][\56](.*)[D]";
-	private static String patternD = "(.*)[D][\56](.*)$";
+	private static String patternB = "(.*)[B]\56(.*)[C]";
+	private static String patternC = "(.*)[C]\56(.*)[D]";
+	private static String patternD = "(.*)[D]\56(.*)$";
 	private static Pattern ra = Pattern.compile(patternA);
 	private static Pattern rb = Pattern.compile(patternB);
 	private static Pattern rc = Pattern.compile(patternC);
@@ -29,12 +23,6 @@ public class QuestionListByUriName {
 		JSONObject result = JSONObject.parseObject(s);
 		JSONArray data = result.getJSONArray("data");
 		JSONArray answerList = new JSONArray();
-		if(data == null) {
-			JSONObject x = new JSONObject();
-			x.put("data", answerList);
-			String answer = x.toString();
-			return answer;
-		}
 		for(int i = 0; i < data.size(); i++) {
 			JSONObject x = (JSONObject)data.get(i);
 			JSONObject item = new JSONObject();
@@ -60,16 +48,12 @@ public class QuestionListByUriName {
 			while (md.find())
 				D = md.group(2);
 			item.put("qBody", qBody);
-			if(A == "" || B == "" || C == "" || D == "" || Body == "")
-				continue;
 			item.put("Body", Body);
 			item.put("A", A);
 			item.put("B", B);
 			item.put("C", C);
 			item.put("D", D);
 			item.put("qAnswer", qAnswer);
-			if (!qAnswer.equals("A") && !qAnswer.equals("B") && !qAnswer.equals("C") && !qAnswer.equals("D"))
-				continue;
 			answerList.add(item);
 		}
 		JSONObject item = new JSONObject();

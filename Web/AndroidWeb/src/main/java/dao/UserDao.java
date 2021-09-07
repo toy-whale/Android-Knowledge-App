@@ -82,4 +82,29 @@ public class UserDao {
         
         return user;
     }
+    
+    public boolean updateUser(int id, User userNew) {
+        String sql = "update users set username = ?, password = ? where id = ?";
+        Connection conn = JDBCUtils.getConn();
+        
+        if (conn != null) {
+        	try {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, userNew.getUsername());
+                ps.setString(2, userNew.getPassword());
+                ps.setInt(3, id);
+                
+                int value = ps.executeUpdate();
+
+                if (value > 0) {
+                    return true;
+                }                
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return false;
+    }
 }

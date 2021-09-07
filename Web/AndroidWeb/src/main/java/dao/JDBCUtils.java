@@ -19,7 +19,7 @@ public class JDBCUtils {
 		try {
 			// Connect to local MySql Database
 			// Replace your port(3306), account("root"), password("root") here
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&allowPublicKeyRetrieval=true","root","root");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8","root","root");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
