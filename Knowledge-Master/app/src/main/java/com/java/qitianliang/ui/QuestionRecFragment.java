@@ -180,18 +180,18 @@ public class QuestionRecFragment extends Fragment {
             if(v == null) continue;
             int num = v.size();
             num = num * 1 / 2;
-            if(num > 4) num = 4;
+            if(num > 2) num = 2;
             int index[] = getRandom(v.size(), num);
             for(int j = 0; j < num; j++) {
                 JSONObject y = v.getJSONObject(index[j]);
                 if(!qset.contains((y))) {
                     qset.add(y);
                     tot++;
-                    if(tot == 14)
+                    if(tot == 7)
                         break;
                 }
             }
-            if(tot == 14)
+            if(tot == 7)
                 break;
         }
         RandomGet();
@@ -199,7 +199,7 @@ public class QuestionRecFragment extends Fragment {
     }
     public static void RandomGet() {
         Random r = new Random();
-        while(tot < 20) { //随机抽题
+        while(tot < 10) { //随机抽题
             int e = r.nextInt(MAX);
             String x = Bank.get(e);
             JSONObject y = JSONObject.parseObject(x);

@@ -20,8 +20,13 @@
         android:title="@string/logout"
         app:showAsAction="never" />
     <item
-        android:id="@+id/test"
+        android:id="@+id/clear_text"
         android:orderInCategory="100"
         android:title="清除浏览记录"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/test"
+        android:orderInCategory="100"
+        android:title="进入专项测试"
         app:showAsAction="never" />
 </menu>

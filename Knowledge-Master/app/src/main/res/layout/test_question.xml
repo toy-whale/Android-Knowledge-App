@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="题目"
+        android:textSize="20dp"
+        android:paddingTop="5dp"
+        android:paddingLeft="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:orientation="vertical">
+        <RadioButton
+            android:id="@+id/A"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选项A"
+            android:textSize="15dp"
+            android:buttonTint="#FF6200EE"
+            android:checked="true"/>
+        <RadioButton
+            android:id="@+id/B"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:buttonTint="#FF6200EE"
+            android:text="选项B"/>
+        <RadioButton
+            android:id="@+id/C"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:buttonTint="#FF6200EE"
+            android:text="选项C" />
+        <RadioButton
+            android:id="@+id/D"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:buttonTint="#FF6200EE"
+            android:text="选项D" />
+    </RadioGroup>
+    <TextView
+        android:id="@+id/test_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="回答正确！"
+        android:textSize="15dp"
+        android:visibility="invisible"
+        android:gravity="center"
+        android:textColor="#008000"
+        android:layout_marginTop= "0dp"
+        android:layout_marginBottom="0dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+</LinearLayout>

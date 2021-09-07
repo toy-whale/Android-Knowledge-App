@@ -9,7 +9,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 public class TestQuestion {
-    public static String get(String[] points, int number, String id) throws Exception {
+    public static JSONObject get(String[] points, int number, String id) throws Exception {
         int len = points.length;
         int cnt = 0;
         JSONObject item = new JSONObject();
@@ -33,13 +33,11 @@ public class TestQuestion {
         }
         if(number <= 0) { //数量输入有误
             item.put("msg", "1");
-            String answer = item.toString();
-            return answer;
+            return item;
         }
         if(number > set.size()) { //数量超过题库数量
             item.put("msg", "2");
-            String answer = item.toString();
-            return answer;
+            return item;
         }
         int average = number / len; //每个知识点平均抽取试题
         for(int j = 0; j < len;j++) {
@@ -84,8 +82,7 @@ public class TestQuestion {
         questions = shuffle(questions);
         item.put("msg","0");
         item.put("data", questions);
-        String answer = item.toString();
-        return answer;
+        return item;
     }
     public static int[] getRandom(int length, int size) {
         int index[] = new int[size];

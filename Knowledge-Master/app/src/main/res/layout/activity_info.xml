@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <!--
             <TextView
                 android:id="@+id/text6"
                 android:layout_width="100dp"
@@ -26,12 +27,14 @@
                 android:layout_weight="1"
                 android:text="新用户名:"
                 android:textSize="15dp" />
+                -->
 
             <EditText
                 android:id="@+id/infoUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:hint="新用户名"
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:text="" />
@@ -43,6 +46,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <!--
             <TextView
                 android:id="@+id/text7"
                 android:layout_width="wrap_content"
@@ -50,12 +54,14 @@
                 android:layout_weight="1"
                 android:text="新密码: "
                 android:textSize="15dp" />
+                -->
 
             <EditText
                 android:id="@+id/infoPassWord"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:hint="新密码"
                 android:ems="10"
                 android:inputType="textPassword" />
 
@@ -66,19 +72,22 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <!--
             <TextView
                 android:id="@+id/text8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="请确认:"
+                android:text="请确认密码:"
                 android:textSize="15dp" />
+                -->
 
             <EditText
                 android:id="@+id/infoPassWordConfirm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:hint="请确认密码"
                 android:ems="10"
                 android:inputType="textPassword" />
 
@@ -98,6 +107,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="cancel"
+            android:layout_marginTop="5dp"
             android:text="取消"
             android:textSize="15dp"/>
 
