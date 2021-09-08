@@ -1,6 +1,7 @@
 package com.java.qitianliang;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -29,6 +30,7 @@ import java.util.List;
 
 public class ActivityTest extends AppCompatActivity {
     private List<Question> QuestionList = new ArrayList<Question>();
+    private JSONArray y = new JSONArray();
     private NoScrollListview test_listview;
     private Button POST;
     private boolean is_finish = false;
@@ -45,20 +47,12 @@ public class ActivityTest extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.show();
+        Intent intent = getIntent();
+        y = JSONArray.parseArray(intent.getStringExtra("question"));
         test_listview = findViewById(R.id.test_list_view);
         POST = findViewById(R.id.post_test);
-        JSONObject x = null;
-        JSONArray y = null;
-        String ID = Login.get("14759265980","Ee123456");
-        final String[][] points = {{"李白"}};
-        try {
-            x = TestQuestion.get(points[0], 10, ID);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if(x != null)
-            y = x.getJSONArray("data");
         initQuestion(y);
+        number = y.size();
         POST.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,17 +85,13 @@ public class ActivityTest extends AppCompatActivity {
                     }
                     result.setVisibility(View.VISIBLE);
                 }
-                grade = 100 * right_number / number;
+                grade = (int)(100.0 * (double) right_number / (double) number);
                 AlertDialog.Builder result = new AlertDialog.Builder(ActivityTest.this);
                 result.setTitle("测试结果");
-                result.setMessage("恭喜您完成测试，您的成绩为" + grade + "，请继续努力！");
+                result.setMessage("恭喜您完成测试!您答对" + right_number + "题，答错" + (number - right_number)
+                        + "题，您的成绩为" + grade + "。请继续努力！");
                 result.setPositiveButton("确认",null);
                 result.show();
-                /*new AlertDialog.Builder(getApplicationContext())
-                        .setTitle("标题")
-                        .setMessage("简单的消息提示框")
-                        .setPositiveButton("确定", null)
-                        .show();*/
             }
         });
     }
