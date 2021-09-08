@@ -16,6 +16,7 @@ import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -55,8 +56,10 @@ public class InstanceFindFragment extends Fragment {
     FindPairAdapter instance_pair_adapter;
     NoScrollListview instance_listView;
     Spinner sort_option;
+    Spinner filter_option;
     Spinner display_option;
     AutoCompleteTextView search;
+    AutoCompleteTextView keywords;
     String username = MainActivity.loginUsername;
     Button POST;
     TextView result;
@@ -102,6 +105,9 @@ public class InstanceFindFragment extends Fragment {
     public int currentSort = 1;
     public int currentDis = 4;
 
+    // filter
+    public int FILTER_OPTION = 0;
+
     public static InstanceFindFragment newInstance() {
         return new InstanceFindFragment();
     }
@@ -113,14 +119,46 @@ public class InstanceFindFragment extends Fragment {
 
         search = view.findViewById(R.id.searchInstanceByWords);
         search.setText("");
+        keywords = view.findViewById(R.id.searchInstanceByKeys);
+        keywords.setText("");
         initsearch();
         sort_option = view.findViewById(R.id.sortOptions_find);
+        filter_option = view.findViewById(R.id.filterOptions_find);
         display_option = view.findViewById(R.id.displayOptions_find);
         result = view.findViewById(R.id.find_result);
 
         instance_listView = view.findViewById(R.id.find_list_view);
         instance_adapter = new FindAdapter(getActivity(), R.layout.instance_find_item, InstanceListSingle);
         instance_pair_adapter = new FindPairAdapter(getActivity(), R.layout.instance_find_item_grid, InstanceListPair);
+
+        filter_option.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                // 是否调出输入框
+                switch (i) {
+                    case 0:
+                        FILTER_OPTION = 0;
+                        keywords.setVisibility(View.GONE);
+                        break;
+                    case 1:
+                        FILTER_OPTION = 1;
+                        keywords.setVisibility(View.GONE);
+                        break;
+                    case 2:
+                        FILTER_OPTION = 2;
+                        keywords.setVisibility(View.VISIBLE);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         POST = view.findViewById(R.id.search_btn);
         POST.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,36 +214,55 @@ public class InstanceFindFragment extends Fragment {
                 }.start();
             }
         });
+
         return view;
     }
 
     void initInstances(JSONObject x) {
         JSONArray data = x.getJSONArray("data");
+        List<JSONObject> dataList = new ArrayList<>();
+        dataList.clear();
+        String searchInput = search.getText().toString();
+        String keyInput = keywords.getText().toString();
         for(int i = 0; i < data.size(); i++) {
-            JSONObject y = data.getJSONObject(i);
-            Instance_find u = new Instance_find(y);
+            JSONObject tmp = data.getJSONObject(i);
+            Instance_find tmp0 = new Instance_find(tmp);
+            boolean skip = false;
+            // 过滤
+            switch (FILTER_OPTION) {
+                case 1:
+                    if (!tmp0.getLabel().equals(searchInput))
+                        skip = true;
+                    break;
+                case 2:
+                    if (!tmp0.getCategory().equals(keyInput))
+                        skip = true;
+                    break;
+                default:
+                    break;
+            }
+            if (!skip)
+                dataList.add(tmp);
+        }
+        for(int i = 0; i < dataList.size(); i++) {
+            Instance_find u = new Instance_find(dataList.get(i));
             InstanceListSingle.add(u);
         }
-        int pairs = data.size() / 2;
+        int pairs = dataList.size() / 2;
         int i = 0;
-        if (data.size() % 2 == 0) {
+        if (dataList.size() % 2 == 0) {
             for(i = 0; i < pairs * 2; i+=2) {
-                JSONObject y = data.getJSONObject(i);
-                JSONObject z = data.getJSONObject(i+1);
-                Instance_find_pair u = new Instance_find_pair(y, z);
+                Instance_find_pair u = new Instance_find_pair(dataList.get(i), dataList.get(i+1));
                 InstanceListPair.add(u);
             }
         }
         else {
             for(i = 0; i < pairs * 2; i+=2) {
-                JSONObject y = data.getJSONObject(i);
-                JSONObject z = data.getJSONObject(i+1);
-                Instance_find_pair u = new Instance_find_pair(y, z);
+                Instance_find_pair u = new Instance_find_pair(dataList.get(i), dataList.get(i+1));
                 InstanceListPair.add(u);
             }
-            JSONObject y = data.getJSONObject(i);
             JSONObject z = null;
-            Instance_find_pair u = new Instance_find_pair(y, z);
+            Instance_find_pair u = new Instance_find_pair(dataList.get(i), z);
             InstanceListPair.add(u);
         }
     }
