@@ -191,50 +191,6 @@ public class MainActivity extends AppCompatActivity {
         // 图标
         navigationView.setItemIconTintList(null);
 
-        // 设置菜单点击跳转
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int target_fragment = 0;
-                switch (item.getItemId()) {
-                    case R.id.item_instanceList :
-                        target_fragment = R.id.nav_instanceList;
-                        break;
-                    case R.id.item_instanceFind :
-                        target_fragment = R.id.nav_instanceFind;
-                        break;
-                    case R.id.item_instanceLink:
-                        target_fragment = R.id.nav_instanceLink;
-                        break;
-                    case R.id.item_questionAns:
-                        target_fragment = R.id.nav_questionAns;
-                        break;
-                    case R.id.item_specificTest:
-                        target_fragment = R.id.nav_specificTest;
-                        break;
-                    case R.id.item_knowledgeSum:
-                        target_fragment = R.id.nav_knowledgeSum;
-                        break;
-                    case R.id.item_questionRec:
-                        target_fragment = R.id.nav_questionRec;
-                        break;
-                    case R.id.item_browsingHis:
-                        target_fragment = R.id.nav_browsingHis;
-                        break;
-                    case R.id.item_collectingHis:
-                        target_fragment = R.id.nav_collectingHis;
-                        break;
-                    default:
-                        break;
-                }
-                if (!navController.popBackStack(target_fragment, false)) {
-                    navController.navigate(target_fragment);
-                }
-                drawer.closeDrawer(navigationView);
-                return true;
-            }
-        });
-
         // 学科栏初始化
         TabLayout tabs = binding.appBarMain.tabs;
         for (int i = 0; i < 9; i++)
@@ -268,6 +224,59 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
 
+            }
+        });
+
+        // 设置菜单点击跳转
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int target_fragment = 0;
+                switch (item.getItemId()) {
+                    case R.id.item_instanceList :
+                        target_fragment = R.id.nav_instanceList;
+                        tabs.setVisibility(View.VISIBLE);
+                        break;
+                    case R.id.item_instanceFind :
+                        target_fragment = R.id.nav_instanceFind;
+                        tabs.setVisibility(View.VISIBLE);
+                        break;
+                    case R.id.item_instanceLink:
+                        target_fragment = R.id.nav_instanceLink;
+                        tabs.setVisibility(View.VISIBLE);
+                        break;
+                    case R.id.item_questionAns:
+                        target_fragment = R.id.nav_questionAns;
+                        tabs.setVisibility(View.VISIBLE);
+                        break;
+                    case R.id.item_specificTest:
+                        target_fragment = R.id.nav_specificTest;
+                        tabs.setVisibility(View.GONE);
+                        break;
+                    case R.id.item_knowledgeSum:
+                        target_fragment = R.id.nav_knowledgeSum;
+                        tabs.setVisibility(View.GONE);
+                        break;
+                    case R.id.item_questionRec:
+                        target_fragment = R.id.nav_questionRec;
+                        tabs.setVisibility(View.GONE);
+                        break;
+                    case R.id.item_browsingHis:
+                        target_fragment = R.id.nav_browsingHis;
+                        tabs.setVisibility(View.GONE);
+                        break;
+                    case R.id.item_collectingHis:
+                        target_fragment = R.id.nav_collectingHis;
+                        tabs.setVisibility(View.GONE);
+                        break;
+                    default:
+                        break;
+                }
+                if (!navController.popBackStack(target_fragment, false)) {
+                    navController.navigate(target_fragment);
+                }
+                drawer.closeDrawer(navigationView);
+                return true;
             }
         });
 
