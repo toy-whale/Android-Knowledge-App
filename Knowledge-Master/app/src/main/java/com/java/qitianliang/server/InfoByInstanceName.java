@@ -34,8 +34,8 @@ public class InfoByInstanceName {
                 object = x.getString("objectLabel");
             else
                 object = x.getString("object");
-            if(object.matches(pattern))
-                continue;
+            //if(object.matches(pattern))
+            //    continue;
             y.put("object", object);
             property.add(y);
         }

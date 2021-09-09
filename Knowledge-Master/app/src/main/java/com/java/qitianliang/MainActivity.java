@@ -436,10 +436,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 int offset = 2 * num_title + 2;
                 for (int i = 0; i < num_entity; i++) {
-                    int entity_index = i * 6 + offset;
+                    int entity_index = i * 7 + offset;
                     e.insertEntity(new Entity(allData[entity_index], allData[entity_index+1],
                             allData[entity_index+2], allData[entity_index+3],
-                            allData[entity_index+4], allData[entity_index+5]));
+                            allData[entity_index+4], allData[entity_index+5], allData[entity_index + 6]));
                 }
             }
         }.start();

@@ -34,6 +34,10 @@ public class QuestionListByUriName {
             JSONObject item = new JSONObject();
             String qBody = x.getString("qBody");
             String qAnswer = x.getString("qAnswer");
+            if(qAnswer != null && qAnswer.length() > 2) {
+                if(qAnswer.charAt(0) == '答' && qAnswer.charAt(1) == '案')
+                    qAnswer = qAnswer.substring(2);
+            }
             Matcher ma = ra.matcher(qBody);
             Matcher mb = rb.matcher(qBody);
             Matcher mc = rc.matcher(qBody);

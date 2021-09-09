@@ -39,7 +39,8 @@ public class EntityDBManager {
             @SuppressLint("Range") String property = cursor.getString(cursor.getColumnIndex("property"));
             @SuppressLint("Range") String relative = cursor.getString(cursor.getColumnIndex("relative"));
             @SuppressLint("Range") String question = cursor.getString(cursor.getColumnIndex("question"));
-            Entity entity = new Entity(name, subject, description, property, relative, question);
+            @SuppressLint("Range") String image = cursor.getString(cursor.getColumnIndex("image"));
+            Entity entity = new Entity(name, subject, description, property, relative, question, image);
             entityList.add(entity);
         }
         mHelper.close();
@@ -71,7 +72,8 @@ public class EntityDBManager {
             @SuppressLint("Range") String property = cursor.getString(cursor.getColumnIndex("property"));
             @SuppressLint("Range") String relative = cursor.getString(cursor.getColumnIndex("relative"));
             @SuppressLint("Range") String question = cursor.getString(cursor.getColumnIndex("question"));
-            entity = new Entity(name, subject, description, property, relative, question);
+            @SuppressLint("Range") String image = cursor.getString(cursor.getColumnIndex("image"));
+            entity = new Entity(name, subject, description, property, relative, question, image);
             mHelper.close();
         }
         return entity;
@@ -88,6 +90,6 @@ public class EntityDBManager {
         String u = entity.getName() + entity.getSubject();
         Entity judge = getEntityByUri(entity.getName(), entity.getSubject());
         if (judge != null) return;
-        db.execSQL("insert into entity(uri, name, time, subject, description, property, relative, question) values(?,?,?,?,?,?,?,?)", new Object[]{u, entity.getName(), System.currentTimeMillis(), entity.getSubject(), entity.getDescription(), entity.getProperty(), entity.getRelative(), entity.getQuestion()});
+        db.execSQL("insert into entity(uri, name, time, subject, description, property, relative, question, image) values(?,?,?,?,?,?,?,?,?)", new Object[]{u, entity.getName(), System.currentTimeMillis(), entity.getSubject(), entity.getDescription(), entity.getProperty(), entity.getRelative(), entity.getQuestion(), entity.getImage()});
     }
 }

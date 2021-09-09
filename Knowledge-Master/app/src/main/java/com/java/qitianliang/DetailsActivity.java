@@ -3,11 +3,14 @@ package com.java.qitianliang;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
+import android.util.Base64;
 import android.widget.*;
 import android.view.*;
 
@@ -26,12 +29,17 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java.qitianliang.ui.linkinstance.InstanceAdapter;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DetailsActivity extends AppCompatActivity {
     private TextView title;
     private TextView description;
+    private TextView item;
+    private ImageView image;
     private List<Question> QuestionList = new ArrayList<Question>();
     private List<Property> PropertyList = new ArrayList<Property>();
     private List<Relative> RelativeList = new ArrayList<Relative>();
@@ -41,8 +49,9 @@ public class DetailsActivity extends AppCompatActivity {
     private boolean is_find = false;
     private JSONObject Questions = null;
     private JSONObject Result = null;
+    private Bitmap imageMap = null;
+    private static String http = "^http:(.*)";
     private String is_collect = "false"; //是否收藏
-
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -66,7 +75,6 @@ public class DetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Name = intent.getStringExtra("name");
         Course = intent.getStringExtra("course");
-        //查找收藏记录
         if (username != null && findInDB("c"))
             is_collect = "true";
         else
@@ -77,8 +85,8 @@ public class DetailsActivity extends AppCompatActivity {
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.show();
         //查找历史记录
-        if (username != null)
-            is_find = findInDB("h");
+        //if (username != null)
+        is_find = findInDB("h");
         if (is_find == true) {
             initdata();
             return;
@@ -105,6 +113,21 @@ public class DetailsActivity extends AppCompatActivity {
                             result = InfoByInstanceName.get(Course, Name, ID);
                         } catch (Exception e) {
                             e.printStackTrace();
+                        }
+                        if(result != null) {
+                            JSONObject Re = JSONObject.parseObject(result);
+                            JSONArray u = Re.getJSONArray("property");
+                            for (int i = 0; i < u.size(); i++) {
+                                JSONObject x = u.getJSONObject(i);
+                                if (x.getString("label") != null && x.getString("label").equals("图片")) {
+                                    try {
+                                        imageMap = GetImage.get(x.getString("object"));
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    break;
+                                }
+                            }
                         }
                         String question = "";
                         try {
@@ -168,6 +191,7 @@ public class DetailsActivity extends AppCompatActivity {
                 //ShareUtil.shareText(this,"发送详情页！","test");
                 break;
             case android.R.id.home:
+                imageMap = null;
                 finish();
                 break;
             default:
@@ -207,10 +231,11 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void initdata() {
-        //定义习题
         if (Questions == null && is_find == false) return;
         setContentView(R.layout.activity_details);
+        image = (ImageView) findViewById(R.id.entity_image);
         title = (TextView) findViewById(R.id.title);
+        item = (TextView) findViewById(R.id.item);
         description = (TextView) findViewById(R.id.description);
         title.setText(Name);
         if (is_find == true) {  //如果历史记录中有当前项
@@ -226,20 +251,36 @@ public class DetailsActivity extends AppCompatActivity {
             initQuestion(data);
             manager.deleteEntityByUri(Name, Course);
             manager.insertEntity(entity);
+            String I = entity.getImage();
+            Bitmap Map = StringToBitmap(I);
+            if(!I.equals("")) {
+                image.setImageBitmap(Map);
+                image.setVisibility(View.VISIBLE);
+                title.setGravity(Gravity.LEFT);
+                item.setGravity(Gravity.LEFT);
+            }
         } else {  //从网络获取数据
-            if(username != null) {
-                //更新数据库
+            if(imageMap != null) {
+                image.setImageBitmap(imageMap);
+                image.setVisibility(View.VISIBLE);
+                title.setGravity(Gravity.LEFT);
+                item.setGravity(Gravity.LEFT);
+            }
+            if(username != null) { //更新数据库
                 EntityDBManager manager = EntityDBManager.getInstance(this, username);
                 Entity entity = manager.getEntityByUri(Name, Course);
                 if (entity != null)
                     manager.deleteEntityByUri(Name, Course);
                 String name = Name;
                 String subject = Course;
-                String description = findDescription();
+                String D = findDescription();
                 String property = Result.getJSONArray("property").toString();
                 String relative = Result.getJSONArray("content").toString();
                 String question = Questions.getJSONArray("data").toString();
-                Entity e = new Entity(name, subject, description, property, relative, question);
+                String I = BitmapToString(imageMap);
+                if(I == null)
+                    I = "";
+                Entity e = new Entity(name, subject, D, property, relative, question, I);
                 manager.insertEntity(e);
             }
             initRelative(Result.getJSONArray("content"));
@@ -253,6 +294,8 @@ public class DetailsActivity extends AppCompatActivity {
     void initRelative(JSONArray data) {
         for (int i = 0; i < data.size(); i++) {
             JSONObject y = data.getJSONObject(i);
+            if(y.getString("object") != null && y.getString("object").matches(http))
+                continue;
             Relative u = new Relative(y, Name);
             RelativeList.add(u);
         }
@@ -264,6 +307,8 @@ public class DetailsActivity extends AppCompatActivity {
     void initProperty(JSONArray data) {
         for (int i = 0; i < data.size(); i++) {
             JSONObject y = data.getJSONObject(i);
+            if(y.getString("object") != null && y.getString("object").matches(http))
+                continue;
             Property u = new Property(y);
             PropertyList.add(u);
         }
@@ -285,6 +330,28 @@ public class DetailsActivity extends AppCompatActivity {
         NoScrollListview question_listView = (NoScrollListview) findViewById(R.id.question_list_view);
         question_listView.setAdapter(question_adapter);
     }
+
+    public Bitmap StringToBitmap(String string) {
+        Bitmap bitmap = null;
+        try {
+            byte[] bitmapArray;
+            bitmapArray = Base64.decode(string, Base64.DEFAULT);
+            bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
+    public String BitmapToString(Bitmap bitmap) {
+        String string = null;
+        ByteArrayOutputStream bStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream);
+        byte[]bytes = bStream.toByteArray();
+        string=Base64.encodeToString(bytes, Base64.DEFAULT);
+        return string;
+    }
+
     void PrintAll() {
         EntityDBManager manager = EntityDBManager.getInstance(this, username);
         List<Entity> e = manager.getAllEntity();

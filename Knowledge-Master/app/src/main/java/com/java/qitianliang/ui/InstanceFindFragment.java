@@ -203,8 +203,8 @@ public class InstanceFindFragment extends Fragment {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            if(answer == null)
-                                msg.what = 0;
+                            //if(answer == null)
+                            //    msg.what = 0;
                             Bundle bundle = new Bundle();
                             bundle.putString("answer", answer);
                             msg.setData(bundle);

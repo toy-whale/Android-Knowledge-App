@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class EntitySQLiteOpenHelper extends SQLiteOpenHelper {
     // 数据库名
-    private static final String NAME = "history.db";
+    private static final String NAME = "E.db";
     // 数据库版本
     private static final int VERSION = 1;
     // 建表语句
@@ -18,7 +18,8 @@ public class EntitySQLiteOpenHelper extends SQLiteOpenHelper {
             "description text," +
             "property text," +
             "relative text," +
-            "question text)";
+            "question text," +
+            "image text)";
 
     public EntitySQLiteOpenHelper(Context context, String username) {
         super(context, NAME + username, null, VERSION);

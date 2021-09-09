@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class TitleSQLiteOpenHelper extends SQLiteOpenHelper {
     // 数据库名
-    private static final String NAME = "collecting.db";
+    private static final String NAME = "C.db";
     // 数据库版本
     private static final int VERSION = 1;
     // 建表语句

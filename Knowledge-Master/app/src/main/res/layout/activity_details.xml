@@ -11,24 +11,45 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="title"
-            android:gravity="center"
-            android:layout_gravity="center_horizontal"
-            android:textSize="40dp"
-            android:paddingTop="0dp"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-        <TextView
-            android:id="@+id/item"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="实体"
-            android:gravity="center"
-            android:textSize="20dp"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="title"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:gravity="center"
+                    android:textSize="40dp"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                <TextView
+                    android:id="@+id/item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="实体"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:gravity="center"
+                    android:textSize="20dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/entity_image"
+                android:visibility="visible"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
+            </ImageView>
+        </LinearLayout>
         <TextView
             android:id="@+id/description"
             android:layout_width="match_parent"
@@ -104,7 +125,7 @@
             android:layout_height="wrap_content"
             android:divider="#00000000"
             android:id="@+id/question_list_view"
-            android:layout_marginTop= "20dp"
+            android:layout_marginTop= "10dp"
             >
         </com.java.qitianliang.noScrollListview.NoScrollListview>
     </LinearLayout>
