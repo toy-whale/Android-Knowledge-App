@@ -97,7 +97,7 @@ public class DetailsActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    if (ID.equals(""))
+                    if (ID == null || ID.equals(""))
                         msg.what = 0;
                     else {
                         String result = "";
@@ -164,8 +164,8 @@ public class DetailsActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.share: //分享到新浪微博
-                //Toast.makeText(this, "分享到新浪微博！", Toast.LENGTH_LONG).show();
-                ShareUtil.shareText(this,"发送详情页！","test");
+                Toast.makeText(this, "分享到新浪微博！", Toast.LENGTH_LONG).show();
+                //ShareUtil.shareText(this,"发送详情页！","test");
                 break;
             case android.R.id.home:
                 finish();

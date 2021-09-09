@@ -12,21 +12,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <!--
-        <Button
-            android:id="@+id/refresh"
+        <TextView
+            android:id="@+id/refresh_notice"
             android:paddingTop="5dp"
+            android:textSize="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="换一批"/>
-            -->
+            android:text="下拉更新推荐"/>
         <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="#00000000"
             android:id="@+id/rec_list_view"
-            android:layout_marginTop= "5dp"
+            android:layout_marginTop= "0dp"
             >
         </ListView>
     </LinearLayout>

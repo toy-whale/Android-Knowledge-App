@@ -76,9 +76,9 @@ public class QuestionAdapter extends ArrayAdapter<Question> {
         });
         Share.setOnClickListener(new View.OnClickListener() { //分享试题
             public void onClick(View v) {
-                //Toast.makeText(getContext(), "分享到新浪微博！",Toast.LENGTH_LONG);
-                //System.out.println("分享到新浪微博！");
-                ShareUtil.shareText(getContext(),"发送试题！","test");
+                Toast.makeText(getContext(), "分享到新浪微博！",Toast.LENGTH_LONG);
+                System.out.println("分享到新浪微博！");
+                //ShareUtil.shareText(getContext(),"发送试题！","test");
             }
         });
         return view;
