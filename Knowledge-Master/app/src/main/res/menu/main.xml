@@ -19,6 +19,12 @@
         android:orderInCategory="100"
         android:title="@string/logout"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_exit"
+        android:orderInCategory="100"
+        android:title="退出"
+        app:showAsAction="never" />
     <!--
     <item
         android:id="@+id/clear_text"

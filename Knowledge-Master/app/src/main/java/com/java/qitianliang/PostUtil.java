@@ -19,7 +19,7 @@ public class PostUtil {
             // your phone(run android app) and PC(run server) should share Internet connection
             // and change it into your PC(server) Internet IPv4 address
             
-            HttpURLConnection conn = (HttpURLConnection) new URL("http://183.172.52.139:8080/AndroidWeb/"+url).openConnection();
+            HttpURLConnection conn = (HttpURLConnection) new URL("http://183.172.180.79:8081/AndroidWeb/"+url).openConnection();
             conn.setRequestMethod("POST");
             conn.setReadTimeout(5000);
             conn.setConnectTimeout(5000);
@@ -34,7 +34,6 @@ public class PostUtil {
                 InputStream is = conn.getInputStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                 StringBuffer response = new StringBuffer();
-
                 String line = null;
                 while ((line = reader.readLine()) != null) {
                     response.append(line);
