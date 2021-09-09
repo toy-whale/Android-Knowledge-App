@@ -73,7 +73,7 @@ public class InstanceListFragment extends Fragment {
 
         // 初始化
         currentSub = MainActivity.currentSubject;
-        instanceListOfSub = MainActivity.instanceListOfAll.get(currentSub);
+        instanceListOfSub = new ArrayList<String>(MainActivity.instanceListOfAll.get(currentSub));
         assert instanceListOfSub != null;
         instanceListOfSubByLength = new ArrayList<String>(instanceListOfSub);
         instanceListOfSubByLength.sort(new Comparator<String>() {
@@ -98,6 +98,11 @@ public class InstanceListFragment extends Fragment {
         for (int i = 0; i < INSTANCE_A_TIME; i+=2) {
             InstanceListPair.add(new Instance_list_pair(instanceListOfSub.get(i), instanceListOfSub.get(i+1)));
         }
+        // 末页
+        instanceListOfSub.add("null");
+        instanceListOfSubByChar.add("null");
+        instanceListOfSubByLength.add("null");
+
         instance_listView = view.findViewById(R.id.list_list_view);
         instance_adapter = new ListAdapter(getActivity(), R.layout.instance_list_item, InstanceListSingle);
         instance_pair_adapter = new ListPairAdapter(getActivity(), R.layout.instance_list_item_grid, InstanceListPair);
@@ -108,13 +113,17 @@ public class InstanceListFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView textView, int p, KeyEvent keyEvent) {
                 int target_page = Integer.parseInt(jump_page.getText().toString());
-                if (target_page <= 0 || target_page >= page_amount ) {
+                if (target_page <= 0 || target_page > page_amount ) {
                     Toast.makeText(getContext(), "不在页数范围内!", Toast.LENGTH_LONG).show();
                     return false;
                 }
                 current_page = target_page;
                 int i = (current_page - 1) * INSTANCE_A_TIME;
-                int j = i + INSTANCE_A_TIME;
+                int j = 0;
+                if (current_page != page_amount)
+                    j = i + INSTANCE_A_TIME;
+                else
+                    j = instance_amount;
                 int k = i;
                 InstanceListSingle.clear();
                 InstanceListPair.clear();
@@ -168,7 +177,8 @@ public class InstanceListFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (current_page >= 2) {
-                    int i = (current_page - 2) * INSTANCE_A_TIME;
+                    current_page--;
+                    int i = (current_page - 1) * INSTANCE_A_TIME;
                     int j = i + INSTANCE_A_TIME;
                     int k = i;
                     InstanceListSingle.clear();
@@ -201,7 +211,6 @@ public class InstanceListFragment extends Fragment {
                         default:
                             break;
                     }
-                    current_page--;
                     switch (currentDis) {
                         case 4:
                             instance_listView.setAdapter(instance_adapter);
@@ -227,8 +236,13 @@ public class InstanceListFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (current_page < page_amount) {
-                    int i = (current_page) * INSTANCE_A_TIME;
-                    int j = i + INSTANCE_A_TIME;
+                    current_page++;
+                    int i = (current_page - 1) * INSTANCE_A_TIME;
+                    int j = 0;
+                    if (current_page != page_amount)
+                        j = i + INSTANCE_A_TIME;
+                    else
+                        j = instance_amount;
                     int k = i;
                     InstanceListSingle.clear();
                     InstanceListPair.clear();
@@ -260,7 +274,6 @@ public class InstanceListFragment extends Fragment {
                         default:
                             break;
                     }
-                    current_page++;
                     switch (currentDis) {
                         case 4:
                             instance_listView.setAdapter(instance_adapter);

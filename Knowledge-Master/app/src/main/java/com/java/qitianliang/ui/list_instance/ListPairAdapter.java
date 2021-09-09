@@ -43,6 +43,11 @@ public class ListPairAdapter extends ArrayAdapter<Instance_list_pair> {
         String name_r = instance.getLabelRight();
         t_right.setText(name_r);
 
+        //末页检测
+        if (name_r.equals("null")) {
+            view.findViewById(R.id.hide_list).setVisibility(View.INVISIBLE);
+        }
+
         t_left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

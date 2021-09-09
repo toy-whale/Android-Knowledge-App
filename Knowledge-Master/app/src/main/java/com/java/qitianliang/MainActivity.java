@@ -108,18 +108,18 @@ public class MainActivity extends AppCompatActivity {
                         // Login Activity
                         startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), 1);
                         break;
-                    case R.id.clear_text:
-                        //清除浏览记录
-                        if(loginUsername != null) {
-                            EntityDBManager manager = EntityDBManager.getInstance(MainActivity.this, loginUsername);
-                            manager.deleteAllEntity();
-                        }
-                        Toast.makeText(MainActivity.this, "浏览记录已清除!", Toast.LENGTH_LONG).show();
-                        break;
-                    case R.id.test:
-                        intent = new Intent();
-                        intent.setClass(com.java.qitianliang.MainActivity.this, ActivityTest.class);
-                        startActivity(intent);
+//                    case R.id.clear_text:
+//                        //清除浏览记录
+//                        if(loginUsername != null) {
+//                            EntityDBManager manager = EntityDBManager.getInstance(MainActivity.this, loginUsername);
+//                            manager.deleteAllEntity();
+//                        }
+//                        Toast.makeText(MainActivity.this, "浏览记录已清除!", Toast.LENGTH_LONG).show();
+//                        break;
+//                    case R.id.test:
+//                        intent = new Intent();
+//                        intent.setClass(com.java.qitianliang.MainActivity.this, ActivityTest.class);
+//                        startActivity(intent);
                     default:
                         break;
                 }
