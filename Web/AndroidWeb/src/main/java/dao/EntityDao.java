@@ -31,8 +31,9 @@ public class EntityDao {
                    String property_db = rs.getString(5);
                    String relative_db = rs.getString(6);
                    String question_db = rs.getString(7);
+                   String image_db = rs.getString(8);
                    Entity tmp = new Entity(name_db, subject_db, description_db,
-                		   property_db, relative_db, question_db);
+                		   property_db, relative_db, question_db, image_db);
                    result.add(tmp);
                 }
             } catch (SQLException e) {
@@ -46,7 +47,7 @@ public class EntityDao {
 		if (username == null || username.equals(""))
 			return false;
 		
-		String sql = "insert into entities(username, name, subject, description, property, relative, question) values (?, ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into entities(username, name, subject, description, property, relative, question, image) values (?, ?, ?, ?, ?, ?, ?, ?)";
 		Connection conn = JDBCUtils.getConn();
 		
 		if (conn != null) {
@@ -63,6 +64,7 @@ public class EntityDao {
                     ps.setString(5, tmp.getProperty());
                     ps.setString(6, tmp.getRelative());
                     ps.setString(7, tmp.getQuestion());
+                    ps.setString(8, tmp.getImage());
                     ps.executeUpdate();
         		}
             } catch (SQLException e) {

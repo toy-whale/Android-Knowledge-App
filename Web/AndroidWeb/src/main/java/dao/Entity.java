@@ -8,14 +8,16 @@ public class Entity {
     private String property;
     private String relative;
     private String question;
+    private String image;
     
-    public Entity(String name, String subject, String description, String property, String relative, String question) {
+    public Entity(String name, String subject, String description, String property, String relative, String question, String image) {
         this.name = name;
         this.subject = subject;
         this.description = description;
         this.property = property;
         this.relative = relative;
         this.question = question;
+        this.image = image;
     }
 
     public String getName() {
@@ -53,4 +55,11 @@ public class Entity {
     		return "null";
         return question;
     }
+    
+    public String getImage() {
+    	if (image == null || image.equals(""))
+    		return "null";
+        return image;
+    }
+    
 }

@@ -481,7 +481,8 @@ public class MainActivity extends AppCompatActivity {
                                 "&entity" + Integer.toString(j) + "description=" + URLEncoder.encode(e.get(j).getDescription(), "UTF-8") +
                                 "&entity" + Integer.toString(j) + "property=" + URLEncoder.encode(e.get(j).getProperty(), "UTF-8") +
                                 "&entity" + Integer.toString(j) + "relative=" + URLEncoder.encode(e.get(j).getRelative(), "UTF-8") +
-                                "&entity" + Integer.toString(j) + "question=" + URLEncoder.encode(e.get(j).getQuestion(), "UTF-8");
+                                "&entity" + Integer.toString(j) + "question=" + URLEncoder.encode(e.get(j).getQuestion(), "UTF-8") +
+                                "&entity" + Integer.toString(j) + "image=" + URLEncoder.encode(e.get(j).getImage(), "UTF-8");
                         upgrade += msg_entity;
                     }
                 } catch (UnsupportedEncodingException ex) {

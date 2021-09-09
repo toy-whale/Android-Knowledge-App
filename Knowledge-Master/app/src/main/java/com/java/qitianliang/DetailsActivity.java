@@ -345,6 +345,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     public String BitmapToString(Bitmap bitmap) {
         String string = null;
+        if (bitmap == null) return string;
         ByteArrayOutputStream bStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream);
         byte[]bytes = bStream.toByteArray();

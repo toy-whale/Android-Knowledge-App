@@ -58,7 +58,8 @@ public class HistoryServlet extends HttpServlet {
 						+ load_entity.get(j).getDescription() + split
 						+ load_entity.get(j).getProperty() + split
 						+ load_entity.get(j).getRelative() + split
-						+ load_entity.get(j).getQuestion() + split;
+						+ load_entity.get(j).getQuestion() + split
+						+ load_entity.get(j).getImage() + split;
 			}
 			
 			String msg = Integer.toString(num_title) + split + Integer.toString(num_entity) + split + msg_title + msg_entity;
@@ -92,9 +93,11 @@ public class HistoryServlet extends HttpServlet {
 				String getProperty = "entity" + Integer.toString(j) + "property";
 				String getRelative = "entity" + Integer.toString(j) + "relative";
 				String getQuestion = "entity" + Integer.toString(j) + "question";
+				String getImage = "entity" + Integer.toString(j) + "image";
 				Entity tmp = new Entity(request.getParameter(getName), request.getParameter(getSubject),
 						request.getParameter(getDescription), request.getParameter(getProperty),
-						request.getParameter(getRelative), request.getParameter(getQuestion));
+						request.getParameter(getRelative), request.getParameter(getQuestion),
+						request.getParameter(getImage));
 				upgrade_entity.add(tmp);
 			}
 			titleDao.insertAllTitle(username, upgrade_title);
