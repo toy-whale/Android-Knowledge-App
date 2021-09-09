@@ -102,7 +102,7 @@ public class InstanceLinkFragment extends Fragment {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            if (ID.equals(""))
+                            if (ID == null || ID.equals(""))
                                 msg.what = 0;
                             String answer = null;
                             try {

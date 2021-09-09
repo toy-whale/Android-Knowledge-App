@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.item_specificTest:
                         target_fragment = R.id.nav_specificTest;
-                        tabs.setVisibility(View.GONE);
+                        tabs.setVisibility(View.VISIBLE);
                         break;
                     case R.id.item_knowledgeSum:
                         target_fragment = R.id.nav_knowledgeSum;

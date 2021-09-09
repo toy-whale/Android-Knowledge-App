@@ -180,7 +180,7 @@ public class InstanceFindFragment extends Fragment {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            if (ID.equals(""))
+                            if (ID == null || ID.equals(""))
                                 msg.what = 0;
                             int sort_pos = sort_option.getSelectedItemPosition();
                             String sort_type = null;

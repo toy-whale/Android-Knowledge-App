@@ -97,7 +97,7 @@ public class DetailsActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    if (ID.equals(""))
+                    if (ID == null || ID.equals(""))
                         msg.what = 0;
                     else {
                         String result = "";

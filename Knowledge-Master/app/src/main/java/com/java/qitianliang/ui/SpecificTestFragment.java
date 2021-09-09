@@ -67,7 +67,6 @@ public class SpecificTestFragment extends Fragment {
                 String answer = bundle.getString("answer");
                 JSONObject x = JSONObject.parseObject(answer);
                 String message = x.getString("msg");
-                System.out.println(message);
                 if(message.equals("1")) {
                     AlertDialog.Builder result = new AlertDialog.Builder(getActivity());
                     result.setTitle("警告");
@@ -161,7 +160,7 @@ public class SpecificTestFragment extends Fragment {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            if (ID.equals(""))
+                            if (ID == null || ID.equals(""))
                                 msg.what = 0;
                             String answer = null;
                             try {
