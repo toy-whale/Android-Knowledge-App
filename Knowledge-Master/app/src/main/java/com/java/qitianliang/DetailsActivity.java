@@ -79,6 +79,7 @@ public class DetailsActivity extends AppCompatActivity {
             is_collect = "true";
         else
             is_collect = "false";
+        imageMap = null;
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -122,6 +123,10 @@ public class DetailsActivity extends AppCompatActivity {
                                 if (x.getString("label") != null && x.getString("label").equals("图片")) {
                                     try {
                                         imageMap = GetImage.get(x.getString("object"));
+                                        int srcWidth = imageMap.getWidth();
+                                        int srcHeight = imageMap.getHeight();
+                                        if(srcWidth * srcHeight < 10000)
+                                            imageMap = null;
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
@@ -253,7 +258,7 @@ public class DetailsActivity extends AppCompatActivity {
             manager.insertEntity(entity);
             String I = entity.getImage();
             Bitmap Map = StringToBitmap(I);
-            if(!I.equals("")) {
+            if(I != null && !I.equals("") && !I.equals("null")) {
                 image.setImageBitmap(Map);
                 image.setVisibility(View.VISIBLE);
                 title.setGravity(Gravity.LEFT);

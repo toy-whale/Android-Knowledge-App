@@ -183,7 +183,7 @@ public class SpecificTestFragment extends Fragment {
         myItem.setHasFixedSize(true);
         myItemPaint = new Paint();
         myItemPaint.setTextSize(40);
-        mPaddingSize = 80;
+        mPaddingSize = 120;
         final int width = getActivity().getWindowManager().getDefaultDisplay().getWidth();
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), width);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
