@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private DrawerLayout drawer;
     private NavigationView navigationView;
+    private NavController navController;
 
     // 用于同步浏览记录
     public static String loginUsername = null;
@@ -185,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_collectingHis)
                 .setOpenableLayout(drawer)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
@@ -313,16 +314,18 @@ public class MainActivity extends AppCompatActivity {
 
         switch (requestCode) {
             case 1:
-                if (resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK)
                     // Get Login Username for Collecting List and History Record
                     loginUsername = data.getStringExtra("data_return");
-                } else
+                else
                     loginUsername = null;
                 if (loginUsername != null) {
                     ((TextView) findViewById(R.id.usernameView)).setText(loginUsername);
                     // 根据用户加载收藏记录
                     loadHistory();
                 }
+                else
+                    ((TextView) findViewById(R.id.usernameView)).setText("未登录");
                 break;
             case 2:
                 if (resultCode == RESULT_OK) {
@@ -344,6 +347,8 @@ public class MainActivity extends AppCompatActivity {
                     loginUsername = data.getStringExtra("data_return");
                     ((TextView) findViewById(R.id.usernameView)).setText(loginUsername);
                     // reload user data
+                    upgradeHistory();
+                    changeHistory(oldUsername);
                     loadHistory();
                 }
                 break;
@@ -493,5 +498,25 @@ public class MainActivity extends AppCompatActivity {
             }
         }.start();
     }
+
+    //修改用户信息
+    public void changeHistory(String oldUsername) {
+        //
+        new Thread() {
+            @Override
+            public void run() {
+                String change = "";
+                // request
+                try {
+                    change = "request=change&oldusername=" + URLEncoder.encode(oldUsername, "UTF-8") +
+                            "&newusername=" + URLEncoder.encode(loginUsername, "UTF-8");
+                } catch (UnsupportedEncodingException ex) {
+                    ex.printStackTrace();
+                }
+                String request = PostUtil.Post("HistoryServlet", change);
+            }
+        }.start();
+    }
+
 
 }

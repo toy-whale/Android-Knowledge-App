@@ -55,10 +55,25 @@ public class FindPairAdapter extends ArrayAdapter<Instance_find_pair> {
         if (name_r.equals("") && cate_r.equals(""))
             view.findViewById(R.id.hide_or_not).setVisibility(View.INVISIBLE);
 
+        // 浏览记录检测
+        if (MainActivity.loginUsername != null) {
+            EntityDBManager manager = EntityDBManager.getInstance(getContext(), MainActivity.loginUsername);
+            List<com.java.qitianliang.SQLite.Entity> e = manager.getAllEntity();
+            for (int i = 0; i < e.size(); i++) {
+                if (e.get(i).getName().equals(name_l)) {
+                    left1.setTextColor(R.color.purple_500);
+                }
+                if (e.get(i).getName().equals(name_r)) {
+                    right1.setTextColor(R.color.purple_500);
+                }
+            }
+        }
+
         LinearLayout left = view.findViewById(R.id.always_show);
         left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                left1.setTextColor(R.color.purple_500);
                 Intent intent = new Intent();
                 intent.setClass(getContext(), DetailsActivity.class);
                 intent.putExtra("name", name_l);
@@ -71,26 +86,15 @@ public class FindPairAdapter extends ArrayAdapter<Instance_find_pair> {
         right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                right1.setTextColor(R.color.purple_500);
                 Intent intent = new Intent();
                 intent.setClass(getContext(), DetailsActivity.class);
                 intent.putExtra("name", name_r);
                 intent.putExtra("course", MainActivity.currentSubject);
                 getContext().startActivity(intent);
+
             }
         });
-
-        // 浏览记录检测
-        if (MainActivity.loginUsername == null) return view;
-        EntityDBManager manager = EntityDBManager.getInstance(getContext(), MainActivity.loginUsername);
-        List<com.java.qitianliang.SQLite.Entity> e = manager.getAllEntity();
-        for (int i = 0; i < e.size(); i++) {
-            if (e.get(i).getName().equals(name_l)) {
-                left1.setTextColor(R.color.purple_500);
-            }
-            if (e.get(i).getName().equals(name_r)) {
-                right1.setTextColor(R.color.purple_500);
-            }
-        }
 
         return view;
     }

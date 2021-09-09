@@ -39,8 +39,20 @@ public class FindAdapter extends ArrayAdapter<Instance_find> {
         String cate = instance.getCategory();
         entity.setText(name);
         category.setText(cate);
+        // 浏览记录检测
+        if (MainActivity.loginUsername != null) {
+            EntityDBManager manager = EntityDBManager.getInstance(getContext(), MainActivity.loginUsername);
+            List<com.java.qitianliang.SQLite.Entity> e = manager.getAllEntity();
+            for (int i = 0; i < e.size(); i++) {
+                if (e.get(i).getName().equals(name)) {
+                    entity.setTextColor(R.color.purple_500);
+                }
+            }
+        }
+
         view.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                entity.setTextColor(R.color.purple_500);
                 Intent intent = new Intent();
                 intent.setClass(getContext(), DetailsActivity.class);
                 intent.putExtra("name", name);
@@ -48,16 +60,6 @@ public class FindAdapter extends ArrayAdapter<Instance_find> {
                 getContext().startActivity(intent);
             }
         });
-
-        // 浏览记录检测
-        if (MainActivity.loginUsername == null) return view;
-        EntityDBManager manager = EntityDBManager.getInstance(getContext(), MainActivity.loginUsername);
-        List<com.java.qitianliang.SQLite.Entity> e = manager.getAllEntity();
-        for (int i = 0; i < e.size(); i++) {
-            if (e.get(i).getName().equals(name)) {
-                entity.setTextColor(R.color.purple_500);
-            }
-        }
 
         return view;
     }
