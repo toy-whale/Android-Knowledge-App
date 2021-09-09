@@ -25,7 +25,6 @@ public class EntityDao {
                 ResultSet rs = ps.executeQuery();
 
                 while (rs.next()){
-                   int id = rs.getInt(1);
                    String name_db = rs.getString(2);
                    String subject_db = rs.getString(3);
                    String description_db = rs.getString(4);
@@ -47,7 +46,7 @@ public class EntityDao {
 		if (username == null || username.equals(""))
 			return false;
 		
-		String sql = "insert into entities(name, subject, description, property, relative, question, username) values (?, ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into entities(username, name, subject, description, property, relative, question) values (?, ?, ?, ?, ?, ?, ?)";
 		Connection conn = JDBCUtils.getConn();
 		
 		if (conn != null) {
@@ -57,13 +56,13 @@ public class EntityDao {
         			boolean isExist = judgeExist(tmp, username);
         			if (isExist) continue;
         			PreparedStatement ps = conn.prepareStatement(sql);
-                    ps.setString(1, tmp.getName());
-                    ps.setString(2, tmp.getSubject());
-                    ps.setString(3, tmp.getDescription());
-                    ps.setString(4, tmp.getProperty());
-                    ps.setString(5, tmp.getRelative());
-                    ps.setString(6, tmp.getQuestion());
-                    ps.setString(7, username);
+                    ps.setString(1, username);
+                    ps.setString(2, tmp.getName());
+                    ps.setString(3, tmp.getSubject());
+                    ps.setString(4, tmp.getDescription());
+                    ps.setString(5, tmp.getProperty());
+                    ps.setString(6, tmp.getRelative());
+                    ps.setString(7, tmp.getQuestion());
                     ps.executeUpdate();
         		}
             } catch (SQLException e) {
@@ -76,19 +75,14 @@ public class EntityDao {
 	public boolean judgeExist(Entity e, String username) {
 		if (username == null || username.equals(""))
 			return true;
-		String sql = "select * from entities where name = ? and subject = ? and description = ? and property = ? and relative = ? and question = ? and username = ?";
+		String sql = "select * from entities where username = ? and name = ?";
         Connection conn = JDBCUtils.getConn();
         
         if (conn != null) {
         	try {
                 PreparedStatement ps = conn.prepareStatement(sql);
-                ps.setString(1, e.getName());
-                ps.setString(2, e.getSubject());
-                ps.setString(3, e.getDescription());
-                ps.setString(4, e.getProperty());
-                ps.setString(5, e.getRelative());
-                ps.setString(6, e.getQuestion());
-                ps.setString(7, username);
+                ps.setString(1, username);
+                ps.setString(2, e.getName());
                 ResultSet rs = ps.executeQuery();
 
                 while (rs.next()){

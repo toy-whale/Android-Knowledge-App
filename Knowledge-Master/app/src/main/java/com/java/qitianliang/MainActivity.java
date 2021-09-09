@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                             manager.deleteAllEntity();
                         }
                         Toast.makeText(MainActivity.this, "浏览记录已清除!", Toast.LENGTH_LONG).show();
+                        break;
                     case R.id.test:
                         intent = new Intent();
                         intent.setClass(com.java.qitianliang.MainActivity.this, ActivityTest.class);
@@ -251,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.item_specificTest:
                         target_fragment = R.id.nav_specificTest;
-                        tabs.setVisibility(View.GONE);
+                        tabs.setVisibility(View.VISIBLE);
                         break;
                     case R.id.item_knowledgeSum:
                         target_fragment = R.id.nav_knowledgeSum;
@@ -279,9 +280,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-        // 加载历史记录
-
 
         // Login Activity
         startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), 1);
@@ -428,7 +426,7 @@ public class MainActivity extends AppCompatActivity {
                 String request = PostUtil.Post("HistoryServlet", load);
 
                 // load
-                String[] allData = request.split(" ");
+                String[] allData = request.split("_");
                 int num_title = Integer.parseInt(allData[0]);
                 int num_entity = Integer.parseInt(allData[1]);
 
@@ -465,28 +463,27 @@ public class MainActivity extends AppCompatActivity {
                 // upgrade
                 int num_title = v.size();
                 int num_entity = e.size();
-                String msg_title = "";
-                String msg_entity = "";
-                for (int i = 0; i < num_title; i++) {
-                    msg_title = msg_title + v.get(i).getTitle() + " "
-                            + v.get(i).getSubject() + " ";
-                }
-                for (int j = 0; j < num_entity; j++) {
-                    msg_entity = msg_entity + e.get(j).getName() + " "
-                            + e.get(j).getSubject() + " "
-                            + e.get(j).getDescription() + " "
-                            + e.get(j).getProperty() + " "
-                            + e.get(j).getRelative() + " "
-                            + e.get(j).getQuestion() + " ";
-                }
 
                 // request
                 try {
                     upgrade = "request=upgrade&username=" + URLEncoder.encode(username, "UTF-8") +
                             "&titleNum=" + URLEncoder.encode(Integer.toString(num_title), "UTF-8") +
-                            "&entityNum=" + URLEncoder.encode(Integer.toString(num_entity), "UTF-8") +
-                            "&titles=" + URLEncoder.encode(msg_title, "UTF-8") +
-                            "&entities=" + URLEncoder.encode(msg_entity, "UTF-8");
+                            "&entityNum=" + URLEncoder.encode(Integer.toString(num_entity), "UTF-8");
+                    // 添加title和entity
+                    for (int i = 0; i < num_title; i++) {
+                        String msg_title = "&title" + Integer.toString(i) + "title=" + URLEncoder.encode(v.get(i).getTitle(), "UTF-8") +
+                                "&title" + Integer.toString(i) + "subject=" + URLEncoder.encode(v.get(i).getSubject(), "UTF-8");
+                        upgrade += msg_title;
+                    }
+                    for (int j = 0; j < num_entity; j++) {
+                        String msg_entity = "&entity" + Integer.toString(j) + "name=" + URLEncoder.encode(e.get(j).getName(), "UTF-8") +
+                                "&entity" + Integer.toString(j) + "subject=" + URLEncoder.encode(e.get(j).getSubject(), "UTF-8") +
+                                "&entity" + Integer.toString(j) + "description=" + URLEncoder.encode(e.get(j).getDescription(), "UTF-8") +
+                                "&entity" + Integer.toString(j) + "property=" + URLEncoder.encode(e.get(j).getProperty(), "UTF-8") +
+                                "&entity" + Integer.toString(j) + "relative=" + URLEncoder.encode(e.get(j).getRelative(), "UTF-8") +
+                                "&entity" + Integer.toString(j) + "question=" + URLEncoder.encode(e.get(j).getQuestion(), "UTF-8");
+                        upgrade += msg_entity;
+                    }
                 } catch (UnsupportedEncodingException ex) {
                     ex.printStackTrace();
                 }

@@ -25,7 +25,6 @@ public class TitleDao {
                 ResultSet rs = ps.executeQuery();
 
                 while (rs.next()){
-                   int id = rs.getInt(1);
                    String title_db = rs.getString(2);
                    String subject_db  = rs.getString(3);
                    Title tmp = new Title(title_db, subject_db);
@@ -43,7 +42,7 @@ public class TitleDao {
 		if (username == null || username.equals(""))
 			return false;
 		
-		String sql = "insert into titles(title, subject, username) values (?, ?, ?)";
+		String sql = "insert into titles(username, title, subject) values (?, ?, ?)";
 	
         Connection conn = JDBCUtils.getConn();
 		
@@ -54,9 +53,9 @@ public class TitleDao {
         			boolean isExist = judgeExist(tmp, username);
         			if (isExist) continue;
         			PreparedStatement ps = conn.prepareStatement(sql);
-                    ps.setString(1, tmp.getTitle());
-                    ps.setString(2, tmp.getSubject());
-                    ps.setString(3, username);
+        			ps.setString(1, username);
+                    ps.setString(2, tmp.getTitle());
+                    ps.setString(3, tmp.getSubject());
                     ps.executeUpdate();
         		}
 
@@ -70,15 +69,14 @@ public class TitleDao {
 	public boolean judgeExist(Title t, String username) {
 		if (username == null || username.equals(""))
 			return true;
-		String sql = "select * from entities where title = ? and subject = ? and username = ?";
+		String sql = "select * from titles where username = ? and title = ?";
         Connection conn = JDBCUtils.getConn();
         
         if (conn != null) {
         	try {
                 PreparedStatement ps = conn.prepareStatement(sql);
-                ps.setString(1, t.getTitle());
-                ps.setString(2, t.getSubject());
-                ps.setString(3, username);
+                ps.setString(1, username);
+                ps.setString(2, t.getTitle());
                 ResultSet rs = ps.executeQuery();
 
                 while (rs.next()){

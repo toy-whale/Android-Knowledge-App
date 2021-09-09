@@ -46,7 +46,7 @@ public class HistoryServlet extends HttpServlet {
 			int num_entity = load_entity.size();
 			String msg_title = "";
 			String msg_entity = "";
-			String split = " ";
+			String split = "_";
 			
 			for (int i = 0; i < num_title; i++) {
 				msg_title = msg_title + load_title.get(i).getTitle() + split
@@ -75,23 +75,26 @@ public class HistoryServlet extends HttpServlet {
 			String username = request.getParameter("username");
 			int num_title = Integer.parseInt(request.getParameter("titleNum"));
 			int num_entity = Integer.parseInt(request.getParameter("entityNum"));
-			String titles = request.getParameter("titles");
-			String entities = request.getParameter("entities");
-			String[] data_title = titles.split(" ");
-			String[] data_entity = entities.split(" ");
+			
 			List<Title> upgrade_title = new ArrayList<Title>();
 			List<Entity> upgrade_entity = new ArrayList<Entity>();
 			
 			for (int i = 0; i < num_title; i++) {
-				int index = i * 2;
-				Title tmp = new Title(data_title[index], data_title[index+1]);
+				String getTitle = "title" + Integer.toString(i) + "title";
+				String getSubject = "title" + Integer.toString(i) + "subject";
+				Title tmp = new Title(request.getParameter(getTitle), request.getParameter(getSubject));
 				upgrade_title.add(tmp);
 			}
 			for (int j = 0; j < num_entity; j++) {
-				int index = j * 6;
-				Entity tmp = new Entity(data_entity[index], data_entity[index+1],
-						data_entity[index+2], data_entity[index+3],
-						data_entity[index+4], data_entity[index+5]);
+				String getName = "entity" + Integer.toString(j) + "name";
+				String getSubject = "entity" + Integer.toString(j) + "subject";
+				String getDescription = "entity" + Integer.toString(j) + "description";
+				String getProperty = "entity" + Integer.toString(j) + "property";
+				String getRelative = "entity" + Integer.toString(j) + "relative";
+				String getQuestion = "entity" + Integer.toString(j) + "question";
+				Entity tmp = new Entity(request.getParameter(getName), request.getParameter(getSubject),
+						request.getParameter(getDescription), request.getParameter(getProperty),
+						request.getParameter(getRelative), request.getParameter(getQuestion));
 				upgrade_entity.add(tmp);
 			}
 			titleDao.insertAllTitle(username, upgrade_title);

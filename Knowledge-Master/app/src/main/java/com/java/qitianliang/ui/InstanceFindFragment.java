@@ -235,7 +235,10 @@ public class InstanceFindFragment extends Fragment {
                         skip = true;
                     break;
                 case 2:
-                    if (!tmp0.getCategory().equals(keyInput))
+                    if (keyInput == null || keyInput.equals(""))
+                        // 按模糊搜索处理
+                        break;
+                    if (!tmp0.getCategory().contains(keyInput))
                         skip = true;
                     break;
                 default:
