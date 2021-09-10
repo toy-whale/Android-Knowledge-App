@@ -112,7 +112,6 @@ public class SpecificTestFragment extends Fragment {
         cleaner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("delete！");
                 hotSearchTestList = new ArrayList<String>();
                 setPoints();
             }
@@ -121,12 +120,7 @@ public class SpecificTestFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String Key = mSearch.getText().toString();
-                if(Key == null)
-                    System.out.println("null");
-                if(Key.equals(""))
-                    System.out.println("empty");
                 SearchItems(MainActivity.currentSubject, Key);
-                System.out.println(Results.size());
                 initInstances();
             }
         });
@@ -184,7 +178,7 @@ public class SpecificTestFragment extends Fragment {
         myItem.setHasFixedSize(true);
         myItemPaint = new Paint();
         myItemPaint.setTextSize(40);
-        mPaddingSize = 120;
+        mPaddingSize = 115;
         final int width = getActivity().getWindowManager().getDefaultDisplay().getWidth();
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), width);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {

@@ -15,7 +15,7 @@
         <TextView
             android:id="@+id/refresh_notice"
             android:paddingTop="5dp"
-            android:textSize="16dp"
+            android:textSize="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
