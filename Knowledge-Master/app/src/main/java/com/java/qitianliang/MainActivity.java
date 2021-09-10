@@ -55,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private DrawerLayout drawer;
     private NavigationView navigationView;
-    public static NavController navController;
+    private NavController navController;
+    private TabLayout tabs;
 
     // 用于同步浏览记录
     public static String loginUsername = null;
@@ -192,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setItemIconTintList(null);
 
         // 学科栏初始化
-        TabLayout tabs = binding.appBarMain.tabs;
+        tabs = binding.appBarMain.tabs;
         for (int i = 0; i < 9; i++)
             tabs.addTab(tabs.newTab().setText(subjects[i]));
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -318,6 +319,7 @@ public class MainActivity extends AppCompatActivity {
                     // navigate to list
                     navController.popBackStack();
                     navController.navigate(R.id.nav_instanceList);
+                    tabs.setVisibility(View.VISIBLE);
                 }
                 else
                     loginUsername = null;
@@ -450,7 +452,7 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     String data = PostUtil.Post("HistoryServlet", load);
-                    String[] data_title = data.split(" ");
+                    String[] data_title = data.split("SPLIT");
                     t.insertTitle(new Title(data_title[0], data_title[1]));
                 }
                 for (int i = 0; i < num_entity; i++) {
@@ -463,7 +465,7 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     String data = PostUtil.Post("HistoryServlet", load);
-                    String[] data_entity = data.split(" ");
+                    String[] data_entity = data.split("SPLIT");
                     e.insertEntity(new Entity(data_entity[0], data_entity[1],
                             data_entity[2], data_entity[3], data_entity[4],
                             data_entity[5], data_entity[6]));

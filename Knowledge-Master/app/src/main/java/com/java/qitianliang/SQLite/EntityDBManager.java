@@ -43,21 +43,21 @@ public class EntityDBManager {
             Entity entity = new Entity(name, subject, description, property, relative, question, image);
             entityList.add(entity);
         }
-        mHelper.close();
+        //mHelper.close();
         return entityList;
     }
 
     public void deleteAllEntity() {
         SQLiteDatabase db = mHelper.getWritableDatabase();
         db.execSQL("delete from Entity");
-        mHelper.close();
+        //mHelper.close();
     }
 
     public void deleteEntityByUri(String Name, String Course) {
         SQLiteDatabase db = mHelper.getWritableDatabase();
         String u = Name + Course;
         db.execSQL("delete from Entity where uri = " + "'" + u + "'");
-        mHelper.close();
+        //mHelper.close();
     }
 
     public Entity getEntityByUri(String Name, String Course) {
@@ -74,7 +74,7 @@ public class EntityDBManager {
             @SuppressLint("Range") String question = cursor.getString(cursor.getColumnIndex("question"));
             @SuppressLint("Range") String image = cursor.getString(cursor.getColumnIndex("image"));
             entity = new Entity(name, subject, description, property, relative, question, image);
-            mHelper.close();
+            //mHelper.close();
         }
         return entity;
     }

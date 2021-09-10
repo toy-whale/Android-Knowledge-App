@@ -66,10 +66,11 @@ public class HistoryServlet extends HttpServlet {
 				String type = request.getParameter("type");
 				int order = Integer.parseInt(request.getParameter("order"));
 				String msg = "";
+				String split = "SPLIT";
 				if (type.equals("title")) {
 					Title tmp = load_title.get(order);
 					String msg_title = "";
-					msg_title = tmp.getTitle() + " " + tmp.getSubject();
+					msg_title = tmp.getTitle() + split + tmp.getSubject();
 					response.setContentType("text/html;charset=utf-8");
 					PrintWriter out = response.getWriter();
 					out.println(msg_title);
@@ -80,9 +81,9 @@ public class HistoryServlet extends HttpServlet {
 				else if (type.equals("entity")) {
 					Entity tmp = load_entity.get(order);
 					String msg_entity = "";
-					msg_entity = tmp.getName() + " " + tmp.getSubject() + " "
-							+ tmp.getDescription() + " " + tmp.getProperty() + " "
-							+ tmp.getRelative() + " " + tmp.getQuestion() + " "
+					msg_entity = tmp.getName() + split + tmp.getSubject() + split
+							+ tmp.getDescription() + split + tmp.getProperty() + split
+							+ tmp.getRelative() + split + tmp.getQuestion() + split
 							+ tmp.getImage();
 					response.setContentType("text/html;charset=utf-8");
 					PrintWriter out = response.getWriter();
