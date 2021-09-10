@@ -61,11 +61,13 @@ public class DetailsActivity extends AppCompatActivity {
                 String question = bundle.getString("question");
                 Result = JSONObject.parseObject(result);
                 Questions = JSONObject.parseObject(question);
+                if(Result == null) Result = new JSONObject();
+                if(Questions == null) Questions = new JSONObject();
                 is_collect = "false";
+                initdata();
             } else if (msg.what == 0) { //联网失败
                 Toast.makeText(getApplicationContext(), "网络不太好呢~", Toast.LENGTH_LONG).show();
             }
-            initdata();
         }
     };
 
@@ -87,7 +89,7 @@ public class DetailsActivity extends AppCompatActivity {
         actionBar.show();
         //查找历史记录
         //if (username != null)
-        is_find = findInDB("h");
+            is_find = findInDB("h");
         if (is_find == true) {
             initdata();
             return;
@@ -117,20 +119,22 @@ public class DetailsActivity extends AppCompatActivity {
                         }
                         if(result != null) {
                             JSONObject Re = JSONObject.parseObject(result);
-                            JSONArray u = Re.getJSONArray("property");
-                            for (int i = 0; i < u.size(); i++) {
-                                JSONObject x = u.getJSONObject(i);
-                                if (x.getString("label") != null && x.getString("label").equals("图片")) {
-                                    try {
-                                        imageMap = GetImage.get(x.getString("object"));
-                                        int srcWidth = imageMap.getWidth();
-                                        int srcHeight = imageMap.getHeight();
-                                        if(srcWidth * srcHeight < 10000)
-                                            imageMap = null;
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
+                            if(Re != null && Re.getJSONArray("property") != null) {
+                                JSONArray u = Re.getJSONArray("property");
+                                for (int i = 0; i < u.size(); i++) {
+                                    JSONObject x = u.getJSONObject(i);
+                                    if (x.getString("label") != null && x.getString("label").equals("图片")) {
+                                        try {
+                                            imageMap = GetImage.get(x.getString("object"));
+                                            int srcWidth = imageMap.getWidth();
+                                            int srcHeight = imageMap.getHeight();
+                                            if (srcWidth * srcHeight < 10000)
+                                                imageMap = null;
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                        break;
                                     }
-                                    break;
                                 }
                             }
                         }
@@ -188,12 +192,11 @@ public class DetailsActivity extends AppCompatActivity {
                         TitleDBManager manager = TitleDBManager.getInstance(this, username);
                         manager.deleteTitleByUri(Name, Course);
                     }
-                    //PrintAll();
                 }
                 break;
             case R.id.share: //分享到新浪微博
-                Toast.makeText(this, "分享到新浪微博！", Toast.LENGTH_LONG).show();
-                //ShareUtil.shareText(this,"发送详情页！","test");
+                String Text = "知识点：" + Name + '\n' + findShareText();
+                ShareUtil.shareText(this,Text,"知识详情");
                 break;
             case android.R.id.home:
                 imageMap = null;
@@ -225,7 +228,9 @@ public class DetailsActivity extends AppCompatActivity {
 
     private String findDescription() {
         String D = "无相关描述！";
+        if(Result == null) return "      " + D;
         JSONArray data = Result.getJSONArray("property");
+        if(data == null) return "      " + D;
         for (int i = 0; i < data.size(); i++) {
             JSONObject y = data.getJSONObject(i);
             if (y.getString("label").equals("定义"))
@@ -233,6 +238,20 @@ public class DetailsActivity extends AppCompatActivity {
         }
         if (D == null) D = "无相关描述！";
         return "      " + D;
+    }
+
+    private String findShareText() {
+        String T = findDescription().substring(6);
+        if(T.equals("无相关描述！") && Result != null) {
+            JSONArray data = Result.getJSONArray("property");
+            if(data == null) return T;
+            for (int i = 0; i < data.size(); i++) {
+                JSONObject y = data.getJSONObject(i);
+                if (!y.getString("object").equals(""))
+                    return y.getString("object");
+            }
+        }
+        return T;
     }
 
     private void initdata() {
@@ -271,7 +290,7 @@ public class DetailsActivity extends AppCompatActivity {
                 title.setGravity(Gravity.LEFT);
                 item.setGravity(Gravity.LEFT);
             }
-            if(username != null) { //更新数据库
+            //if(username != null) { //更新数据库
                 EntityDBManager manager = EntityDBManager.getInstance(this, username);
                 Entity entity = manager.getEntityByUri(Name, Course);
                 if (entity != null)
@@ -279,24 +298,36 @@ public class DetailsActivity extends AppCompatActivity {
                 String name = Name;
                 String subject = Course;
                 String D = findDescription();
-                String property = Result.getJSONArray("property").toString();
-                String relative = Result.getJSONArray("content").toString();
-                String question = Questions.getJSONArray("data").toString();
+                String property, relative, question;
+                if(Result.getJSONArray("property") == null)
+                    property = "[]";
+                else
+                    property = Result.getJSONArray("property").toString();
+                if(Result.getJSONArray("content") == null)
+                    relative = "[]";
+                else
+                    relative = Result.getJSONArray("content").toString();
+                if(Questions.getJSONArray("data") == null)
+                    question = "[]";
+                else
+                    question = Questions.getJSONArray("data").toString();
                 String I = BitmapToString(imageMap);
                 if(I == null)
                     I = "";
                 Entity e = new Entity(name, subject, D, property, relative, question, I);
                 manager.insertEntity(e);
-            }
+            //}
             initRelative(Result.getJSONArray("content"));
             initProperty(Result.getJSONArray("property"));
             initQuestion(Questions.getJSONArray("data"));
             description.setText(findDescription());
         }
+        System.out.println("print");
         PrintAll();
     }
 
     void initRelative(JSONArray data) {
+        if(data == null) return;
         for (int i = 0; i < data.size(); i++) {
             JSONObject y = data.getJSONObject(i);
             if(y.getString("object") != null && y.getString("object").matches(http))
@@ -310,6 +341,7 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     void initProperty(JSONArray data) {
+        if(data == null) return;
         for (int i = 0; i < data.size(); i++) {
             JSONObject y = data.getJSONObject(i);
             if(y.getString("object") != null && y.getString("object").matches(http))
@@ -323,6 +355,7 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     void initQuestion(JSONArray data) {
+        if(data == null) return;
         for (int i = 0; i < data.size(); i++) {
             JSONObject y = data.getJSONObject(i);
             String Body = y.getString("Body");

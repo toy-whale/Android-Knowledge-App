@@ -219,7 +219,9 @@ public class InstanceFindFragment extends Fragment {
     }
 
     void initInstances(JSONObject x) {
+        if(x == null) return;
         JSONArray data = x.getJSONArray("data");
+        if(data == null) return;
         List<JSONObject> dataList = new ArrayList<>();
         dataList.clear();
         String searchInput = search.getText().toString();

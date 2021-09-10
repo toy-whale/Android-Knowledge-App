@@ -18,6 +18,8 @@ public class InfoByInstanceName {
     public static String get(String course, String name, String id) throws Exception {
         String s = sendGet(course, name, id);
         JSONObject result = JSONObject.parseObject(s);
+        if(result == null)
+            return null;
         JSONObject data = result.getJSONObject("data");
         JSONArray property_ = data.getJSONArray("property");
         JSONArray content_ = data.getJSONArray("content");

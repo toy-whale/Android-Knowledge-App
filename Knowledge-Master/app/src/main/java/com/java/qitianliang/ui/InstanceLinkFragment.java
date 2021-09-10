@@ -123,7 +123,9 @@ public class InstanceLinkFragment extends Fragment {
     }
 
     void initInstances(JSONObject x) {
+        if(x == null) return;
         JSONArray data = x.getJSONArray("data");
+        if(data == null) return;
         for (int i = 0; i < data.size(); i++) {
             JSONObject y = data.getJSONObject(i);
             int flag = 1;

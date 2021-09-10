@@ -66,6 +66,7 @@ public class SpecificTestFragment extends Fragment {
                 Bundle bundle = msg.getData();
                 String answer = bundle.getString("answer");
                 JSONObject x = JSONObject.parseObject(answer);
+                if(x == null) return;
                 String message = x.getString("msg");
                 if(message.equals("1")) {
                     AlertDialog.Builder result = new AlertDialog.Builder(getActivity());
@@ -239,5 +240,13 @@ public class SpecificTestFragment extends Fragment {
             if(Entity.contains(Key))
                 Results.add(Bank.get(i));
         }
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        test_number.setText("");
+        mSearch.setText("");
+        hotSearchTestList = new ArrayList<String>();
+        setPoints();
     }
 }

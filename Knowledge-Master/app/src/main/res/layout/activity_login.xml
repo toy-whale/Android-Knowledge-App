@@ -67,28 +67,31 @@
 
         <Button
             android:id="@+id/button_login"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
+            android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="30dp"
             android:onClick="login"
             android:text="登录"
             android:textSize="15dp"/>
 
         <Button
             android:id="@+id/button_goto_register"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
+            android:layout_gravity="center"
             android:layout_height="wrap_content"
             android:onClick="goto_register"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:text="注册"
             android:textSize="15dp"/>
 
         <Button
             android:id="@+id/button_skip"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
+            android:layout_gravity="center"
             android:layout_height="wrap_content"
             android:onClick="skip"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:text="跳过登录"
             android:textSize="15dp"/>
 
