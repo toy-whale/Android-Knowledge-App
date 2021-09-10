@@ -33,6 +33,8 @@ public class TitleDao {
 
             } catch (SQLException e) {
                 e.printStackTrace();
+            } finally {
+                JDBCUtils.closeConn(conn);
             }
         }
 		return result;
@@ -61,6 +63,30 @@ public class TitleDao {
 
             } catch (SQLException e) {
                 e.printStackTrace();
+            } finally {
+                JDBCUtils.closeConn(conn);
+            }
+        }
+		return true;
+	}
+	
+	public boolean deleteAllTitle(String username) {
+		if (username == null || username.equals(""))
+			return false;
+		
+		String sql = "delete from titles where username = ?";
+	
+        Connection conn = JDBCUtils.getConn();
+		
+		if (conn != null) {
+        	try {
+        		PreparedStatement ps = conn.prepareStatement(sql);
+    			ps.setString(1, username);
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                JDBCUtils.closeConn(conn);
             }
         }
 		return true;
@@ -84,6 +110,8 @@ public class TitleDao {
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
+            } finally {
+                JDBCUtils.closeConn(conn);
             }
         }
         

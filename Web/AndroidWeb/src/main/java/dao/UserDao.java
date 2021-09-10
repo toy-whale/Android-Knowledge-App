@@ -25,6 +25,8 @@ public class UserDao {
 
             } catch (SQLException e) {
                 e.printStackTrace();
+            } finally {
+                JDBCUtils.closeConn(conn);
             }
         }
         
@@ -51,6 +53,8 @@ public class UserDao {
 
             } catch (SQLException e) {
                 e.printStackTrace();
+            } finally {
+                JDBCUtils.closeConn(conn);
             }
         }
         return false;
@@ -77,6 +81,8 @@ public class UserDao {
 
             } catch (SQLException e) {
                 e.printStackTrace();
+            } finally {
+                JDBCUtils.closeConn(conn);
             }
         }
         
@@ -102,6 +108,8 @@ public class UserDao {
 
             } catch (SQLException e) {
                 e.printStackTrace();
+            } finally {
+                JDBCUtils.closeConn(conn);
             }
         }
         

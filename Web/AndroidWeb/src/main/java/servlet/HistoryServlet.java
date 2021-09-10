@@ -19,6 +19,11 @@ import dao.Entity;
 
 public class HistoryServlet extends HttpServlet {
 	
+	private List<Title> load_title;
+	private List<Entity> load_entity;
+	private int num_title;
+	private int num_entity;
+	
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -38,37 +43,55 @@ public class HistoryServlet extends HttpServlet {
 		
 		// load into android
 		if (require.equals("load")) {
-			String username = request.getParameter("username");
-			// get List
-			List<Title> load_title = titleDao.findAllTitle(username);
-			List<Entity> load_entity = entityDao.findAllEntity(username);
-			int num_title = load_title.size();
-			int num_entity = load_entity.size();
-			String msg_title = "";
-			String msg_entity = "";
-			String split = "_";
-			
-			for (int i = 0; i < num_title; i++) {
-				msg_title = msg_title + load_title.get(i).getTitle() + split
-						+ load_title.get(i).getSubject() + split;
+			String step = request.getParameter("step");
+			// send amount
+			if (step.equals("num")) {
+				String username = request.getParameter("username");
+				// get List
+				load_title = titleDao.findAllTitle(username);
+				load_entity = entityDao.findAllEntity(username);
+				num_title = load_title.size();
+				num_entity = load_entity.size();
+				String msg = "";
+				msg = Integer.toString(num_title) + " " + Integer.toString(num_entity);
+				response.setContentType("text/html;charset=utf-8");
+				PrintWriter out = response.getWriter();
+				out.println(msg);
+				out.flush();
+				out.close();
+				return;
 			}
-			for (int j = 0; j < num_entity; j++) {
-				msg_entity = msg_entity + load_entity.get(j).getName() + split
-						+ load_entity.get(j).getSubject() + split
-						+ load_entity.get(j).getDescription() + split
-						+ load_entity.get(j).getProperty() + split
-						+ load_entity.get(j).getRelative() + split
-						+ load_entity.get(j).getQuestion() + split
-						+ load_entity.get(j).getImage() + split;
+			else if (step.equals("data")) {
+				// load title or entity
+				String type = request.getParameter("type");
+				int order = Integer.parseInt(request.getParameter("order"));
+				String msg = "";
+				if (type.equals("title")) {
+					Title tmp = load_title.get(order);
+					String msg_title = "";
+					msg_title = tmp.getTitle() + " " + tmp.getSubject();
+					response.setContentType("text/html;charset=utf-8");
+					PrintWriter out = response.getWriter();
+					out.println(msg_title);
+					out.flush();
+					out.close();
+					return;
+				}
+				else if (type.equals("entity")) {
+					Entity tmp = load_entity.get(order);
+					String msg_entity = "";
+					msg_entity = tmp.getName() + " " + tmp.getSubject() + " "
+							+ tmp.getDescription() + " " + tmp.getProperty() + " "
+							+ tmp.getRelative() + " " + tmp.getQuestion() + " "
+							+ tmp.getImage();
+					response.setContentType("text/html;charset=utf-8");
+					PrintWriter out = response.getWriter();
+					out.println(msg_entity);
+					out.flush();
+					out.close();
+					return;
+				}						
 			}
-			
-			String msg = Integer.toString(num_title) + split + Integer.toString(num_entity) + split + msg_title + msg_entity;
-			response.setContentType("text/html;charset=utf-8");
-			PrintWriter out = response.getWriter();
-			out.println(msg);
-			out.flush();
-			out.close();
-			return;
 		}
 		
 		// upgrade local DB
@@ -111,7 +134,16 @@ public class HistoryServlet extends HttpServlet {
 			out.close();
 			return;
 		}
-		
+		else if (require.equals("change")) {
+			String oldName = request.getParameter("oldusername");
+			String newName = request.getParameter("newusername");
+			List<Title> oldTitle = titleDao.findAllTitle(oldName);
+			List<Entity> oldEntity = entityDao.findAllEntity(oldName);
+			titleDao.deleteAllTitle(oldName);
+			entityDao.deleteAllEntity(oldName);
+			titleDao.insertAllTitle(newName, oldTitle);
+			entityDao.insertAllEntity(newName, oldEntity);
+		}
 	}
 }
 

@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private DrawerLayout drawer;
     private NavigationView navigationView;
-    private NavController navController;
+    public static NavController navController;
 
     // 用于同步浏览记录
     public static String loginUsername = null;
@@ -79,51 +79,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         drawer = binding.drawerLayout;
         navigationView = binding.navView;
-
-        setSupportActionBar(binding.appBarMain.toolbar);
-        binding.appBarMain.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                int id = item.getItemId();
-                switch (id) {
-                    case R.id.action_subjectChange:
-                        // 修改学科
-                        Intent intent = new Intent(getApplicationContext(), ActivitySubjectManager.class);
-                        intent.putExtra("sub", Subject);
-                        intent.putExtra("delSub", delSubject);
-                        startActivityForResult(intent, 2);
-                        currentSubject = transChi2Eng(Subject.get(0));
-                        break;
-                    case R.id.action_passwordChange:
-                        // 信息修改
-                        // 必须登录后才能修改已登录账号的信息
-                        if(loginUsername != null) {
-                            startActivityForResult(new Intent(getApplicationContext(), ActivityInfo.class), 3);
-                        }
-                        else {
-                            Toast.makeText(MainActivity.this, "登录后才能修改用户信息!", Toast.LENGTH_LONG).show();
-                        }
-                        break;
-                    case R.id.action_logout:
-                        // 保存记录
-                        upgradeHistory();
-                        loginUsername = null;
-                        // Login Activity
-                        startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), 1);
-                        break;
-                    case R.id.action_exit:
-                        ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-                        List<ActivityManager.AppTask> appTaskList = activityManager.getAppTasks();
-                        for (ActivityManager.AppTask appTask : appTaskList) {
-                            appTask.finishAndRemoveTask();
-                        }
-                        System.exit(0);
-                    default:
-                        break;
-                }
-                return false;
-            }
-        });
 
         // 从文件中读入全部实体序列
         for (int i = 0; i < 9; i++) {
@@ -190,6 +145,52 @@ public class MainActivity extends AppCompatActivity {
         // 图标
         navigationView.setItemIconTintList(null);
 
+        setSupportActionBar(binding.appBarMain.toolbar);
+        binding.appBarMain.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                switch (id) {
+                    case R.id.action_subjectChange:
+                        // 修改学科
+                        Intent intent = new Intent(getApplicationContext(), ActivitySubjectManager.class);
+                        intent.putExtra("sub", Subject);
+                        intent.putExtra("delSub", delSubject);
+                        startActivityForResult(intent, 2);
+                        currentSubject = transChi2Eng(Subject.get(0));
+                        break;
+                    case R.id.action_passwordChange:
+                        // 信息修改
+                        // 必须登录后才能修改已登录账号的信息
+                        if(loginUsername != null)
+                            startActivityForResult(new Intent(getApplicationContext(), ActivityInfo.class), 3);
+                        else
+                            Toast.makeText(MainActivity.this, "登录后才能修改用户信息!", Toast.LENGTH_LONG).show();
+                        break;
+                    case R.id.action_logout:
+                        // 保存历史记录
+                        upgradeHistory();
+                        loginUsername = null;
+                        // Login Activity
+                        startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), 1);
+                        break;
+                    case R.id.action_exit:
+                        // 保存历史记录
+                        upgradeHistory();
+
+                        ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+                        List<ActivityManager.AppTask> appTaskList = activityManager.getAppTasks();
+                        for (ActivityManager.AppTask appTask : appTaskList) {
+                            appTask.finishAndRemoveTask();
+                        }
+                        System.exit(0);
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
+
         // 学科栏初始化
         TabLayout tabs = binding.appBarMain.tabs;
         for (int i = 0; i < 9; i++)
@@ -201,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                 currentSubject = transChi2Eng(subject_chi);
                 // 获取当前活动的fragment
                 // 更新对应fragment的内容
-                // 实体列表、专项测试
+                // 实体列表
                 int id = navController.getCurrentDestination().getId();
                 switch (id) {
                     case R.id.nav_instanceList:
@@ -311,9 +312,13 @@ public class MainActivity extends AppCompatActivity {
 
         switch (requestCode) {
             case 1:
-                if (resultCode == RESULT_OK)
+                if (resultCode == RESULT_OK) {
                     // Get Login Username for Collecting List and History Record
                     loginUsername = data.getStringExtra("data_return");
+                    // navigate to list
+                    navController.popBackStack();
+                    navController.navigate(R.id.nav_instanceList);
+                }
                 else
                     loginUsername = null;
                 if (loginUsername != null) {
@@ -341,12 +346,15 @@ public class MainActivity extends AppCompatActivity {
                 // 信息修改
                 if (resultCode == RESULT_OK) {
                     String oldUsername = loginUsername;
-                    loginUsername = data.getStringExtra("data_return");
-                    ((TextView) findViewById(R.id.usernameView)).setText(loginUsername);
-                    // reload user data
+                    String newUsername = data.getStringExtra("newName");
+                    // 用旧用户名保存本地记录
                     upgradeHistory();
-                    changeHistory(oldUsername);
+                    // 修改后端记录的用户名
+                    changeHistory(oldUsername, newUsername);
+                    loginUsername = newUsername;
+                    // 按新用户名向后端请求加载
                     loadHistory();
+                    ((TextView) findViewById(R.id.usernameView)).setText(loginUsername);
                 }
                 break;
             default:
@@ -408,40 +416,57 @@ public class MainActivity extends AppCompatActivity {
         String username = MainActivity.loginUsername;
         if (username == null || username.equals("")) return;
 
-        // 加载新登陆的用户前应该把本地记录删除
+        // 加载新登陆的用户前把本地记录删除
         EntityDBManager e = EntityDBManager.getInstance(MainActivity.this, MainActivity.loginUsername);
         e.deleteAllEntity();
         TitleDBManager t = TitleDBManager.getInstance(MainActivity.this, MainActivity.loginUsername);
         t.deleteAllTitle();
 
-        // 以下待定
+        // 多次POST
+        // 分别获取记录数量和数据内容
         new Thread() {
             @Override
             public void run() {
                 String load = "";
                 // request
                 try {
-                    load = "request=load&username=" + URLEncoder.encode(username, "UTF-8");
+                    load = "request=load&step=num&username=" + URLEncoder.encode(username, "UTF-8");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
+                // 首先获取数量
                 String request = PostUtil.Post("HistoryServlet", load);
-
-                // load
-                String[] allData = request.split("_");
+                String[] allData = request.split(" ");
                 int num_title = Integer.parseInt(allData[0]);
                 int num_entity = Integer.parseInt(allData[1]);
 
                 for (int i = 0; i < num_title; i++) {
-                    int title_index = i * 2 + 2;
-                    t.insertTitle(new Title(allData[title_index], allData[title_index+1]));
+                    // load title
+                    // request
+                    try {
+                        load = "request=load&step=data&type=title&username=" + URLEncoder.encode(username, "UTF-8") +
+                                "&order=" + URLEncoder.encode(Integer.toString(i), "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    String data = PostUtil.Post("HistoryServlet", load);
+                    String[] data_title = data.split(" ");
+                    t.insertTitle(new Title(data_title[0], data_title[1]));
                 }
-                int offset = 2 * num_title + 2;
                 for (int i = 0; i < num_entity; i++) {
-                    int entity_index = i * 7 + offset;
-                    e.insertEntity(new Entity(allData[entity_index], allData[entity_index+1],
-                            allData[entity_index+2], allData[entity_index+3],
-                            allData[entity_index+4], allData[entity_index+5], allData[entity_index + 6]));
+                    // load entity
+                    // request
+                    try {
+                        load = "request=load&step=data&type=entity&username=" + URLEncoder.encode(username, "UTF-8") +
+                                "&order=" + URLEncoder.encode(Integer.toString(i), "UTF-8");;
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    String data = PostUtil.Post("HistoryServlet", load);
+                    String[] data_entity = data.split(" ");
+                    e.insertEntity(new Entity(data_entity[0], data_entity[1],
+                            data_entity[2], data_entity[3], data_entity[4],
+                            data_entity[5], data_entity[6]));
                 }
             }
         }.start();
@@ -452,7 +477,7 @@ public class MainActivity extends AppCompatActivity {
         String username = MainActivity.loginUsername;
         if (username == null || username.equals("")) return;
 
-        // 以下待定
+        // 本地所有浏览和收藏传输至后端
         new Thread() {
             @Override
             public void run() {
@@ -497,8 +522,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //修改用户信息
-    public void changeHistory(String oldUsername) {
-        //
+    public void changeHistory(String oldUsername, String newUsername) {
+        // 后端按照用户名修改
         new Thread() {
             @Override
             public void run() {
@@ -506,7 +531,7 @@ public class MainActivity extends AppCompatActivity {
                 // request
                 try {
                     change = "request=change&oldusername=" + URLEncoder.encode(oldUsername, "UTF-8") +
-                            "&newusername=" + URLEncoder.encode(loginUsername, "UTF-8");
+                            "&newusername=" + URLEncoder.encode(newUsername, "UTF-8");
                 } catch (UnsupportedEncodingException ex) {
                     ex.printStackTrace();
                 }
