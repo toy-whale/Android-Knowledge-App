@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.java.qitianliang.MainActivity;
 import com.java.qitianliang.R;
 import com.java.qitianliang.noScrollListview.NoScrollListview;
+import com.java.qitianliang.server.InstanceList;
 import com.java.qitianliang.ui.list_instance.Instance_list;
 import com.java.qitianliang.ui.list_instance.Instance_list_pair;
 import com.java.qitianliang.ui.list_instance.ListAdapter;
@@ -92,6 +93,8 @@ public class InstanceListFragment extends Fragment {
         list_number.setText("共计" + instance_amount + "个实体,合" + page_amount + "页");
         page_number = (TextView) view.findViewById(R.id.pages_list);
         page_number.setText("第" + current_page + "页");
+        InstanceListSingle.clear();
+        InstanceListPair.clear();
         for (int i = 0; i < INSTANCE_A_TIME; i++) {
             InstanceListSingle.add(new Instance_list(instanceListOfSub.get(i)));
         }

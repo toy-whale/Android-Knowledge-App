@@ -56,16 +56,14 @@ public class FindPairAdapter extends ArrayAdapter<Instance_find_pair> {
             view.findViewById(R.id.hide_or_not).setVisibility(View.INVISIBLE);
 
         // 浏览记录检测
-        if (MainActivity.loginUsername != null) {
-            EntityDBManager manager = EntityDBManager.getInstance(getContext(), MainActivity.loginUsername);
-            List<com.java.qitianliang.SQLite.Entity> e = manager.getAllEntity();
-            for (int i = 0; i < e.size(); i++) {
-                if (e.get(i).getName().equals(name_l)) {
-                    left1.setTextColor(R.color.purple_500);
-                }
-                if (e.get(i).getName().equals(name_r)) {
-                    right1.setTextColor(R.color.purple_500);
-                }
+        EntityDBManager manager = EntityDBManager.getInstance(getContext(), MainActivity.loginUsername);
+        List<com.java.qitianliang.SQLite.Entity> e = manager.getAllEntity();
+        for (int i = 0; i < e.size(); i++) {
+            if (e.get(i).getName().equals(name_l)) {
+                left1.setTextColor(R.color.purple_500);
+            }
+            if (e.get(i).getName().equals(name_r)) {
+                right1.setTextColor(R.color.purple_500);
             }
         }
 
