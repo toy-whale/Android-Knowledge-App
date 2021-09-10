@@ -80,6 +80,52 @@ public class MainActivity extends AppCompatActivity {
         drawer = binding.drawerLayout;
         navigationView = binding.navView;
 
+        setSupportActionBar(binding.appBarMain.toolbar);
+        binding.appBarMain.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                switch (id) {
+                    case R.id.action_subjectChange:
+                        // 修改学科
+                        Intent intent = new Intent(getApplicationContext(), ActivitySubjectManager.class);
+                        intent.putExtra("sub", Subject);
+                        intent.putExtra("delSub", delSubject);
+                        startActivityForResult(intent, 2);
+                        currentSubject = transChi2Eng(Subject.get(0));
+                        break;
+                    case R.id.action_passwordChange:
+                        // 信息修改
+                        // 必须登录后才能修改已登录账号的信息
+                        if(loginUsername != null)
+                            startActivityForResult(new Intent(getApplicationContext(), ActivityInfo.class), 3);
+                        else
+                            Toast.makeText(MainActivity.this, "登录后才能修改用户信息!", Toast.LENGTH_LONG).show();
+                        break;
+                    case R.id.action_logout:
+                        // 保存历史记录
+                        upgradeHistory();
+                        loginUsername = null;
+                        // Login Activity
+                        startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), 1);
+                        break;
+                    case R.id.action_exit:
+                        // 保存历史记录
+                        upgradeHistory();
+
+                        ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+                        List<ActivityManager.AppTask> appTaskList = activityManager.getAppTasks();
+                        for (ActivityManager.AppTask appTask : appTaskList) {
+                            appTask.finishAndRemoveTask();
+                        }
+                        System.exit(0);
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
+
         // 从文件中读入全部实体序列
         for (int i = 0; i < 9; i++) {
             int raw_file = transChi2FileId(subjects[i]);
@@ -144,52 +190,6 @@ public class MainActivity extends AppCompatActivity {
 
         // 图标
         navigationView.setItemIconTintList(null);
-
-        setSupportActionBar(binding.appBarMain.toolbar);
-        binding.appBarMain.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                int id = item.getItemId();
-                switch (id) {
-                    case R.id.action_subjectChange:
-                        // 修改学科
-                        Intent intent = new Intent(getApplicationContext(), ActivitySubjectManager.class);
-                        intent.putExtra("sub", Subject);
-                        intent.putExtra("delSub", delSubject);
-                        startActivityForResult(intent, 2);
-                        currentSubject = transChi2Eng(Subject.get(0));
-                        break;
-                    case R.id.action_passwordChange:
-                        // 信息修改
-                        // 必须登录后才能修改已登录账号的信息
-                        if(loginUsername != null)
-                            startActivityForResult(new Intent(getApplicationContext(), ActivityInfo.class), 3);
-                        else
-                            Toast.makeText(MainActivity.this, "登录后才能修改用户信息!", Toast.LENGTH_LONG).show();
-                        break;
-                    case R.id.action_logout:
-                        // 保存历史记录
-                        upgradeHistory();
-                        loginUsername = null;
-                        // Login Activity
-                        startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), 1);
-                        break;
-                    case R.id.action_exit:
-                        // 保存历史记录
-                        upgradeHistory();
-
-                        ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-                        List<ActivityManager.AppTask> appTaskList = activityManager.getAppTasks();
-                        for (ActivityManager.AppTask appTask : appTaskList) {
-                            appTask.finishAndRemoveTask();
-                        }
-                        System.exit(0);
-                    default:
-                        break;
-                }
-                return false;
-            }
-        });
 
         // 学科栏初始化
         TabLayout tabs = binding.appBarMain.tabs;
