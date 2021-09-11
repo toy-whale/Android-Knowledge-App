@@ -74,7 +74,7 @@ public class Relatedsubject {
         String answer = item.toString();
         return answer;
     }
-    private static String sendPost(String course, String subjectName, String id) throws Exception {
+    /*private static String sendPost(String course, String subjectName, String id) throws Exception {
         String result = "";
         HttpURLConnection conn = (HttpURLConnection) new URL(relatedsubjectURL).openConnection();
         conn.setRequestMethod("POST");
@@ -99,8 +99,8 @@ public class Relatedsubject {
             result = response.toString();
         }
         return result;
-    }
-    /*private static String sendPost(String course, String subjectName, String id) throws Exception {
+    }*/
+    private static String sendPost(String course, String subjectName, String id) throws Exception {
         String result = "";
         try {
             PostMethod postMethod = new PostMethod(relatedsubjectURL) ;
@@ -116,5 +116,5 @@ public class Relatedsubject {
             result = postMethod.getResponseBodyAsString();
         } catch (Exception e) {}
         return result;
-    }*/
+    }
 }

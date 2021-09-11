@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     // 用于同步浏览记录
     public static String loginUsername = null;
-    private boolean threadReady = false;
+    public static boolean threadReady = false;
     private boolean loadFinish = false;
 
     // 当前选定学科
