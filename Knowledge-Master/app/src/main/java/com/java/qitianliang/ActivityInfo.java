@@ -57,10 +57,14 @@ public class ActivityInfo extends AppCompatActivity {
         new Thread() {
             @Override
             public void run() {
-
+                int msg = 0;
                 // request
                 String request = PostUtil.Post("InfoServlet", new String("request=update"));
-
+                if (request.equals("Service Error")) {
+                    msg = 3;
+                    handInfo.sendEmptyMessage(msg);
+                    return;
+                }
                 // access
                 String publicKey = request;
                 String userdata = "";
@@ -74,18 +78,22 @@ public class ActivityInfo extends AppCompatActivity {
                 }
 
                 request = PostUtil.Post("InfoServlet", userdata);
-                int msg = 0;
+                if (request.equals("Service Error")) {
+                    msg = 3;
+                    handInfo.sendEmptyMessage(msg);
+                    return;
+                }
                 if (request.equals("Info Change Successful"))
                     msg = 1;
                 else if (request.equals("Username Already Exists"))
                     msg = 2;
-                handRegister.sendEmptyMessage(msg);
+                handInfo.sendEmptyMessage(msg);
 
             }
         }.start();
     }
 
-    final Handler handRegister = new Handler() {
+    final Handler handInfo = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0) {
@@ -98,6 +106,8 @@ public class ActivityInfo extends AppCompatActivity {
                 intent.putExtra("newName", ((EditText) findViewById(R.id.infoUserName)).getText().toString());
                 setResult(RESULT_OK, intent);
                 finish();
+            } else if (msg.what == 3) {
+                Toast.makeText(getApplicationContext(), "服务器连接异常!", Toast.LENGTH_LONG).show();
             }
         }
     };

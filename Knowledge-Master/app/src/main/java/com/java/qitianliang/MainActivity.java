@@ -113,13 +113,13 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_exit:
                         // 保存历史记录
                         upgradeHistory();
-
-                        ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-                        List<ActivityManager.AppTask> appTaskList = activityManager.getAppTasks();
-                        for (ActivityManager.AppTask appTask : appTaskList) {
-                            appTask.finishAndRemoveTask();
-                        }
-                        System.exit(0);
+                        finish();
+//                        ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+//                        List<ActivityManager.AppTask> appTaskList = activityManager.getAppTasks();
+//                        for (ActivityManager.AppTask appTask : appTaskList) {
+//                            appTask.finishAndRemoveTask();
+//                        }
+//                        System.exit(0);
                     default:
                         break;
                 }
@@ -316,10 +316,6 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     // Get Login Username for Collecting List and History Record
                     loginUsername = data.getStringExtra("data_return");
-                    // navigate to list
-                    navController.popBackStack();
-                    navController.navigate(R.id.nav_instanceList);
-                    tabs.setVisibility(View.VISIBLE);
                 }
                 else
                     loginUsername = null;
@@ -330,6 +326,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else
                     ((TextView) findViewById(R.id.usernameView)).setText("未登录");
+                // navigate to list
+                navController.popBackStack();
+                navController.navigate(R.id.nav_instanceList);
+                tabs.setVisibility(View.VISIBLE);
                 break;
             case 2:
                 if (resultCode == RESULT_OK) {
@@ -355,8 +355,8 @@ public class MainActivity extends AppCompatActivity {
                     changeHistory(oldUsername, newUsername);
                     loginUsername = newUsername;
                     // 按新用户名向后端请求加载
-                    loadHistory();
                     ((TextView) findViewById(R.id.usernameView)).setText(loginUsername);
+                    loadHistory();
                 }
                 break;
             default:
@@ -542,5 +542,8 @@ public class MainActivity extends AppCompatActivity {
         }.start();
     }
 
+    public void PostError() {
+        Toast.makeText(MainActivity.this, "服务器连接异常!", Toast.LENGTH_LONG).show();
+    }
 
 }

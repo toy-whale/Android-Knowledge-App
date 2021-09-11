@@ -46,10 +46,14 @@ public class ActivityRegister extends AppCompatActivity {
         new Thread() {
             @Override
             public void run() {
-
+                int msg = 0;
                 // request
                 String request = PostUtil.Post("RegisterServlet", new String("request=register"));
-
+                if (request.equals("Service Error")) {
+                    msg = 3;
+                    handRegister.sendEmptyMessage(msg);
+                    return;
+                }
                 // access
                 String publicKey = request;
                 String userdata = "";
@@ -62,7 +66,11 @@ public class ActivityRegister extends AppCompatActivity {
                 }
 
                 request = PostUtil.Post("RegisterServlet", userdata);
-                int msg = 0;
+                if (request.equals("Service Error")) {
+                    msg = 3;
+                    handRegister.sendEmptyMessage(msg);
+                    return;
+                }
                 if (request.equals("Register Successful"))
                     msg = 1;
                 else if (request.equals("Username Already Exists"))
@@ -83,6 +91,8 @@ public class ActivityRegister extends AppCompatActivity {
             } else if (msg.what == 1) {
                 Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_LONG).show();
                 finish();
+            } else if (msg.what == 3) {
+                Toast.makeText(getApplicationContext(), "服务器连接异常!", Toast.LENGTH_LONG).show();
             }
         }
     };

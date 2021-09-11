@@ -37,9 +37,14 @@ public class ActivityLogin extends AppCompatActivity {
         new Thread() {
             @Override
             public void run() {
-
+                int msg = 0;
                 // request
                 String request = PostUtil.Post("LoginServlet", new String("request=login"));
+                if (request.equals("Service Error")) {
+                    msg = 2;
+                    handLogin.sendEmptyMessage(msg);
+                    return;
+                }
 
                 // access
                 String publicKey = request;
@@ -54,7 +59,11 @@ public class ActivityLogin extends AppCompatActivity {
                 }
 
                 request = PostUtil.Post("LoginServlet", userdata);
-                int msg = 0;
+                if (request.equals("Service Error")) {
+                    msg = 2;
+                    handLogin.sendEmptyMessage(msg);
+                    return;
+                }
                 if (request.equals("Login Successful"))
                     msg = 1;
                 handLogin.sendEmptyMessage(msg);
@@ -73,6 +82,9 @@ public class ActivityLogin extends AppCompatActivity {
                 finish();
             } else if (msg.what == 0) {
                 Toast.makeText(getApplicationContext(), "用户名或密码错误", Toast.LENGTH_LONG).show();
+            }
+            else if (msg.what == 2) {
+                Toast.makeText(getApplicationContext(), "服务器连接异常!", Toast.LENGTH_LONG).show();
             }
         }
     };

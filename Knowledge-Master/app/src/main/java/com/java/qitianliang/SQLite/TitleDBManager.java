@@ -39,21 +39,21 @@ public class TitleDBManager {
             Title e = new Title(title, subject);
             TitleList.add(e);
         }
-        mHelper.close();
+        //mHelper.close();
         return TitleList;
     }
 
     public void deleteAllTitle() {
         SQLiteDatabase db = mHelper.getWritableDatabase();
         db.execSQL("delete from Title");
-        mHelper.close();
+        //mHelper.close();
     }
 
     public void deleteTitleByUri(String Name, String Course) {
         SQLiteDatabase db = mHelper.getWritableDatabase();
         String u = Name + Course;
         db.execSQL("delete from Title where uri = " + "'" + u + "'");
-        mHelper.close();
+        //mHelper.close();
     }
 
     public Title getTitleByUri(String Name, String Course) {
@@ -65,7 +65,7 @@ public class TitleDBManager {
             @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex("title"));
             @SuppressLint("Range") String subject = cursor.getString(cursor.getColumnIndex("subject"));
             e = new Title(title, subject);
-            mHelper.close();
+            //mHelper.close();
         }
         return e;
     }

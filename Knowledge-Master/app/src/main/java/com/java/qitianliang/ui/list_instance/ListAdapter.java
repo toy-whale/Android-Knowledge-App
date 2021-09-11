@@ -37,14 +37,17 @@ public class ListAdapter extends ArrayAdapter<Instance_list> {
         String name = instance.getLabel();
         entity.setText(name);
         // 浏览记录检测
-        EntityDBManager manager = EntityDBManager.getInstance(getContext(), MainActivity.loginUsername);
-        List<com.java.qitianliang.SQLite.Entity> e = manager.getAllEntity();
-        for (int i = 0; i < e.size(); i++)
-            if (e.get(i).getName().equals(name))
-                entity.setTextColor(R.color.purple_500);
+        if (MainActivity.loginUsername != null) {
+            EntityDBManager manager = EntityDBManager.getInstance(getContext(), MainActivity.loginUsername);
+            List<com.java.qitianliang.SQLite.Entity> e = manager.getAllEntity();
+            for (int i = 0; i < e.size(); i++)
+                if (e.get(i).getName().equals(name))
+                    entity.setTextColor(R.color.purple_500);
+        }
         view.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                entity.setTextColor(R.color.purple_500);
+                if (MainActivity.loginUsername != null)
+                    entity.setTextColor(R.color.purple_500);
                 Intent intent = new Intent();
                 intent.setClass(getContext(), DetailsActivity.class);
                 intent.putExtra("name", name);

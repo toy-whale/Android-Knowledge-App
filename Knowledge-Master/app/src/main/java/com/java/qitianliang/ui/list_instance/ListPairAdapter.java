@@ -49,14 +49,16 @@ public class ListPairAdapter extends ArrayAdapter<Instance_list_pair> {
         }
 
         // 浏览记录检测
-        EntityDBManager manager = EntityDBManager.getInstance(getContext(), MainActivity.loginUsername);
-        List<com.java.qitianliang.SQLite.Entity> e = manager.getAllEntity();
-        for (int i = 0; i < e.size(); i++) {
-            if (e.get(i).getName().equals(name_l)) {
-                t_left.setTextColor(R.color.purple_500);
-            }
-            if (e.get(i).getName().equals(name_r)) {
-                t_right.setTextColor(R.color.purple_500);
+        if (MainActivity.loginUsername != null) {
+            EntityDBManager manager = EntityDBManager.getInstance(getContext(), MainActivity.loginUsername);
+            List<com.java.qitianliang.SQLite.Entity> e = manager.getAllEntity();
+            for (int i = 0; i < e.size(); i++) {
+                if (e.get(i).getName().equals(name_l)) {
+                    t_left.setTextColor(R.color.purple_500);
+                }
+                if (e.get(i).getName().equals(name_r)) {
+                    t_right.setTextColor(R.color.purple_500);
+                }
             }
         }
 
@@ -69,7 +71,8 @@ public class ListPairAdapter extends ArrayAdapter<Instance_list_pair> {
                 intent.putExtra("course", MainActivity.currentSubject);
                 intent.putExtra("is_collect","false");
                 getContext().startActivity(intent);
-                t_left.setTextColor(R.color.purple_500);
+                if (MainActivity.loginUsername != null)
+                    t_left.setTextColor(R.color.purple_500);
             }
         });
 
@@ -82,7 +85,8 @@ public class ListPairAdapter extends ArrayAdapter<Instance_list_pair> {
                 intent.putExtra("course", MainActivity.currentSubject);
                 intent.putExtra("is_collect","false");
                 getContext().startActivity(intent);
-                t_right.setTextColor(R.color.purple_500);
+                if (MainActivity.loginUsername != null)
+                    t_right.setTextColor(R.color.purple_500);
             }
         });
 
