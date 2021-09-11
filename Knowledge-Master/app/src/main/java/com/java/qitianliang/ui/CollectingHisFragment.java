@@ -3,7 +3,10 @@ package com.java.qitianliang.ui;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.os.Bundle;
 
@@ -35,6 +38,12 @@ public class CollectingHisFragment extends Fragment {
     CollectAdapter instance_adapter;
     NoScrollListview instance_listView;
     TextView tips;
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            reLoad();
+        }
+    };
 
     public List<Instance_collect> InstanceList = new ArrayList<>();
 
@@ -51,6 +60,9 @@ public class CollectingHisFragment extends Fragment {
         instance_listView = (NoScrollListview) view.findViewById(R.id.collect_list_view);
         instance_adapter = new CollectAdapter(getActivity(), R.layout.instance_list_item, InstanceList);
         instance_listView.setAdapter(instance_adapter);
+
+        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        getActivity().getApplicationContext().registerReceiver(receiver, filter);
 
         // 不展示收藏
         if(MainActivity.loginUsername == null) {
@@ -71,6 +83,7 @@ public class CollectingHisFragment extends Fragment {
             if (y.getSubject().equals(MainActivity.currentSubject))
                 InstanceList.add(new Instance_collect(y.getTitle()));
         }
+        instance_listView.setAdapter(instance_adapter);
         instance_adapter.notifyDataSetChanged();
     }
 
@@ -80,16 +93,9 @@ public class CollectingHisFragment extends Fragment {
                 MainActivity.transEng2Chi(MainActivity.currentSubject) + "学科的实体");
     }
 
-    class MyContentObselver extends ContentObserver {
-        public MyContentObselver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            super.onChange(selfChange);
-            reLoad();
-        }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().getApplicationContext().unregisterReceiver(receiver);
     }
-
 }
