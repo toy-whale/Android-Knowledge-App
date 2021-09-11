@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.os.StrictMode;
 import android.util.Base64;
 import android.widget.*;
 import android.view.*;
@@ -28,9 +29,13 @@ import com.java.qitianliang.SQLite.*;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java.qitianliang.ui.linkinstance.InstanceAdapter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,7 +92,7 @@ public class DetailsActivity extends AppCompatActivity {
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.show();
         //查找历史记录
-        //if (username != null)
+        if (username != null)
             is_find = findInDB("h");
         if (is_find == true) {
             initdata();
@@ -196,7 +201,7 @@ public class DetailsActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.share: //分享到新浪微博
-                String Text = "知识点：" + Name + '\n' + findShareText();
+                String Text = "知识点：" + Name + '\n' + "描述：" + findShareText();
                 ShareUtil.shareText(this,Text,"知识详情");
                 break;
             case android.R.id.home:
@@ -242,16 +247,9 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private String findShareText() {
-        String T = findDescription().substring(6);
-        if(T.equals("无相关描述！") && Result != null) {
-            JSONArray data = Result.getJSONArray("property");
-            if(data == null) return T;
-            for (int i = 0; i < data.size(); i++) {
-                JSONObject y = data.getJSONObject(i);
-                if (!y.getString("object").equals(""))
-                    return y.getString("object");
-            }
-        }
+        String T = description.getText().toString().substring(6);
+        if(T.equals("无相关描述！") && PropertyList != null && PropertyList.size() > 0)
+            T = PropertyList.get(0).getObject();
         return T;
     }
 
@@ -291,7 +289,7 @@ public class DetailsActivity extends AppCompatActivity {
                 title.setGravity(Gravity.LEFT);
                 item.setGravity(Gravity.LEFT);
             }
-            //if(username != null) { //更新数据库
+            if(username != null) { //更新数据库
                 EntityDBManager manager = EntityDBManager.getInstance(this, username);
                 Entity entity = manager.getEntityByUri(Name, Course);
                 if (entity != null)
@@ -317,14 +315,12 @@ public class DetailsActivity extends AppCompatActivity {
                     I = "";
                 Entity e = new Entity(name, subject, D, property, relative, question, I);
                 manager.insertEntity(e);
-            //}
+            }
             initRelative(Result.getJSONArray("content"));
             initProperty(Result.getJSONArray("property"));
             initQuestion(Questions.getJSONArray("data"));
             description.setText(findDescription());
         }
-        System.out.println("print");
-        PrintAll();
     }
 
     void initRelative(JSONArray data) {
@@ -334,7 +330,8 @@ public class DetailsActivity extends AppCompatActivity {
             if(y.getString("object") != null && y.getString("object").matches(http))
                 continue;
             Relative u = new Relative(y, Name);
-            RelativeList.add(u);
+            if(!RelativeList.contains(u))
+                RelativeList.add(u);
         }
         RelativeAdapter relative_adapter = new RelativeAdapter(this, R.layout.relative, RelativeList);
         NoScrollListview relative_listView = (NoScrollListview) findViewById(R.id.relative_list_view);
@@ -348,7 +345,8 @@ public class DetailsActivity extends AppCompatActivity {
             if(y.getString("object") != null && y.getString("object").matches(http))
                 continue;
             Property u = new Property(y);
-            PropertyList.add(u);
+            if(!PropertyList.contains(u))
+                PropertyList.add(u);
         }
         PropertyAdapter property_adapter = new PropertyAdapter(this, R.layout.property, PropertyList);
         NoScrollListview property_listView = (NoScrollListview) findViewById(R.id.property_list_view);
@@ -392,28 +390,58 @@ public class DetailsActivity extends AppCompatActivity {
         return string;
     }
 
-    void PrintAll() {
-        EntityDBManager manager = EntityDBManager.getInstance(this, username);
-        List<Entity> e = manager.getAllEntity();
-        System.out.println();
-        for (int i = 0; i < e.size(); i++) {
-            Entity y = e.get(i);
-            System.out.println(i + 1 + ":");
-            System.out.println(y.getName());
-            System.out.println(y.getSubject());
-            System.out.println(y.getDescription());
-            System.out.println(y.getProperty());
-            System.out.println(y.getRelative());
-            System.out.println(y.getQuestion());
-        }
-        System.out.println("浏览记录输出结束!\n");
-        TitleDBManager u = TitleDBManager.getInstance(this, username);
-        List<Title> v = u.getAllTitle();
-        for (int i = 0; i < v.size(); i++) {
-            Title y = v.get(i);
-            System.out.println(i + 1 + ": ");
-            System.out.println(y.getTitle());
-        }
-        System.out.println("收藏记录输出结束!\n");
+    protected void onPause() {
+        super.onPause();
+        // 退出前保存到后端
+        upgradeHistory();
+    }
+
+    public void upgradeHistory() {
+        String username = MainActivity.loginUsername;
+        if (username == null || username.equals("")) return;
+
+        // 本地所有浏览和收藏传输至后端
+        new Thread() {
+            @Override
+            public void run() {
+                MainActivity.threadReady = false;
+                String upgrade = "";
+                EntityDBManager manager = EntityDBManager.getInstance(DetailsActivity.this, MainActivity.loginUsername);
+                List<Entity> e = manager.getAllEntity();
+                TitleDBManager u = TitleDBManager.getInstance(DetailsActivity.this, MainActivity.loginUsername);
+                List<Title> v = u.getAllTitle();
+
+                // upgrade
+                int num_title = v.size();
+                int num_entity = e.size();
+
+                // request
+                try {
+                    upgrade = "request=upgrade&username=" + URLEncoder.encode(username, "UTF-8") +
+                            "&titleNum=" + URLEncoder.encode(Integer.toString(num_title), "UTF-8") +
+                            "&entityNum=" + URLEncoder.encode(Integer.toString(num_entity), "UTF-8");
+                    // 添加title和entity
+                    for (int i = 0; i < num_title; i++) {
+                        String msg_title = "&title" + Integer.toString(i) + "title=" + URLEncoder.encode(v.get(i).getTitle(), "UTF-8") +
+                                "&title" + Integer.toString(i) + "subject=" + URLEncoder.encode(v.get(i).getSubject(), "UTF-8");
+                        upgrade += msg_title;
+                    }
+                    for (int j = 0; j < num_entity; j++) {
+                        String msg_entity = "&entity" + Integer.toString(j) + "name=" + URLEncoder.encode(e.get(j).getName(), "UTF-8") +
+                                "&entity" + Integer.toString(j) + "subject=" + URLEncoder.encode(e.get(j).getSubject(), "UTF-8") +
+                                "&entity" + Integer.toString(j) + "description=" + URLEncoder.encode(e.get(j).getDescription(), "UTF-8") +
+                                "&entity" + Integer.toString(j) + "property=" + URLEncoder.encode(e.get(j).getProperty(), "UTF-8") +
+                                "&entity" + Integer.toString(j) + "relative=" + URLEncoder.encode(e.get(j).getRelative(), "UTF-8") +
+                                "&entity" + Integer.toString(j) + "question=" + URLEncoder.encode(e.get(j).getQuestion(), "UTF-8") +
+                                "&entity" + Integer.toString(j) + "image=" + URLEncoder.encode(e.get(j).getImage(), "UTF-8");
+                        upgrade += msg_entity;
+                    }
+                } catch (UnsupportedEncodingException ex) {
+                    ex.printStackTrace();
+                }
+                PostUtil.Post("HistoryServlet", upgrade);
+                MainActivity.threadReady = true;
+            }
+        }.start();
     }
 }
