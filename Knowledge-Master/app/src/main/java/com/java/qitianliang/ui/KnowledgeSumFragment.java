@@ -66,13 +66,20 @@ public class KnowledgeSumFragment extends Fragment {
                 Bundle bundle = msg.getData();
                 String answer = bundle.getString("answer");
                 JSONObject x = JSONObject.parseObject(answer);
-                //if(x == null) return;
+                if(x == null) return;
+                if(hotSearchTestList.size() == 0) {
+                    Toast.makeText(getActivity(), "请选择知识点！", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), ActivitySum.class);
+                intent.putExtra("answer", answer);
+                intent.putExtra("title",hotSearchTestList.get(0));
+                startActivity(intent);
             } else if (msg.what == 0) { //联网失败
                 Toast.makeText(getActivity(), "网络不太好呢~", Toast.LENGTH_LONG).show();
             }
-            Intent intent = new Intent();
-            intent.setClass(getActivity(), ActivitySum.class);
-            startActivity(intent);
+
         }
     };
 

@@ -14,6 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class Relatedsubject {
+    private static String pattern = "^http:(.*)";
     private static String relatedsubjectURL = "http://open.edukg.cn/opedukg/api/typeOpen/open/relatedsubject";
     public static String get(String course, String subjectName, String id) throws Exception {
         String s = sendPost(course, subjectName, id);
@@ -30,11 +31,15 @@ public class Relatedsubject {
                 String p = x.getString("predicate");
                 if(p != null && sList.get(p) == null) {
                     JSONArray u = new JSONArray();
+                    if(x.getString("value").matches(pattern))
+                        continue;
                     u.add(x.getString("value"));
                     sList.put(p, u);
                 }
                 else if(p != null && sList.get(p) != null) {
                     JSONArray u = sList.getJSONArray(p);
+                    if(x.getString("value").matches(pattern))
+                        continue;
                     u.add(x.getString("value"));
                     sList.put(p, u);
                 }
@@ -43,11 +48,15 @@ public class Relatedsubject {
                 String p = x.getString("predicate");
                 if(p != null && vList.get(p) == null) {
                     JSONArray u = new JSONArray();
+                    if(x.getString("value").matches(pattern))
+                        continue;
                     u.add(x.getString("subject"));
                     vList.put(p, u);
                 }
                 else if(p != null && vList.get(p) != null) {
                     JSONArray u = vList.getJSONArray(p);
+                    if(x.getString("value").matches(pattern))
+                        continue;
                     u.add(x.getString("subject"));
                     vList.put(p, u);
                 }
@@ -55,11 +64,6 @@ public class Relatedsubject {
             else
                 continue;
         }
-        String r = QuestionListByUriName.get(subjectName, id);
-        JSONObject rjson = JSONObject.parseObject(r);
-        JSONArray qset = rjson.getJSONArray("data");
-        if(qset != null && qset.size() > 0)
-            sList.put("相关习题", qset);
         JSONObject item = new JSONObject();
         item.put("subject", sList);
         item.put("value", vList);
