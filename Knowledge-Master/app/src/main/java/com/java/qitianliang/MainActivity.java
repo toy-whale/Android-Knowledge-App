@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
     // 用于同步浏览记录
     public static String loginUsername = null;
+    private boolean threadReady = false;
 
     // 当前选定学科
     public static String currentSubject = "chinese";
@@ -207,11 +208,11 @@ public class MainActivity extends AppCompatActivity {
                 int id = navController.getCurrentDestination().getId();
                 switch (id) {
                     case R.id.nav_instanceList:
+                    case R.id.nav_browsingHis:
+                    case R.id.nav_collectingHis:
                         navController.popBackStack();
                         navController.navigate(id);
                         break;
-                    // other cases
-
                     default:
                         break;
                 }
@@ -264,11 +265,11 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.item_browsingHis:
                         target_fragment = R.id.nav_browsingHis;
-                        tabs.setVisibility(View.GONE);
+                        tabs.setVisibility(View.VISIBLE);
                         break;
                     case R.id.item_collectingHis:
                         target_fragment = R.id.nav_collectingHis;
-                        tabs.setVisibility(View.GONE);
+                        tabs.setVisibility(View.VISIBLE);
                         break;
                     default:
                         break;
@@ -348,15 +349,15 @@ public class MainActivity extends AppCompatActivity {
                 // 信息修改
                 if (resultCode == RESULT_OK) {
                     String oldUsername = loginUsername;
-                    String newUsername = data.getStringExtra("newName");
+                    String newUsername = data.getStringExtra("data_return");
                     // 用旧用户名保存本地记录
                     upgradeHistory();
                     // 修改后端记录的用户名
                     changeHistory(oldUsername, newUsername);
-                    loginUsername = newUsername;
-                    // 按新用户名向后端请求加载
-                    ((TextView) findViewById(R.id.usernameView)).setText(loginUsername);
-                    loadHistory();
+                    loginUsername = null;
+                    // 回到登录界面
+                    ((TextView) findViewById(R.id.usernameView)).setText("未登录");
+                    startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), 1);
                 }
                 break;
             default:
@@ -383,6 +384,31 @@ public class MainActivity extends AppCompatActivity {
                 return new String("chemistry");
             case "生物":
                 return new String("biology");
+            default:
+                return null;
+        }
+    }
+
+    public static String transEng2Chi(String sub_chi) {
+        switch (sub_chi) {
+            case "chinese":
+                return new String("语文");
+            case "math":
+                return new String("数学");
+            case "english":
+                return new String("英语");
+            case "politics":
+                return new String("政治");
+            case "history":
+                return new String("历史");
+            case "geo":
+                return new String("地理");
+            case "physics":
+                return new String("物理");
+            case "chemistry":
+                return new String("化学");
+            case "biology":
+                return new String("生物");
             default:
                 return null;
         }
@@ -483,6 +509,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread() {
             @Override
             public void run() {
+                threadReady = false;
                 String upgrade = "";
                 EntityDBManager manager = EntityDBManager.getInstance(MainActivity.this, MainActivity.loginUsername);
                 List<Entity> e = manager.getAllEntity();
@@ -517,8 +544,8 @@ public class MainActivity extends AppCompatActivity {
                 } catch (UnsupportedEncodingException ex) {
                     ex.printStackTrace();
                 }
-
                 PostUtil.Post("HistoryServlet", upgrade);
+                threadReady = true;
             }
         }.start();
     }
@@ -529,6 +556,14 @@ public class MainActivity extends AppCompatActivity {
         new Thread() {
             @Override
             public void run() {
+                while (!threadReady) {
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                }
                 String change = "";
                 // request
                 try {

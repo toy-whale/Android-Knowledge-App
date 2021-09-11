@@ -54,7 +54,8 @@ public class BrowsingHisFragment extends Fragment {
         }
         // 加载显示
         LoadAll();
-        tips.setText("您过去浏览了" + InstanceList.size() + "条实体信息:");
+        tips.setText("您过去浏览了" + InstanceList.size() + "条" +
+                MainActivity.transEng2Chi(MainActivity.currentSubject) + "学科的实体");
 
         return view;
     }
@@ -66,7 +67,8 @@ public class BrowsingHisFragment extends Fragment {
         InstanceList.clear();
         for (int i = 0; i < e.size(); i++) {
             Entity y = e.get(i);
-            InstanceList.add(new Instance_list(y.getName()));
+            if (y.getSubject().equals(MainActivity.currentSubject))
+                InstanceList.add(new Instance_list(y.getName()));
         }
         instance_adapter.notifyDataSetChanged();
     }

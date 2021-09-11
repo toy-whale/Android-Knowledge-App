@@ -115,7 +115,9 @@ public class InstanceListFragment extends Fragment {
         jump_page.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int p, KeyEvent keyEvent) {
-                int target_page = Integer.parseInt(jump_page.getText().toString());
+                String string_page = jump_page.getText().toString();
+                if (string_page == null || string_page.equals("")) return false;
+                int target_page = Integer.parseInt(string_page);
                 if (target_page <= 0 || target_page > page_amount ) {
                     Toast.makeText(getContext(), "不在页数范围内!", Toast.LENGTH_LONG).show();
                     return false;

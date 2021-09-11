@@ -103,7 +103,7 @@ public class ActivityInfo extends AppCompatActivity {
             } else if (msg.what == 1) {
                 Toast.makeText(getApplicationContext(), "修改成功", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent();
-                intent.putExtra("newName", ((EditText) findViewById(R.id.infoUserName)).getText().toString());
+                intent.putExtra("data_return", ((EditText) findViewById(R.id.infoUserName)).getText().toString());
                 setResult(RESULT_OK, intent);
                 finish();
             } else if (msg.what == 3) {

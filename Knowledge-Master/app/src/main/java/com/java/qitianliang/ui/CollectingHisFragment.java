@@ -59,7 +59,8 @@ public class CollectingHisFragment extends Fragment {
         }
         // 加载显示
         LoadAll();
-        tips.setText("您共收藏了" + InstanceList.size() + "条实体信息:");
+        tips.setText("您共收藏了" + InstanceList.size() + "条" +
+                MainActivity.transEng2Chi(MainActivity.currentSubject) + "学科的实体");
 
         return view;
     }
@@ -70,7 +71,8 @@ public class CollectingHisFragment extends Fragment {
         InstanceList.clear();
         for (int i = 0; i < v.size(); i++) {
             Title y = v.get(i);
-            InstanceList.add(new Instance_list(y.getTitle()));
+            if (y.getSubject().equals(MainActivity.currentSubject))
+                InstanceList.add(new Instance_list(y.getTitle()));
         }
         instance_adapter.notifyDataSetChanged();
     }
