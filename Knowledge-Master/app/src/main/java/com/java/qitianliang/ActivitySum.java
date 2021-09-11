@@ -57,8 +57,8 @@ public class ActivitySum extends AppCompatActivity {
         value = JSONObject.parseObject(points.getString("value"));
         T = (TextView) findViewById(R.id.point_title);
         T.setText(title);
-        if(subject != null) initsubject();
-        if(value != null) initvalue();
+        if(subject != null && subject.keySet().size() > 0) initsubject();
+        if(value != null && value.keySet().size() > 0) initvalue();
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
@@ -77,7 +77,7 @@ public class ActivitySum extends AppCompatActivity {
         elements.add(e);
         elementsData.add(e);
         for(String key : subject.keySet()) {
-            System.out.println(key);
+            if(key.equals("")) continue;
             Element u = new Element(key, 1, id++, e.getId(), true, false);
             elementsData.add(u);
             JSONArray y = subject.getJSONArray(key);
@@ -93,6 +93,7 @@ public class ActivitySum extends AppCompatActivity {
         elements.add(e);
         elementsData.add(e);
         for(String key : value.keySet()) {
+            if(key.equals("")) continue;
             Element u = new Element(key, 1, id++, e.getId(), true, false);
             elementsData.add(u);
             JSONArray y = value.getJSONArray(key);

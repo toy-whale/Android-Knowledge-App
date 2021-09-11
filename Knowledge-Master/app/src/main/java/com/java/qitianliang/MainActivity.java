@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     // 用于同步浏览记录
     public static String loginUsername = null;
-    private boolean threadReady = false;
+    public static boolean threadReady = false;
     private boolean loadFinish = false;
 
     // 当前选定学科
@@ -305,7 +305,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        // 退出前保存到后端
+        upgradeHistory();
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
         // 退出前保存到后端
         upgradeHistory(MainActivity.loginUsername);
     }

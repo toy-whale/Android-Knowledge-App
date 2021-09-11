@@ -39,7 +39,8 @@ public class InfoByInstanceName {
             //if(object.matches(pattern))
             //    continue;
             y.put("object", object);
-            property.add(y);
+            if(!property.contains(y))
+                property.add(y);
         }
         for(int i = 0; i < content_.size(); i++) {
             JSONObject x = (JSONObject)content_.get(i);
@@ -55,7 +56,8 @@ public class InfoByInstanceName {
             }
             if(y.toString().contains("CKEM"))
                 continue;
-            content.add(y);
+            if(!content.contains(y))
+                content.add(y);
         }
         item.put("property", property);
         item.put("content", content);

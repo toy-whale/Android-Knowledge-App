@@ -19,9 +19,13 @@ public class Relatedsubject {
     public static String get(String course, String subjectName, String id) throws Exception {
         String s = sendPost(course, subjectName, id);
         s = s.replaceAll("<br>", "");
-        s = s.replaceAll("\n","");
+        //s = s.replaceAll("\n","");
         JSONObject result = JSONObject.parseObject(s);
-        JSONArray data = result.getJSONArray("data");
+        JSONArray data;
+        if(result == null)
+            data = null;
+        else
+            data = result.getJSONArray("data");
         if(data == null) data = new JSONArray();
         JSONObject sList = new JSONObject();
         JSONObject vList = new JSONObject();
@@ -70,7 +74,7 @@ public class Relatedsubject {
         String answer = item.toString();
         return answer;
     }
-    private static String sendPost(String course, String subjectName, String id) throws Exception {
+    /*private static String sendPost(String course, String subjectName, String id) throws Exception {
         String result = "";
         HttpURLConnection conn = (HttpURLConnection) new URL(relatedsubjectURL).openConnection();
         conn.setRequestMethod("POST");
@@ -94,6 +98,23 @@ public class Relatedsubject {
                 response.append(line);
             result = response.toString();
         }
+        return result;
+    }*/
+    private static String sendPost(String course, String subjectName, String id) throws Exception {
+        String result = "";
+        try {
+            PostMethod postMethod = new PostMethod(relatedsubjectURL) ;
+            postMethod.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8") ;
+            NameValuePair[] data = {
+                    new NameValuePair("course", course),
+                    new NameValuePair("subjectName", subjectName),
+                    new NameValuePair("id", id),
+            };
+            postMethod.setRequestBody(data);
+            org.apache.commons.httpclient.HttpClient httpClient = new org.apache.commons.httpclient.HttpClient();
+            httpClient.executeMethod(postMethod);
+            result = postMethod.getResponseBodyAsString();
+        } catch (Exception e) {}
         return result;
     }
 }
