@@ -49,7 +49,7 @@ public class QuestionRecFragment extends Fragment {
     private Button POST;
     private static JSONArray qset = new JSONArray();
     private List<Question> QuestionList = new ArrayList<Question>();
-    static final int MAX = 1194;
+    static final int MAX = 1270;
     private static int tot = 0;
     static private List<String> Bank =  new ArrayList<String>();
     private ListView rec_listView;
