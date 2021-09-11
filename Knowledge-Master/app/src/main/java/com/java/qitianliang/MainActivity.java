@@ -48,6 +48,7 @@ import java.util.List;
 
 import android.util.Log;
 import android.widget.Toast;
+import java.util.concurrent.CountDownLatch;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     // 用于同步浏览记录
     public static String loginUsername = null;
     private boolean threadReady = false;
+    private boolean loadFinish = false;
 
     // 当前选定学科
     public static String currentSubject = "chinese";
@@ -328,6 +330,9 @@ public class MainActivity extends AppCompatActivity {
                 else
                     ((TextView) findViewById(R.id.usernameView)).setText("未登录");
                 // navigate to list
+                while (!loadFinish) {
+
+                }
                 navController.popBackStack();
                 navController.navigate(R.id.nav_instanceList);
                 tabs.setVisibility(View.VISIBLE);
@@ -455,6 +460,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread() {
             @Override
             public void run() {
+                loadFinish = false;
                 String load = "";
                 // request
                 try {
@@ -496,6 +502,7 @@ public class MainActivity extends AppCompatActivity {
                             data_entity[2], data_entity[3], data_entity[4],
                             data_entity[5], data_entity[6]));
                 }
+                loadFinish = true;
             }
         }.start();
     }
