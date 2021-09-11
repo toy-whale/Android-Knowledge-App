@@ -305,7 +305,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        // 退出前保存到后端
+        upgradeHistory();
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
         // 退出前保存到后端
         upgradeHistory();
     }

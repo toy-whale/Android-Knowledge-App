@@ -19,7 +19,7 @@ public class Relatedsubject {
     public static String get(String course, String subjectName, String id) throws Exception {
         String s = sendPost(course, subjectName, id);
         s = s.replaceAll("<br>", "");
-        s = s.replaceAll("\n","");
+        //s = s.replaceAll("\n","");
         JSONObject result = JSONObject.parseObject(s);
         JSONArray data = result.getJSONArray("data");
         if(data == null) data = new JSONArray();

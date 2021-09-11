@@ -88,7 +88,7 @@ public class DetailsActivity extends AppCompatActivity {
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.show();
         //查找历史记录
-        //if (username != null)
+        if (username != null)
             is_find = findInDB("h");
         if (is_find == true) {
             initdata();
@@ -195,7 +195,7 @@ public class DetailsActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.share: //分享到新浪微博
-                String Text = "知识点：" + Name + '\n' + findShareText();
+                String Text = "知识点：" + Name + '\n' + "描述：" + findShareText();
                 ShareUtil.shareText(this,Text,"知识详情");
                 break;
             case android.R.id.home:
@@ -241,16 +241,9 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private String findShareText() {
-        String T = findDescription().substring(6);
-        if(T.equals("无相关描述！") && Result != null) {
-            JSONArray data = Result.getJSONArray("property");
-            if(data == null) return T;
-            for (int i = 0; i < data.size(); i++) {
-                JSONObject y = data.getJSONObject(i);
-                if (!y.getString("object").equals(""))
-                    return y.getString("object");
-            }
-        }
+        String T = description.getText().toString().substring(6);
+        if(T.equals("无相关描述！") && PropertyList != null && PropertyList.size() > 0)
+            T = PropertyList.get(0).getObject();
         return T;
     }
 
@@ -290,7 +283,7 @@ public class DetailsActivity extends AppCompatActivity {
                 title.setGravity(Gravity.LEFT);
                 item.setGravity(Gravity.LEFT);
             }
-            //if(username != null) { //更新数据库
+            if(username != null) { //更新数据库
                 EntityDBManager manager = EntityDBManager.getInstance(this, username);
                 Entity entity = manager.getEntityByUri(Name, Course);
                 if (entity != null)
@@ -316,14 +309,12 @@ public class DetailsActivity extends AppCompatActivity {
                     I = "";
                 Entity e = new Entity(name, subject, D, property, relative, question, I);
                 manager.insertEntity(e);
-            //}
+            }
             initRelative(Result.getJSONArray("content"));
             initProperty(Result.getJSONArray("property"));
             initQuestion(Questions.getJSONArray("data"));
             description.setText(findDescription());
         }
-        System.out.println("print");
-        PrintAll();
     }
 
     void initRelative(JSONArray data) {
@@ -389,30 +380,5 @@ public class DetailsActivity extends AppCompatActivity {
         byte[]bytes = bStream.toByteArray();
         string=Base64.encodeToString(bytes, Base64.DEFAULT);
         return string;
-    }
-
-    void PrintAll() {
-        EntityDBManager manager = EntityDBManager.getInstance(this, username);
-        List<Entity> e = manager.getAllEntity();
-        System.out.println();
-        for (int i = 0; i < e.size(); i++) {
-            Entity y = e.get(i);
-            System.out.println(i + 1 + ":");
-            System.out.println(y.getName());
-            System.out.println(y.getSubject());
-            System.out.println(y.getDescription());
-            System.out.println(y.getProperty());
-            System.out.println(y.getRelative());
-            System.out.println(y.getQuestion());
-        }
-        System.out.println("浏览记录输出结束!\n");
-        TitleDBManager u = TitleDBManager.getInstance(this, username);
-        List<Title> v = u.getAllTitle();
-        for (int i = 0; i < v.size(); i++) {
-            Title y = v.get(i);
-            System.out.println(i + 1 + ": ");
-            System.out.println(y.getTitle());
-        }
-        System.out.println("收藏记录输出结束!\n");
     }
 }
