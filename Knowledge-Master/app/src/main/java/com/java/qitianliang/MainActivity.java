@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         // 退出前保存到后端
-        upgradeHistory();
+        upgradeHistory(MainActivity.loginUsername);
     }
 
     @Override
