@@ -443,5 +443,6 @@ public class DetailsActivity extends AppCompatActivity {
                 MainActivity.threadReady = true;
             }
         }.start();
+        
     }
 }
