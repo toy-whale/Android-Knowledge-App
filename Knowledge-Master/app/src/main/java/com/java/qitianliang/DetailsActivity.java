@@ -3,8 +3,10 @@ package com.java.qitianliang;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ComponentName;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.content.Intent;
 import android.os.Handler;
@@ -188,6 +190,8 @@ public class DetailsActivity extends AppCompatActivity {
                     if(username != null) {
                         TitleDBManager manager = TitleDBManager.getInstance(this, username);
                         manager.deleteTitleByUri(Name, Course);
+                        Intent intent = new Intent(Intent.ACTION_DIAL);
+                        sendBroadcast(intent);
                     }
                 }
                 break;

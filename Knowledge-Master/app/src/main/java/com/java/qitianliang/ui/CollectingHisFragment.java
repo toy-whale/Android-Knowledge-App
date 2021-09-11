@@ -61,7 +61,7 @@ public class CollectingHisFragment extends Fragment {
         instance_adapter = new CollectAdapter(getActivity(), R.layout.instance_list_item, InstanceList);
         instance_listView.setAdapter(instance_adapter);
 
-        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        IntentFilter filter = new IntentFilter(Intent.ACTION_DIAL);
         getActivity().getApplicationContext().registerReceiver(receiver, filter);
 
         // 不展示收藏
