@@ -131,34 +131,6 @@ public class InstanceFindFragment extends Fragment {
         instance_adapter = new FindAdapter(getActivity(), R.layout.instance_find_item, InstanceListSingle);
         instance_pair_adapter = new FindPairAdapter(getActivity(), R.layout.instance_find_item_grid, InstanceListPair);
 
-        filter_option.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                // 是否调出输入框
-                switch (i) {
-                    case 0:
-                        FILTER_OPTION = 0;
-                        keywords.setVisibility(View.GONE);
-                        break;
-                    case 1:
-                        FILTER_OPTION = 1;
-                        keywords.setVisibility(View.GONE);
-                        break;
-                    case 2:
-                        FILTER_OPTION = 2;
-                        keywords.setVisibility(View.VISIBLE);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
         POST = view.findViewById(R.id.search_btn);
         POST.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,6 +184,90 @@ public class InstanceFindFragment extends Fragment {
                         handler.sendMessage(msg);
                     }
                 }.start();
+            }
+        });
+
+        sort_option.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                // 是否调出输入框
+                switch (i) {
+                    case 0:
+                        currentSort = 1;
+                        POST.performClick();
+                        break;
+                    case 1:
+                        currentSort = 2;
+                        POST.performClick();
+                        break;
+                    case 2:
+                        currentSort = 3;
+                        POST.performClick();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        display_option.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                // 是否调出输入框
+                switch (i) {
+                    case 0:
+                        currentDis = 4;
+                        POST.performClick();
+                        break;
+                    case 1:
+                        currentDis = 5;
+                        POST.performClick();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+        filter_option.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                // 是否调出输入框
+                switch (i) {
+                    case 0:
+                        FILTER_OPTION = 0;
+                        keywords.setVisibility(View.GONE);
+                        POST.performClick();
+                        break;
+                    case 1:
+                        FILTER_OPTION = 1;
+                        keywords.setVisibility(View.GONE);
+                        POST.performClick();
+                        break;
+                    case 2:
+                        FILTER_OPTION = 2;
+                        keywords.setVisibility(View.VISIBLE);
+                        POST.performClick();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
 
