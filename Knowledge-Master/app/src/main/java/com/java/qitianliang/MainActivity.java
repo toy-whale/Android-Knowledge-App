@@ -108,14 +108,14 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.action_logout:
                         // 保存历史记录
-                        upgradeHistory();
+                        upgradeHistory(MainActivity.loginUsername);
                         loginUsername = null;
                         // Login Activity
                         startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), 1);
                         break;
                     case R.id.action_exit:
                         // 保存历史记录
-                        upgradeHistory();
+                        upgradeHistory(MainActivity.loginUsername);
                         finish();
 //                        ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
 //                        List<ActivityManager.AppTask> appTaskList = activityManager.getAppTasks();
@@ -307,7 +307,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
 
         // 退出前保存到后端
-        upgradeHistory();
+        upgradeHistory(MainActivity.loginUsername);
     }
 
     @Override
@@ -325,14 +325,15 @@ public class MainActivity extends AppCompatActivity {
                 if (loginUsername != null) {
                     ((TextView) findViewById(R.id.usernameView)).setText(loginUsername);
                     // 根据用户加载收藏记录
-                    loadHistory();
+                    loadHistory(MainActivity.loginUsername);
+                    while (!loadFinish) {
+
+                    }
+                    loadFinish = false;
                 }
                 else
                     ((TextView) findViewById(R.id.usernameView)).setText("未登录");
                 // navigate to list
-                while (!loadFinish) {
-
-                }
                 navController.popBackStack();
                 navController.navigate(R.id.nav_instanceList);
                 tabs.setVisibility(View.VISIBLE);
@@ -356,7 +357,7 @@ public class MainActivity extends AppCompatActivity {
                     String oldUsername = loginUsername;
                     String newUsername = data.getStringExtra("data_return");
                     // 用旧用户名保存本地记录
-                    upgradeHistory();
+                    upgradeHistory(MainActivity.loginUsername);
                     // 修改后端记录的用户名
                     changeHistory(oldUsername, newUsername);
                     loginUsername = null;
@@ -445,8 +446,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // 加载历史
-    public void loadHistory() {
-        String username = MainActivity.loginUsername;
+    public void loadHistory(String username) {
         if (username == null || username.equals("")) return;
 
         // 加载新登陆的用户前把本地记录删除
@@ -508,8 +508,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //上传历史
-    public void upgradeHistory() {
-        String username = MainActivity.loginUsername;
+    public void upgradeHistory(String username) {
         if (username == null || username.equals("")) return;
 
         // 本地所有浏览和收藏传输至后端
@@ -582,10 +581,7 @@ public class MainActivity extends AppCompatActivity {
                 String request = PostUtil.Post("HistoryServlet", change);
             }
         }.start();
-    }
-
-    public void PostError() {
-        Toast.makeText(MainActivity.this, "服务器连接异常!", Toast.LENGTH_LONG).show();
+        threadReady = false;
     }
 
 }

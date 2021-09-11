@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.os.StrictMode;
 import android.util.Base64;
 import android.widget.*;
 import android.view.*;
@@ -27,11 +26,9 @@ import com.java.qitianliang.SQLite.*;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java.qitianliang.ui.linkinstance.InstanceAdapter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 

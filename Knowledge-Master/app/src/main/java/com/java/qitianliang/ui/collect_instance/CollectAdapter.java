@@ -1,4 +1,4 @@
-package com.java.qitianliang.ui.list_instance;
+package com.java.qitianliang.ui.collect_instance;
 
 import android.annotation.SuppressLint;
 import android.app.TaskInfo;
@@ -22,10 +22,10 @@ import com.java.qitianliang.SQLite.TitleDBManager;
 import com.java.qitianliang.roundBackgroundColorSpan.*;
 import com.java.qitianliang.ui.list_instance.Instance_list;
 
-public class ListAdapter extends ArrayAdapter<Instance_list> {
+public class CollectAdapter extends ArrayAdapter<Instance_collect> {
     private final int resourceId;
 
-    public ListAdapter(Context context, int textViewResourceId, List<Instance_list> objects) {
+    public CollectAdapter(Context context, int textViewResourceId, List<Instance_collect> objects) {
         super(context, textViewResourceId, objects);
         resourceId = textViewResourceId;
     }
@@ -33,7 +33,7 @@ public class ListAdapter extends ArrayAdapter<Instance_list> {
     @SuppressLint("ResourceAsColor")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Instance_list instance = (Instance_list) getItem(position);
+        Instance_collect instance = (Instance_collect) getItem(position);
         View view = LayoutInflater.from(getContext()).inflate(resourceId, null);
         TextView entity = (TextView) view.findViewById(R.id.list_instance);
         String name = instance.getLabel();
@@ -45,6 +45,19 @@ public class ListAdapter extends ArrayAdapter<Instance_list> {
             for (int i = 0; i < e.size(); i++)
                 if (e.get(i).getName().equals(name))
                     entity.setTextColor(R.color.purple_500);
+        }
+        // 收藏检测
+        if (MainActivity.loginUsername != null) {
+            TitleDBManager manager = TitleDBManager.getInstance(getContext(), MainActivity.loginUsername);
+            List<com.java.qitianliang.SQLite.Title> t = manager.getAllTitle();
+            boolean collected = false;
+            for (int i = 0; i < t.size(); i++)
+                if (t.get(i).getTitle().equals(name))
+                    collected = true;
+            if (!collected) {
+                view.setVisibility(View.GONE);
+                return view;
+            }
         }
 
         view.setOnClickListener(new View.OnClickListener() {

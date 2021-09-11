@@ -124,6 +124,8 @@ public class HistoryServlet extends HttpServlet {
 						request.getParameter(getImage));
 				upgrade_entity.add(tmp);
 			}
+			titleDao.deleteAllTitle(username);
+			entityDao.deleteAllEntity(username);
 			titleDao.insertAllTitle(username, upgrade_title);
 			entityDao.insertAllEntity(username, upgrade_entity);
 			
