@@ -113,13 +113,13 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_exit:
                         // 保存历史记录
                         upgradeHistory();
-
-                        ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+                        finish();
+                        /*ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
                         List<ActivityManager.AppTask> appTaskList = activityManager.getAppTasks();
                         for (ActivityManager.AppTask appTask : appTaskList) {
                             appTask.finishAndRemoveTask();
                         }
-                        System.exit(0);
+                        System.exit(0);*/
                     default:
                         break;
                 }
@@ -301,10 +301,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-
-        // 退出前保存到后端
         upgradeHistory();
+        super.onDestroy();
+        // 退出前保存到后端
+    }
+
+    @Override
+    protected void onPause() {
+        upgradeHistory();
+        super.onPause();
+        // 退出前保存到后端
     }
 
     @Override
@@ -478,7 +484,6 @@ public class MainActivity extends AppCompatActivity {
     public void upgradeHistory() {
         String username = MainActivity.loginUsername;
         if (username == null || username.equals("")) return;
-
         // 本地所有浏览和收藏传输至后端
         new Thread() {
             @Override
@@ -492,7 +497,6 @@ public class MainActivity extends AppCompatActivity {
                 // upgrade
                 int num_title = v.size();
                 int num_entity = e.size();
-
                 // request
                 try {
                     upgrade = "request=upgrade&username=" + URLEncoder.encode(username, "UTF-8") +
@@ -517,7 +521,6 @@ public class MainActivity extends AppCompatActivity {
                 } catch (UnsupportedEncodingException ex) {
                     ex.printStackTrace();
                 }
-
                 PostUtil.Post("HistoryServlet", upgrade);
             }
         }.start();
@@ -541,6 +544,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }.start();
     }
-
-
 }
