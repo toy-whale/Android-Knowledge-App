@@ -18,6 +18,7 @@ public class Relatedsubject {
     private static String relatedsubjectURL = "http://open.edukg.cn/opedukg/api/typeOpen/open/relatedsubject";
     public static String get(String course, String subjectName, String id) throws Exception {
         String s = sendPost(course, subjectName, id);
+        s = s.replaceAll("<br><br>", "\n");
         s = s.replaceAll("<br>", "");
         //s = s.replaceAll("\n","");
         JSONObject result = JSONObject.parseObject(s);

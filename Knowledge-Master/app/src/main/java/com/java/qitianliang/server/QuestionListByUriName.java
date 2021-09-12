@@ -15,17 +15,17 @@ import com.alibaba.fastjson.JSONObject;
 
 public class QuestionListByUriName {
     private static String questionListByUriNameURL = "http://open.edukg.cn/opedukg/api/typeOpen/open/questionListByUriName";
-    private static String patternA = "(.*)[A][\56](.*)[B]";
-    private static String patternB = "(.*)[B]\56(.*)[C]";
-    private static String patternC = "(.*)[C]\56(.*)[D]";
-    private static String patternD = "(.*)[D]\56(.*)$";
+    private static String patternA = "(.*)[A][\56](.*)[B][\56]";
+    private static String patternB = "(.*)[B][\56](.*)[C][\56]";
+    private static String patternC = "(.*)[C][\56](.*)[D][\56]";
+    private static String patternD = "(.*)[D][\56](.*)$";
     private static Pattern ra = Pattern.compile(patternA);
     private static Pattern rb = Pattern.compile(patternB);
     private static Pattern rc = Pattern.compile(patternC);
     private static Pattern rd = Pattern.compile(patternD);
 
     public static String get(String uriName, String id) throws Exception {
-        String s = sendGet(uriName, id);
+        String s = sendGet(uriName, id);;
         JSONObject result = JSONObject.parseObject(s);
         JSONArray data = result.getJSONArray("data");
         JSONArray answerList = new JSONArray();
@@ -33,6 +33,7 @@ public class QuestionListByUriName {
             JSONObject x = (JSONObject)data.get(i);
             JSONObject item = new JSONObject();
             String qBody = x.getString("qBody");
+            System.out.println(qBody);
             String qAnswer = x.getString("qAnswer");
             if(qAnswer != null && qAnswer.length() > 2) {
                 if(qAnswer.charAt(0) == '答' && qAnswer.charAt(1) == '案')

@@ -35,13 +35,13 @@ public class TestAdapter extends ArrayAdapter<Question> {
         title.setText(question.getBody());
         //选项
         RadioButton Abtn = (RadioButton) view.findViewById(R.id.A);
-        Abtn.setText(question.getA());
+        Abtn.setText("A. " + question.getA());
         RadioButton Bbtn = (RadioButton) view.findViewById(R.id.B);
-        Bbtn.setText(question.getB());
+        Bbtn.setText("B. " + question.getB());
         RadioButton Cbtn = (RadioButton) view.findViewById(R.id.C);
-        Cbtn.setText(question.getC());
+        Cbtn.setText("C. " + question.getC());
         RadioButton Dbtn = (RadioButton) view.findViewById(R.id.D);
-        Dbtn.setText(question.getD());
+        Dbtn.setText("D. " + question.getD());
         //TextView result = (TextView) view.findViewById(R.id.result);
         return view;
     }
