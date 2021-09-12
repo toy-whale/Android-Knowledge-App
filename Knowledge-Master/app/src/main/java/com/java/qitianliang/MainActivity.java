@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
                         // 保存历史记录
                         upgradeHistory(MainActivity.loginUsername);
                         loginUsername = null;
+                        threadReady = false;
                         // Login Activity
                         startActivityForResult(new Intent(getApplicationContext(), ActivityLogin.class), 1);
                         break;
@@ -454,6 +455,7 @@ public class MainActivity extends AppCompatActivity {
     // 加载历史
     public void loadHistory(String username) {
         if (username == null || username.equals("")) return;
+        loadFinish = false;
 
         // 加载新登陆的用户前把本地记录删除
         EntityDBManager e = EntityDBManager.getInstance(MainActivity.this, MainActivity.loginUsername);
@@ -466,7 +468,6 @@ public class MainActivity extends AppCompatActivity {
         new Thread() {
             @Override
             public void run() {
-                loadFinish = false;
                 String load = "";
                 // request
                 try {
@@ -508,20 +509,20 @@ public class MainActivity extends AppCompatActivity {
                             data_entity[2], data_entity[3], data_entity[4],
                             data_entity[5], data_entity[6]));
                 }
-                loadFinish = true;
             }
         }.start();
+        loadFinish = true;
     }
 
     //上传历史
     public void upgradeHistory(String username) {
         if (username == null || username.equals("")) return;
+        threadReady = false;
 
         // 本地所有浏览和收藏传输至后端
         new Thread() {
             @Override
             public void run() {
-                threadReady = false;
                 String upgrade = "";
                 EntityDBManager manager = EntityDBManager.getInstance(MainActivity.this, MainActivity.loginUsername);
                 List<Entity> e = manager.getAllEntity();
@@ -557,9 +558,9 @@ public class MainActivity extends AppCompatActivity {
                     ex.printStackTrace();
                 }
                 PostUtil.Post("HistoryServlet", upgrade);
-                threadReady = true;
             }
         }.start();
+        threadReady = true;
     }
 
     //修改用户信息

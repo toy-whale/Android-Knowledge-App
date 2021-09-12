@@ -59,6 +59,9 @@ public class InfoServlet extends HttpServlet {
         	// new username fits
         	reg = userDao.updateUser(userOld.getId(), userNew);
         }
+        else if (userJudgeExist.getUsername().equals(oldusername)) {
+        	reg = userDao.updateUser(userOld.getId(), userNew);
+        }
 
         
         if (reg)
@@ -66,8 +69,12 @@ public class InfoServlet extends HttpServlet {
         else
         	msg = "Info Change Failed";
 
-	    if (userJudgeExist != null) 
-	   		 msg = "Username Already Exists";
+	    if (userJudgeExist != null) {
+	    	if (oldusername.equals(newusername))
+	    		msg = "Info Change Successful";
+	    	else
+	    		msg = "Username Already Exists";
+	    }
 	
         PrintWriter out = response.getWriter();
 		out.println(msg);
